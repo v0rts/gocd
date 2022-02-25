@@ -1,10 +1,10 @@
-import com.thoughtworks.go.build.AdoptOpenJDKUrlHelper
+import com.thoughtworks.go.build.AdoptiumUrlHelper
 import com.thoughtworks.go.build.DownloadFile
 import com.thoughtworks.go.build.InstallerType
 import org.apache.commons.codec.digest.DigestUtils
 
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ private File destFile(String url) {
 }
 
 task downloadOsxJreChecksum(type: DownloadFile) {
-  def srcUrl = AdoptOpenJDKUrlHelper.sha256sumURL(
+  def srcUrl = AdoptiumUrlHelper.sha256sumURL(
     com.thoughtworks.go.build.OperatingSystem.mac,
     project.packaging.adoptOpenjdk.featureVersion,
     project.packaging.adoptOpenjdk.interimVersion,
@@ -37,7 +37,7 @@ task downloadOsxJreChecksum(type: DownloadFile) {
 
 task downloadOsxJre(type: DownloadFile) {
   dependsOn downloadOsxJreChecksum
-  def srcUrl = AdoptOpenJDKUrlHelper.downloadURL(
+  def srcUrl = AdoptiumUrlHelper.downloadURL(
     com.thoughtworks.go.build.OperatingSystem.mac,
     project.packaging.adoptOpenjdk.featureVersion,
     project.packaging.adoptOpenjdk.interimVersion,
@@ -64,20 +64,20 @@ def configureOSXZip(Zip zipTask, InstallerType installerType, Zip genericZipTask
 
     // dont include the wrapper.conf, and tanuki wrappers for OSes other than osx
     from(genericZipTree) {
-      exclude "${installerType.baseName}-${project.goVersion}/config/wrapper.conf"
-      exclude "${installerType.baseName}-${project.goVersion}/tanuki/wrapper-*"
-      exclude "${installerType.baseName}-${project.goVersion}/tanuki/libwrapper-*"
+      exclude "${installerType.baseName}-${project.goVersion}/wrapper-config/wrapper.conf"
+      exclude "${installerType.baseName}-${project.goVersion}/wrapper/wrapper-*"
+      exclude "${installerType.baseName}-${project.goVersion}/wrapper/libwrapper-*"
       exclude "${installerType.baseName}-${project.goVersion}/bin/*.bat"
     }
 
     from(genericZipTree) {
-      include "${installerType.baseName}-${project.goVersion}/tanuki/wrapper-macosx-*"
-      include "${installerType.baseName}-${project.goVersion}/tanuki/libwrapper-macosx-*"
+      include "${installerType.baseName}-${project.goVersion}/wrapper/wrapper-macosx-*"
+      include "${installerType.baseName}-${project.goVersion}/wrapper/libwrapper-macosx-*"
     }
 
     // include the wrapper.conf, but replace the java command
     from(genericZipTree) {
-      include "${installerType.baseName}-${project.goVersion}/config/wrapper.conf"
+      include "${installerType.baseName}-${project.goVersion}/wrapper-config/wrapper.conf"
       filter { String eachLine ->
         if (eachLine == 'wrapper.java.command=java') {
           eachLine = 'wrapper.java.command=jre/Contents/Home/bin/java'

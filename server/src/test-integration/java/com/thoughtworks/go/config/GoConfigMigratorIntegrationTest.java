@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -640,7 +640,7 @@ public class GoConfigMigratorIntegrationTest {
                         "  <pipelines group='first'>" +
                         "    <pipeline name='Test'>" +
                         "      <materials>" +
-                        "        <hg url='../manual-testing/ant_hg/dummy' />" +
+                        "        <hg url='manual-testing/ant_hg/dummy' />" +
                         "      </materials>" +
                         "      <stage name='Functional'>" +
                         "        <jobs>" +
@@ -667,7 +667,7 @@ public class GoConfigMigratorIntegrationTest {
                         "  <pipelines group='first'>" +
                         "    <pipeline name='Test' template='test_template'>" +
                         "      <materials>" +
-                        "        <hg url='../manual-testing/ant_hg/dummy' />" +
+                        "        <hg url='manual-testing/ant_hg/dummy' />" +
                         "      </materials>" +
                         "     </pipeline>" +
                         "  </pipelines>" +
@@ -705,7 +705,7 @@ public class GoConfigMigratorIntegrationTest {
                 "        </variable>"
                 + "      </environmentvariables>"
                 + "      <materials>"
-                + "        <hg url='../manual-testing/ant_hg/dummy' />"
+                + "        <hg url='manual-testing/ant_hg/dummy' />"
                 + "      </materials>"
                 + "  <stage name='dist'>"
                 + "    <jobs>"
@@ -733,7 +733,7 @@ public class GoConfigMigratorIntegrationTest {
                 + "  <pipelines group='first'>"
                 + "    <pipeline name='up42'>"
                 + "      <materials>"
-                + "        <hg url='../manual-testing/ant_hg/dummy' />"
+                + "        <hg url='manual-testing/ant_hg/dummy' />"
                 + "      </materials>"
                 + "  <stage name='dist'>"
                 + "    <jobs>"
@@ -775,7 +775,7 @@ public class GoConfigMigratorIntegrationTest {
                 + "  <pipelines group='first'>"
                 + "    <pipeline name='up42'>"
                 + "      <materials>"
-                + "        <hg url='../manual-testing/ant_hg/dummy' />"
+                + "        <hg url='manual-testing/ant_hg/dummy' />"
                 + "      </materials>"
                 + "  <stage name='dist'>"
                 + "    <jobs>"
@@ -835,7 +835,7 @@ public class GoConfigMigratorIntegrationTest {
                 + " <pipelines group='first'>"
                 + "   <pipeline name='up42'>"
                 + "     <materials>"
-                + "       <hg url='../manual-testing/ant_hg/dummy' />"
+                + "       <hg url='manual-testing/ant_hg/dummy' />"
                 + "     </materials>"
                 + "  <stage name='build'>"
                 + "    <jobs>"
@@ -912,7 +912,7 @@ public class GoConfigMigratorIntegrationTest {
                 + " <pipelines group='first'>"
                 + "   <pipeline name='up42'>"
                 + "     <materials>"
-                + "       <hg url='../manual-testing/ant_hg/dummy' />"
+                + "       <hg url='manual-testing/ant_hg/dummy' />"
                 + "     </materials>"
                 + "  <stage name='build'>"
                 + "    <jobs>"
@@ -929,7 +929,7 @@ public class GoConfigMigratorIntegrationTest {
                 + "   </pipeline>"
                 + "   <pipeline name='up43'>"
                 + "     <materials>"
-                + "       <hg url='../manual-testing/ant_hg/dummy' />"
+                + "       <hg url='manual-testing/ant_hg/dummy' />"
                 + "     </materials>"
                 + "  <stage name='build'>"
                 + "    <jobs>"

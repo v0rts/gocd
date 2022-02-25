@@ -1,5 +1,5 @@
 #
-# Copyright 2021 ThoughtWorks, Inc.
+# Copyright 2022 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ describe PipelinesHelper do
     it "should display appropriate message when when auto triggered " do
       joda_date = org.joda.time.DateTime.new(2010, 8, 20, 18, 3, 44, 0, org.joda.time.DateTimeZone.forOffsetHoursMinutes(5, 30))
       message = trigger_message_with_formatted_date_time(joda_date.to_date, GoConstants::DEFAULT_APPROVED_BY)
-      expect(message).to have_selector(".label", "Automatically triggered")
+      expect(message).to have_selector(".label", :text => "Automatically triggered")
       expect(message).to have_selector(".time[data='#{joda_date.to_date.getTime}']")
     end
   end
@@ -180,7 +180,7 @@ describe PipelinesHelper do
       def is_user_an_admin?; true; end
       def show_analytics_only_for_admins?; false; end
 
-      allow(@default_plugin_info_finder).to receive('allPluginInfos').with(PluginConstants.ANALYTICS_EXTENSION).and_return([@plugin_info1, @plugin_info2, @plugin_info3, @plugin_info4])
+      allow(@default_plugin_info_finder).to receive('allPluginInfos').with(PluginConstants::ANALYTICS_EXTENSION).and_return([@plugin_info1, @plugin_info2, @plugin_info3, @plugin_info4])
 
       ids = []
       with_pipeline_analytics_support do |plugin_id|
@@ -195,7 +195,7 @@ describe PipelinesHelper do
       def is_user_an_admin?; false; end
       def show_analytics_only_for_admins?; true; end
 
-      allow(@default_plugin_info_finder).to receive('allPluginInfos').with(PluginConstants.ANALYTICS_EXTENSION).and_return([@plugin_info1, @plugin_info2, @plugin_info3, @plugin_info4])
+      allow(@default_plugin_info_finder).to receive('allPluginInfos').with(PluginConstants::ANALYTICS_EXTENSION).and_return([@plugin_info1, @plugin_info2, @plugin_info3, @plugin_info4])
 
       ids = []
       with_pipeline_analytics_support do |plugin_id|

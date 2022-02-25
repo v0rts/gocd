@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,13 @@
 package com.thoughtworks.go.util;
 
 import com.rits.cloning.Cloner;
+import com.rits.cloning.IDeepCloner;
 
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -47,10 +52,19 @@ public class ClonerFactory {
         private static Cloner create(final Cloner cloner) {
             cloner.registerFastCloner(LIST_1_2.getClass(), (t, _1, _2) -> List.of(((List<?>) t).toArray()));
             cloner.registerFastCloner(SET_1_2.getClass(), (t, _1, _2) -> Set.of(((Set<?>) t).toArray()));
-
+            cloner.registerFastCloner(Date.class, (t, _1, _2) -> new Date(((Date)t).getTime()));
+            cloner.registerFastCloner(java.sql.Date.class, (t, _1, _2) -> new java.sql.Date(((java.sql.Date)t).getTime()));
+            cloner.registerFastCloner(Timestamp.class, ClonerFactory::cloneTimestamp);
+            cloner.registerFastCloner(File.class, (t, _1, _2) -> new File(((File)t).getPath()));
             return cloner;
         }
+    }
 
+    private static Timestamp cloneTimestamp(Object t, IDeepCloner cloner, Map<Object, Object> cloners) {
+        Timestamp original = (Timestamp) t;
+        Timestamp clone = new Timestamp(original.getTime());
+        clone.setNanos(original.getNanos());
+        return clone;
     }
 
     public static Cloner instance() {

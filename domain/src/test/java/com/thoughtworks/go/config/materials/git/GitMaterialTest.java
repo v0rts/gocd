@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -327,7 +327,7 @@ public class GitMaterialTest {
             validationBean = git.checkConnection(new TestSubprocessExecutionContext());
             assertThat(validationBean.isValid()).as("Connection should not be valid").isFalse();
             assertThat(validationBean.getError()).contains("Error performing command");
-            assertThat(validationBean.getError()).contains("git ls-remote http://nonExistantHost/git refs/heads/master");
+            assertThat(validationBean.getError()).contains("git ls-remote -- http://nonExistantHost/git refs/heads/master");
         }
 
         @Test

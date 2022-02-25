@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ import java.util.ArrayList;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {
@@ -70,7 +70,7 @@ public abstract class FullConfigSaveFlowTestBase {
     public void setUp() throws Exception {
         configHelper = new GoConfigFileHelper(goConfigDao);
         configHelper.onSetUp();
-        xml = goConfigMigration.upgradeIfNecessary(IOUtils.toString(getClass().getResourceAsStream("/data/pluggable_artifacts_with_params.xml"), UTF_8));
+        xml = goConfigMigration.upgradeIfNecessary(IOUtils.toString(getClass().getResource("/data/pluggable_artifacts_with_params.xml"), UTF_8));
         loader = new MagicalGoConfigXmlLoader(configCache, registry);
         setupMetadataForPlugin();
     }

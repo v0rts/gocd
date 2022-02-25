@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.util.Set;
 import static java.lang.String.format;
 
 public interface PushPayload extends Payload {
-    String branch();
+    Set<String> branches();
 
     default Set<String> repoUrls() {
         return possibleUrls(hostname(), fullName());
@@ -62,7 +62,7 @@ public interface PushPayload extends Payload {
         return format("%s[%s][%s]",
                 getClass().getSimpleName(),
                 fullName(),
-                branch()
+                String.join(", ", branches())
         );
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 
-import static com.thoughtworks.go.config.materials.ScmMaterialConfig.AUTO_UPDATE;
-import static com.thoughtworks.go.config.materials.ScmMaterialConfig.FOLDER;
+import static com.thoughtworks.go.config.materials.ScmMaterialConfig.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ScmMaterialConfigTest {

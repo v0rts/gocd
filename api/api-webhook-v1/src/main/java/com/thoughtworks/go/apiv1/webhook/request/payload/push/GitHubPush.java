@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ package com.thoughtworks.go.apiv1.webhook.request.payload.push;
 
 import com.thoughtworks.go.apiv1.webhook.request.json.GitHubRepository;
 
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
 @SuppressWarnings({"unused", "RedundantSuppression"})
@@ -27,8 +30,8 @@ public class GitHubPush implements PushPayload {
     private GitHubRepository repository;
 
     @Override
-    public String branch() {
-        return ref.startsWith("refs/heads/") ? removeStart(ref, "refs/heads/") : "";
+    public Set<String> branches() {
+        return ref.startsWith("refs/heads/") ? Set.of(removeStart(ref, "refs/heads/")) : emptySet();
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +109,16 @@ class Fixtures {
 
             private static Map<String, Object> hostedBitbucketTagPayload() {
                 load("/hosted-bitbucket-push.json") + ["changes": [["ref": ["displayId": "v1.0.0", "id": "refs/tags/v1.0.0", "type": "TAG"]]]]
+            }
+        }
+
+        static class PushMultipleChanges implements ArgumentsProvider, PostHelper.Mixin {
+            @Override
+            Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+                return Stream.of(
+                        Arguments.of(Notify.BITBUCKET, { String s -> withBitbucket(s) }, "/bitbucket-push-multiple-changes.json", first(Bitbucket.PUSH)),
+                        Arguments.of(Notify.HOSTED_BITBUCKET, { String s -> withHostedBitbucket(s) }, "/hosted-bitbucket-push-multiple-changes.json", first(HostedBitbucket.PUSH))
+                )
             }
         }
 

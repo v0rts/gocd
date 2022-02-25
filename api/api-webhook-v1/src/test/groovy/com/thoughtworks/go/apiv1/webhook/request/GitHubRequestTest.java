@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ class GitHubRequestTest implements WithMockRequests {
     }
 
     private void assertPayload(GitHubPush payload) {
-        assertEquals("release", payload.branch());
+        assertEquals(Set.of("release"), payload.branches());
         assertEquals("gocd/spaceship", payload.fullName());
         assertEquals("github.com", payload.hostname());
     }

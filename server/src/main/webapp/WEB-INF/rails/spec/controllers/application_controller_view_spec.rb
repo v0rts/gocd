@@ -1,5 +1,5 @@
 #
-# Copyright 2021 ThoughtWorks, Inc.
+# Copyright 2022 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ describe NonApiController do
     it "should fail with double_render error when not rendering error" do
       expect do
         get :double_render_without_error
-      end.to raise_error
+      end.to raise_error(AbstractController::DoubleRenderError)
     end
   end
 

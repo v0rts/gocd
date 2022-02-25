@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 import com.thoughtworks.go.build.ExecuteUnderRailsTask
+import com.thoughtworks.go.build.InstallerType
 import com.thoughtworks.go.build.YarnInstallTask
 import com.thoughtworks.go.build.YarnRunTask
 import groovy.text.SimpleTemplateEngine
@@ -107,35 +108,21 @@ task createJRubyBinstubs {
 task initializeRailsGems {
   outputs.cacheIf { true }
   dependsOn createJRubyBinstubs
-  inputs.files(project.configurations.jrubyGems)
   inputs.file("${project.railsRoot}/Gemfile")
   inputs.file("${project.railsRoot}/Gemfile.lock")
+  inputs.file("${project.railsRoot}/.bundle/config")
   inputs.properties([
+    jrubyVersion: project.deps.jruby,
     bundledGemDir: project.bundledGemDir,
     railsRoot: project.railsRoot
   ])
 
-  def outputDirs = [
-    project.bundledGemDir,
-    "${project.railsRoot}/.bundle"
-  ]
-
-  outputDirs.each {
-    outputs.dir(it)
-  }
+  outputs.dir(project.bundledGemDir)
 
   doFirst {
     project.jrubyexec {
       workingDir = project.railsRoot
-
-      args = ['-S', 'gem', 'install', '--quiet', '--no-ri', '--no-rdoc', '--local', '--ignore-dependencies', '--install-dir', project.bundledGemDir]
-      args += project.configurations.jrubyGems
-      maxHeapSize = '1g'
-    }
-
-    project.jrubyexec {
-      workingDir = project.railsRoot
-      args = ['-S', 'bundle', 'install', '--path', 'gems', '--clean', '--jobs', '4']
+      args = ['-S', 'bundle', 'install']
       maxHeapSize = '1g'
     }
   }
@@ -166,7 +153,6 @@ task cleanRails(type: Delete) {
   doFirst {
     // these are purposely added as `doFirst` to avoid intellij from excluding these from the modules
     project.delete project.jrubyScriptsDir
-    project.delete "${project.railsRoot}/.bundle"
     project.delete project.bundledGemDir
   }
 }
@@ -293,10 +279,9 @@ task rspec(type: ExecuteUnderRailsTask) {
     'REPORTS_DIR': "${project.buildDir}/rspec-results"
   ]
 
-  maxHeapSize = '6g'
-  jvmArgs += ['-XX:+UseCompressedOops', '-XX:-UseCompressedClassPointers', '-XX:+HeapDumpOnOutOfMemoryError', "-XX:HeapDumpPath=${project.buildDir}/heap-dumps"]
-
+  jvmArgs += InstallerType.server.jvmModuleOpensArgs + ['-XX:+HeapDumpOnOutOfMemoryError', "-XX:HeapDumpPath=${project.buildDir}/heap-dumps"]
   args = ['-S', 'rspec', '--backtrace']
+  maxHeapSize = '2g'
 
   if (project.hasProperty('opts')) {
     args += Commandline.translateCommandline(project.property('opts')) as List<String>
@@ -322,10 +307,9 @@ task parallelRspec(type: ExecuteUnderRailsTask) {
     'REPORTS_DIR': "${project.buildDir}/rspec-results"
   ]
 
-  maxHeapSize = '6g'
-  jvmArgs += ['-XX:+UseCompressedOops', '-XX:-UseCompressedClassPointers', '-XX:+HeapDumpOnOutOfMemoryError', "-XX:HeapDumpPath=${project.buildDir}/heap-dumps"]
-
+  jvmArgs += InstallerType.server.jvmModuleOpensArgs + ['-XX:+HeapDumpOnOutOfMemoryError', "-XX:HeapDumpPath=${project.buildDir}/heap-dumps"]
   args = ['-S', 'rspec', '--backtrace']
+  maxHeapSize = '2g'
 
   if (project.hasProperty('opts')) {
     args += Commandline.translateCommandline(project.property('opts')) as List<String>

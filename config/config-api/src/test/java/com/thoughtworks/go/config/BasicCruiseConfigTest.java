@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,6 @@ import com.thoughtworks.go.plugin.domain.elastic.ElasticAgentPluginInfo;
 import com.thoughtworks.go.security.CryptoException;
 import com.thoughtworks.go.security.GoCipher;
 import com.thoughtworks.go.security.ResetCipher;
-import com.thoughtworks.go.util.ClonerFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,8 +60,8 @@ import java.util.Map;
 import static com.thoughtworks.go.helper.MaterialConfigsMother.*;
 import static com.thoughtworks.go.helper.PipelineConfigMother.*;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -324,7 +323,7 @@ public class BasicCruiseConfigTest extends CruiseConfigTestBase {
                 new ConfigurationProperty(new ConfigurationKey("k3"), new ConfigurationValue("pub_v3"))));
         jobConfig.artifactTypeConfigs().add(artifactConfig);
 
-        BasicCruiseConfig preprocessed = ClonerFactory.instance().deepClone(cruiseConfig);
+        BasicCruiseConfig preprocessed = GoConfigMother.deepClone(cruiseConfig);
         new ConfigParamPreprocessor().process(preprocessed);
         cruiseConfig.encryptSecureProperties(preprocessed);
 
@@ -356,7 +355,7 @@ public class BasicCruiseConfigTest extends CruiseConfigTestBase {
 
         cruiseConfig.server().security().getRoles().add(pluginRole);
 
-        BasicCruiseConfig preprocessed = ClonerFactory.instance().deepClone(cruiseConfig);
+        BasicCruiseConfig preprocessed = GoConfigMother.deepClone(cruiseConfig);
         new ConfigParamPreprocessor().process(preprocessed);
         cruiseConfig.encryptSecureProperties(preprocessed);
 
@@ -388,7 +387,7 @@ public class BasicCruiseConfigTest extends CruiseConfigTestBase {
 
         cruiseConfig.getElasticConfig().getProfiles().add(elasticProfile);
 
-        BasicCruiseConfig preprocessed = ClonerFactory.instance().deepClone(cruiseConfig);
+        BasicCruiseConfig preprocessed = GoConfigMother.deepClone(cruiseConfig);
         new ConfigParamPreprocessor().process(preprocessed);
         cruiseConfig.encryptSecureProperties(preprocessed);
 
@@ -412,7 +411,7 @@ public class BasicCruiseConfigTest extends CruiseConfigTestBase {
 
         resetCipher.setupAESCipherFile();
         BasicCruiseConfig config = setupPipelines();
-        BasicCruiseConfig preprocessed = ClonerFactory.instance().deepClone(config);
+        BasicCruiseConfig preprocessed = GoConfigMother.deepClone(config);
         new ConfigParamPreprocessor().process(preprocessed);
         config.encryptSecureProperties(preprocessed);
         PipelineConfig ancestor = config.pipelineConfigByName(new CaseInsensitiveString("ancestor"));

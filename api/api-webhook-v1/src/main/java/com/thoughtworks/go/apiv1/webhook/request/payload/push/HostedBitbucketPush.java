@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toCollection;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "unused", "RedundantSuppression"})
@@ -34,13 +36,12 @@ public class HostedBitbucketPush implements PushPayload {
     private HostedBitbucketRepository repository;
 
     @Override
-    public String branch() {
+    public Set<String> branches() {
         return this.changes.stream()
                 .filter(change -> change.ref != null)
                 .filter(change -> equalsIgnoreCase(change.ref.type, "branch"))
                 .map(change -> change.ref.displayId)
-                .findFirst()
-                .orElse(""); // if pushing a tag, this might be blank
+                .collect(toCollection(TreeSet::new)); // if pushing a tag, this might be empty
     }
 
     @Override

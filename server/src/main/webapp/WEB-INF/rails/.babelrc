@@ -5,7 +5,7 @@
       "@babel/preset-env",
       {
         "debug": false,
-        "corejs": "3.18",
+        "corejs": "3.21",
         "useBuiltIns": "entry",
         "targets": {
           "browsers": [
@@ -26,11 +26,6 @@
         "debug": true,
         "pragma": "m"
       }
-    ]
-  ],
-  "plugins": [
-    [
-      "@babel/plugin-proposal-class-properties"
     ]
   ]
 }

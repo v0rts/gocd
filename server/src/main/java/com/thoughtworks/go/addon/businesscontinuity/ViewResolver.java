@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -36,9 +37,8 @@ public class ViewResolver {
     }
 
     public String resolveView(String viewName, Map<String, String> modelMap) {
-        try {
-            InputStream resourceAsStream = getResourceAsStream(viewName);
-            String template = IOUtils.toString(resourceAsStream, "UTF-8");
+        try (InputStream resourceAsStream = getResourceAsStream(viewName)) {
+            String template = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
             for (String modelKey : modelMap.keySet()) {
                 template = template.replaceAll(format("<<<%s>>>", modelKey), modelMap.get(modelKey));
             }

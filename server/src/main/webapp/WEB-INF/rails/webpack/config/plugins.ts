@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 import {CleanWebpackPlugin} from "clean-webpack-plugin";
+import ESLintPlugin from "eslint-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import fs from "fs";
 import HtmlWebpackPlugin from "html-webpack-plugin";
@@ -33,6 +34,12 @@ const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 
 export function plugins(configOptions: ConfigOptions): webpack.Plugin[] {
   const plugins = [
+    new ESLintPlugin({
+      extensions: ["js", "msx"],
+      exclude: ["node_modules", "webpack/gen"],
+      failOnWarning: true,
+      threads: true
+    }),
     new CleanWebpackPlugin(),
     new UnusedWebpackPlugin({
                               directories: [

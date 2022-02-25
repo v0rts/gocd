@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
@@ -128,14 +127,12 @@ public class GoFileConfigDataSourceIntegrationTest {
         cachedGoPartials.clear();
         dataSource.reloadIfModified();
         configHelper.onTearDown();
-        ReflectionUtil.setStaticField(Charset.class, DEFAULT_CHARSET, null);
         systemEnvironment.clearProperty(SystemEnvironment.CONFIG_FILE_PROPERTY);
         systemEnvironment.set(SystemEnvironment.ENABLE_CONFIG_MERGE_FEATURE, true);
     }
 
     @Test
     public void shouldConvertToUTF8BeforeSavingConfigToFileSystem() throws IOException {
-        ReflectionUtil.setStaticField(Charset.class, DEFAULT_CHARSET, Charset.forName("windows-1252"));
         GoFileConfigDataSource.GoConfigSaveResult result = dataSource.writeWithLock(new UpdateConfigCommand() {
             @Override
             public CruiseConfig update(CruiseConfig cruiseConfig) throws Exception {
@@ -608,7 +605,7 @@ public class GoFileConfigDataSourceIntegrationTest {
 
     private void updateConfigOnFileSystem(UpdateConfig updateConfig) throws Exception {
         String cruiseConfigFile = systemEnvironment.getCruiseConfigFile();
-        CruiseConfig updatedConfig = ClonerFactory.instance().deepClone(goConfigService.getConfigForEditing());
+        CruiseConfig updatedConfig = GoConfigMother.deepClone(goConfigService.getConfigForEditing());
         updateConfig.update(updatedConfig);
         File configFile = new File(cruiseConfigFile);
         FileOutputStream outputStream = new FileOutputStream(configFile);

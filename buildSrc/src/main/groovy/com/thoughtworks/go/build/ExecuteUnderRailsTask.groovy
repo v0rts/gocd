@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,8 +67,6 @@ class ExecuteUnderRailsTask extends JavaExec {
         environment += [CLASSPATH: project.jrubyJar().toString()]
       }
 
-      jvmArgs += project.defaultJvmArgs
-
       // flags to optimize jruby startup performance
       if (!disableJRubyOptimization) {
         jvmArgs += project.jrubyOptimizationJvmArgs
@@ -76,7 +74,7 @@ class ExecuteUnderRailsTask extends JavaExec {
 
       systemProperties += project.jrubyDefaultSystemProperties
 
-      main = 'org.jruby.Main'
+      mainClass.set('org.jruby.Main')
     }
   }
 
@@ -101,7 +99,7 @@ class ExecuteUnderRailsTask extends JavaExec {
   }
 
   static dumpTaskCommand(JavaExecSpec execSpec) {
-    println "[${execSpec.workingDir}]\$ ${execSpec.executable} ${execSpec.allJvmArgs.join(' ')} ${execSpec.main} ${execSpec.args.join(' ')}"
+    println "[${execSpec.workingDir}]\$ java ${execSpec.allJvmArgs.join(' ')} ${execSpec.mainClass.get()} ${execSpec.args.join(' ')}"
   }
 
   static void debugEnvironment(JavaExecSpec javaExecSpec, Map<String, Object> originalEnv) {

@@ -1,5 +1,5 @@
 #
-# Copyright 2021 ThoughtWorks, Inc.
+# Copyright 2022 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,13 +15,14 @@
 #
 
 gem_home = nil
+gem_ruby_version = "#{RUBY_VERSION}".gsub(/\.[0-9]+$/, '.0')
 gemfile_location = nil
 
 if $servlet_context
-  gem_home = $servlet_context.getRealPath("/WEB-INF/rails/gems/jruby/#{RUBY_VERSION}")
+  gem_home = $servlet_context.getRealPath("/WEB-INF/rails/gems/jruby/#{gem_ruby_version}")
   gemfile_location ||= $servlet_context.getRealPath('/WEB-INF/rails/Gemfile')
 else
-  gem_home = File.expand_path(File.join('..', "/rails/gems/jruby/#{RUBY_VERSION}"), __FILE__)
+  gem_home = File.expand_path(File.join('..', "/rails/gems/jruby/#{gem_ruby_version}"), __FILE__)
   gemfile_location ||= File.expand_path(File.join('..', '/rails/Gemfile'), __FILE__)
 end
 

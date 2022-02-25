@@ -1,5 +1,5 @@
 #
-# Copyright 2021 ThoughtWorks, Inc.
+# Copyright 2022 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,8 +64,6 @@ Rails.application.routes.draw do
     # redirects to first-stage details page of the specific pipeline run
     get 'pipelines/:pipeline_name/:pipeline_counter' => 'stages#redirect_to_first_stage', as: :internal_stage_detail_tab, constraints: PIPELINE_LOCATOR_CONSTRAINTS
   end
-
-  get 'preferences/notifications', controller: 'preferences', action: 'notifications'
 
   # bring back routes, these are referenced from rails pages...
   get "agents/:uuid" => 'agent_details#show', as: :agent_detail, constraints: {uuid: ALLOW_DOTS}

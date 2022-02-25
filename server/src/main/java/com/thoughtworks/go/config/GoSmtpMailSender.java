@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.MessagingException;
-import javax.mail.Transport;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 import static com.thoughtworks.go.util.GoConstants.DEFAULT_TIMEOUT;
-import static javax.mail.Message.RecipientType.TO;
+import static jakarta.mail.Message.RecipientType.TO;
 
 @EqualsAndHashCode
 public class GoSmtpMailSender implements GoMailSender {

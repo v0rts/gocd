@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.thoughtworks.go.config.materials.AbstractMaterialConfig;
 import com.thoughtworks.go.config.materials.Filter;
 import com.thoughtworks.go.config.materials.IgnoredFiles;
 import com.thoughtworks.go.config.materials.ScmMaterialConfig;
-import com.thoughtworks.go.config.materials.svn.SvnMaterialConfig;
 import com.thoughtworks.go.domain.materials.MaterialConfig;
 import com.thoughtworks.go.security.GoCipher;
 import com.thoughtworks.go.util.ReflectionUtil;
@@ -111,8 +110,8 @@ class P4MaterialConfigTest {
         assertThat(materialConfig.getEncryptedPassword()).isEqualTo(new GoCipher().encrypt("secret"));
 
         //Dont change
-        map.put(SvnMaterialConfig.PASSWORD, "Hehehe");
-        map.put(SvnMaterialConfig.PASSWORD_CHANGED, "0");
+        map.put(P4MaterialConfig.PASSWORD, "Hehehe");
+        map.put(P4MaterialConfig.PASSWORD_CHANGED, "0");
         materialConfig.setConfigAttributes(map);
 
         assertThat(ReflectionUtil.getField(materialConfig, "password")).isNull();
@@ -120,8 +119,8 @@ class P4MaterialConfigTest {
         assertThat(materialConfig.getEncryptedPassword()).isEqualTo(new GoCipher().encrypt("secret"));
 
         //Dont change
-        map.put(SvnMaterialConfig.PASSWORD, "");
-        map.put(SvnMaterialConfig.PASSWORD_CHANGED, "1");
+        map.put(P4MaterialConfig.PASSWORD, "");
+        map.put(P4MaterialConfig.PASSWORD_CHANGED, "1");
         materialConfig.setConfigAttributes(map);
 
         assertThat(materialConfig.getPassword()).isNull();

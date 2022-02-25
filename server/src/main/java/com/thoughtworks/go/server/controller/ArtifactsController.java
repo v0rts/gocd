@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.thoughtworks.go.server.controller;
 
 import com.thoughtworks.go.domain.ConsoleConsumer;
 import com.thoughtworks.go.domain.JobIdentifier;
+import com.thoughtworks.go.domain.StageIdentifier;
 import com.thoughtworks.go.domain.exception.IllegalArtifactLocationException;
 import com.thoughtworks.go.server.cache.ZipArtifactCache;
 import com.thoughtworks.go.server.dao.JobInstanceDao;
@@ -33,6 +34,7 @@ import com.thoughtworks.go.server.web.FileModelAndView;
 import com.thoughtworks.go.server.web.ResponseCodeView;
 import com.thoughtworks.go.util.ArtifactLogUtil;
 import com.thoughtworks.go.util.SystemEnvironment;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +151,9 @@ public class ArtifactsController {
         if (!headerConstraint.isSatisfied(request)) {
             return ResponseCodeView.create(HttpServletResponse.SC_BAD_REQUEST, "Missing required header 'Confirm'");
         }
+        if (!isValidStageCounter(stageCounter)) {
+            return buildNotFound(pipelineName, pipelineCounter, stageName, stageCounter, buildName);
+        }
         try {
             jobIdentifier = restfulService.findJob(pipelineName, pipelineCounter, stageName, stageCounter,
                     buildName, buildId);
@@ -224,6 +229,10 @@ public class ArtifactsController {
             return FileModelAndView.forbiddenUrl(filePath);
         }
 
+        if (!isValidStageCounter(stageCounter)) {
+            return buildNotFound(pipelineName, pipelineCounter, stageName, stageCounter, buildName);
+        }
+
         JobIdentifier jobIdentifier;
         try {
             jobIdentifier = restfulService.findJob(pipelineName, pipelineCounter, stageName, stageCounter, buildName, buildId);
@@ -250,6 +259,10 @@ public class ArtifactsController {
     ) {
         start = start == null ? 0L : start;
 
+        if (!isValidStageCounter(stageCounter)) {
+            return buildNotFound(pipelineName, pipelineCounter, stageName, stageCounter, buildName);
+        }
+
         try {
             JobIdentifier identifier = restfulService.findJob(pipelineName, pipelineCounter, stageName, stageCounter, buildName);
             if (jobInstanceDao.isJobCompleted(identifier) && !consoleService.doesLogExist(identifier)) {
@@ -272,6 +285,11 @@ public class ArtifactsController {
 
     ModelAndView getArtifact(String filePath, ArtifactFolderViewFactory folderViewFactory, String pipelineName, String counterOrLabel, String stageName, String stageCounter, String buildName, String sha, String serverAlias) throws Exception {
         LOGGER.info("[Artifact Download] Trying to resolve '{}' for '{}/{}/{}/{}/{}'", filePath, pipelineName, counterOrLabel, stageName, stageCounter, buildName);
+
+        if (!isValidStageCounter(stageCounter)) {
+            return buildNotFound(pipelineName, counterOrLabel, stageName, stageCounter, buildName);
+        }
+
         long before = System.currentTimeMillis();
         ArtifactsView view;
         //Work out the job that we are trying to retrieve
@@ -340,5 +358,18 @@ public class ArtifactsController {
     private ModelAndView logsNotFound(JobIdentifier identifier) {
         String notFound = String.format("Console log for %s is unavailable as it may have been purged by Go or deleted externally.", identifier.toFullString());
         return ResponseCodeView.create(SC_NOT_FOUND, notFound);
+    }
+
+    private boolean isValidStageCounter(String stageCounter) {
+        if (StringUtils.isEmpty(stageCounter) || StageIdentifier.LATEST.equalsIgnoreCase(stageCounter)) {
+            return true;
+        }
+
+        try {
+            int value = Integer.parseInt(stageCounter);
+            return value > 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

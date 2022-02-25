@@ -5,7 +5,7 @@ import org.gradle.internal.os.OperatingSystem
 import java.util.regex.Pattern
 
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,12 @@ import java.util.regex.Pattern
 
 OperatingSystem currentOS = OperatingSystem.current()
 
+// Chrome:        See https://chromedriver.chromium.org/downloads  Must match version of Chrome on build host
+// Firefox/gecko: See https://github.com/mozilla/geckodriver/releases and review compatibility at
+//                https://firefox-source-docs.mozilla.org/testing/geckodriver/Support.html
 final Map<String, String> seleniumDrivers = [
-  chromedriver: '87.0.4280.88',
-  geckodriver : '0.27.0',
+  chromedriver: '98.0.4758.80',
+  geckodriver: '0.30.0',
 ]
 
 def execute = { String path, String... argv ->
@@ -72,8 +75,8 @@ def browser = { ->
   return 'firefox'
 }
 
-def browserExecutable = { String path->
-  def separator = "=".multiply(72)
+def browserExecutable = { String path ->
+  def separator = "=" * 72
   println "Browser versions"
   println(separator)
   switch(browser()) {
@@ -173,9 +176,13 @@ task jasmineOld(type: ExecuteUnderRailsTask) {
     'BROWSER'            : browser(),
   ]
 
+  jvmArgs += [
+          // Address JRuby: WARN FilenoUtil : Native subprocess control requires open access to the JDK IO subsystem
+          '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+          '--add-opens=java.base/java.io=ALL-UNNAMED'
+  ]
   args = ['-S', 'rails', 'jasmine:ci']
-  // setup max heap, this is typically required on windows.
-  jvmArgs('-Xmx2g')
+  maxHeapSize = '2g'
 
   doFirst {
     def additionalPaths = [

@@ -1,20 +1,13 @@
 source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+ruby '2.6.8'
 
-ruby '2.5.0'
-
-gem 'rails', '5.2.6'
-gem 'sass-rails', '5.1.0'
-gem 'uglifier'
+gem 'rails'
+gem 'sass-rails'
 
 gem 'dynamic_form'
 
-gem 'roar', '1.0.1'
-gem 'representable', '2.1.7'
-
 gem 'js-routes'
 gem 'ts_routes'
-gem 'versionist'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -27,11 +20,11 @@ group :development, :test do
   gem 'jasmine_selenium_runner'
 
   # make sure to `System.setProperty("jruby.runtime.arguments", "--debug")` before opening up pry
-  gem 'pry-debugger-jruby'
+  gem 'pry-debugger-jruby', platforms: :jruby
 end
 
 group :test do
-  gem 'capybara', '2.15.4'
+  gem 'capybara'
   gem 'rspec-rails'
   gem 'rspec-instafail', require: false
   gem 'rspec_junit_formatter'

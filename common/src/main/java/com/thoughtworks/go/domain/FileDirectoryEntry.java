@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class FileDirectoryEntry extends DirectoryEntry {
         return HtmlElement.li().content(
             HtmlElement.span(HtmlAttribute.cssClass("artifact")).content(
                 HtmlElement.a(HtmlAttribute.href(getUrl()))
-                        .content(getFileName())
+                        .safecontent(getFileName())
             )
         );
 

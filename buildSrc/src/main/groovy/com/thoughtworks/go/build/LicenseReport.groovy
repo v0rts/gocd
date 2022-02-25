@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,13 +129,11 @@ class LicenseReport {
             renderModuleData(markup, counter.incrementAndGet(), moduleName, moduleLicenseData)
           }
 
-          new JsonSlurper().parse(LicenseReport.class.getResourceAsStream("/license-for-misc-things.json"), "utf-8").each { String moduleName, Map<String, Object> moduleLicenseData ->
-            renderModuleData(markup, counter.incrementAndGet(), moduleName, moduleLicenseData)
-          }
-
           new JsonSlurper().parse(this.rubygemsLicenseReport, "utf-8").each { String moduleName, Map<String, Object> moduleLicenseData ->
             renderModuleData(markup, counter.incrementAndGet(), moduleName, moduleLicenseData)
           }
+
+          renderModuleData(markup, counter.incrementAndGet(), "openjdk", openJdkLicense())
 
           div(class: "footer") {
             span("This report was generated at ")
@@ -145,6 +143,22 @@ class LicenseReport {
         }
       }
     }
+  }
+
+  private Map<String, Object> openJdkLicense() {
+    [
+      "moduleName": "openjdk",
+      "moduleVersion": "${project.packaging.adoptOpenjdk.featureVersion}",
+      "moduleUrls": [
+        "https://jdk.java.net/${project.packaging.adoptOpenjdk.featureVersion}/"
+      ],
+      "moduleLicenses": [
+        [
+          "moduleLicense": "GPLv2 with the Classpath Exception",
+          "moduleLicenseUrl": "https://openjdk.java.net/legal/gplv2+ce.html"
+        ]
+      ]
+    ]
   }
 
   private void renderModuleData(MarkupBuilder template, int counter, String moduleName, Map<String, Object> moduleLicenseData) {

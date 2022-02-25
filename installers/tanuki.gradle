@@ -2,7 +2,7 @@ import com.thoughtworks.go.build.DownloadFile
 import org.apache.commons.codec.digest.DigestUtils
 
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ private File destFile(String url) {
 }
 
 task downloadTanukiDeltaPack(type: DownloadFile) {
-  def srcUrl = System.getenv("TANKUK_WRAPPER_URL") ?: "https://nexus.gocd.io/repository/s3-mirrors/local/tanuki/wrapper-delta-pack-${project.versions.tanuki}-st.tar.gz"
+  def srcUrl = System.getenv("TANUKI_WRAPPER_URL") ?: "https://nexus.gocd.io/repository/s3-mirrors/local/tanuki/wrapper-delta-pack-${project.versions.tanuki}.tar.gz"
   src srcUrl
   dest destFile(srcUrl)
-  checksum '18625b1d009e0973fe066d12ab6ea3b956d7a25d9220966d763de601df28e3a5'
+  checksum project.versions.tanukiSha256sum
 }
 
 task extractDeltaPack(type: Copy) {

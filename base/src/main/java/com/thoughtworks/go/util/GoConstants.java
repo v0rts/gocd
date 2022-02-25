@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,6 @@ public class GoConstants {
     public static final long MEGA_BYTE = 1024 * 1024;
     public static final long GIGA_BYTE = MEGABYTES_IN_GIGABYTE * MEGA_BYTE;
     public static final String USE_COMPRESSED_JAVASCRIPT = "rails.use.compressed.js";
-    public static final String I18N_CACHE_LIFE = "cruise.i18n.cache.life";
     public static final String GO_URL_CONTEXT = "/go";
     public static final String REGULAR_MULTIPART_FILENAME = "file";
     public static final String CHECKSUM_MULTIPART_FILENAME = "file_checksum";

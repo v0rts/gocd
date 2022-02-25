@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.thoughtworks.go.server.presentation.models.HtmlRenderer;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class HtmlElement implements HtmlRenderable {
     public static HtmlElement div(HtmlAttribute... attributes) { return new HtmlElement("div", attributes); }
@@ -37,8 +38,12 @@ public class HtmlElement implements HtmlRenderable {
         this.attributes = attributes;
     }
 
-    public HtmlElement content(String body) {
+    public HtmlElement unsafecontent(String body) {
         return content(new TextElement(body));
+    }
+
+    public HtmlElement safecontent(String body) {
+        return content(new TextElement(StringEscapeUtils.escapeHtml4(body)));
     }
 
     public HtmlElement content(HtmlRenderable... elements) {
@@ -80,5 +85,4 @@ public class HtmlElement implements HtmlRenderable {
             renderer.append("</" + elementName + ">\n");
         }
     }
-
 }

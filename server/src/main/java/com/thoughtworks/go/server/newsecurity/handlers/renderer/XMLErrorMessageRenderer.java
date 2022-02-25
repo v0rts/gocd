@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.thoughtworks.go.server.newsecurity.handlers.renderer;
 
 import com.thoughtworks.go.server.newsecurity.models.ContentTypeAwareResponse;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.MediaType;
 
 public class XMLErrorMessageRenderer extends ContentTypeAwareResponse {
@@ -28,7 +28,7 @@ public class XMLErrorMessageRenderer extends ContentTypeAwareResponse {
     public String getFormattedMessage(String message) {
         return new StringBuilder()
                 .append("<access-denied>\n")
-                .append("  <message>").append(StringEscapeUtils.escapeXml(message)).append("</message>\n")
+                .append("  <message>").append(StringEscapeUtils.escapeXml11(message)).append("</message>\n")
                 .append("</access-denied>\n")
                 .toString();
     }

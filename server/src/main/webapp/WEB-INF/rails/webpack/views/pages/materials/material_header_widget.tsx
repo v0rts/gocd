@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ export class MaterialHeaderWidget extends MithrilViewComponent<MaterialAttrs> {
       : <span><span className={headerStyles.committer}>{username}</span> | {revision} </span>;
 
     const vsmLink = <Link dataTestId={"vsm-link"} href={SparkRoutes.materialsVsmLink(fingerprint, modification.revision)}
-                          title={"Value Stream Map"} onclick={e => e.stopPropagation()}>VSM</Link>;
+                          title={"Value Stream Map"} onclick={(e: any) => e.stopPropagation()}>VSM</Link>;
     return <div className={styles.commitInfo}>
       <span className={headerStyles.comment}>
         {comment}

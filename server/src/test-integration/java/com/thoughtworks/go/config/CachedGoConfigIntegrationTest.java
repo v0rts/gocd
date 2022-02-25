@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,10 @@ import com.thoughtworks.go.serverhealth.HealthStateType;
 import com.thoughtworks.go.serverhealth.ServerHealthService;
 import com.thoughtworks.go.serverhealth.ServerHealthState;
 import com.thoughtworks.go.service.ConfigRepository;
-import com.thoughtworks.go.util.*;
+import com.thoughtworks.go.util.GoConfigFileHelper;
+import com.thoughtworks.go.util.ReflectionUtil;
+import com.thoughtworks.go.util.SystemEnvironment;
+import com.thoughtworks.go.util.TempDirUtils;
 import com.thoughtworks.go.util.command.CommandLine;
 import com.thoughtworks.go.util.command.ConsoleResult;
 import org.apache.commons.io.FileUtils;
@@ -84,6 +87,7 @@ import java.util.stream.Collectors;
 
 import static com.thoughtworks.go.helper.ConfigFileFixture.DEFAULT_XML_WITH_2_AGENTS;
 import static com.thoughtworks.go.helper.MaterialConfigsMother.git;
+import static com.thoughtworks.go.util.GoConstants.CONFIG_SCHEMA_VERSION;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
@@ -465,7 +469,7 @@ public class CachedGoConfigIntegrationTest {
 
     @Test
     public void shouldInterpolateParamsInTemplate() throws Exception {
-        String content = "<cruise schemaVersion='" + GoConstants.CONFIG_SCHEMA_VERSION + "'>\n"
+        String content = "<cruise schemaVersion='" + CONFIG_SCHEMA_VERSION + "'>\n"
                 + "<server>"
                 + "<artifacts>\n"
                 + "<artifactsDir>artifacts</artifactsDir>\n"
@@ -527,7 +531,7 @@ public class CachedGoConfigIntegrationTest {
 
     @Test
     public void shouldHandleParamQuotingCorrectly() throws Exception {
-        String content = "<cruise schemaVersion='" + GoConstants.CONFIG_SCHEMA_VERSION + "'>\n"
+        String content = "<cruise schemaVersion='" + CONFIG_SCHEMA_VERSION + "'>\n"
                 + "<server>"
                 + "<artifacts>\n"
                 + "<artifactsDir>artifacts</artifactsDir>\n"
@@ -566,7 +570,7 @@ public class CachedGoConfigIntegrationTest {
 
     @Test
     public void shouldAllowParamsInLabelTemplates() throws Exception {
-        String content = "<cruise schemaVersion='" + GoConstants.CONFIG_SCHEMA_VERSION + "'>\n"
+        String content = "<cruise schemaVersion='" + CONFIG_SCHEMA_VERSION + "'>\n"
                 + "<server>"
                 + "<artifacts>\n"
                 + "<artifactsDir>artifacts</artifactsDir>\n"
@@ -603,7 +607,7 @@ public class CachedGoConfigIntegrationTest {
 
     @Test
     public void shouldThrowErrorWhenEnvironmentVariablesAreDuplicate() throws Exception {
-        String content = "<cruise schemaVersion='" + GoConstants.CONFIG_SCHEMA_VERSION + "'>\n"
+        String content = "<cruise schemaVersion='" + CONFIG_SCHEMA_VERSION + "'>\n"
                 + "<server>"
                 + "<artifacts>\n"
                 + "<artifactsDir>artifacts</artifactsDir>\n"
@@ -760,7 +764,7 @@ public class CachedGoConfigIntegrationTest {
 
     private String configXmlWithPipeline(String pipelineName) {
         return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                "<cruise xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"cruise-config.xsd\" schemaVersion=\"" + GoConstants.CONFIG_SCHEMA_VERSION + "\">\n" +
+                "<cruise xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"cruise-config.xsd\" schemaVersion=\"" + CONFIG_SCHEMA_VERSION + "\">\n" +
                 "  <server serverId=\"dd8d0f5a-7e8d-4948-a1c7-ddcedbac15d0\">\n" +
                 "    <artifacts>\n" +
                 "       <artifactsDir>artifacts</artifactsDir>\n" +
@@ -880,7 +884,7 @@ public class CachedGoConfigIntegrationTest {
         String remoteDownstream = "remote-downstream";
         setupExternalConfigRepoWithDependencyMaterialOnPipelineInMainXml(upstream, remoteDownstream);
 
-        PartialConfig partialWithStageRenamed = ClonerFactory.instance().deepClone(cachedGoPartials.lastValidPartials().get(0));
+        PartialConfig partialWithStageRenamed = GoConfigMother.deepClone(cachedGoPartials.lastValidPartials().get(0));
         PipelineConfig pipelineInRemoteConfigRepo = partialWithStageRenamed.getGroups().get(0).getPipelines().get(0);
         pipelineInRemoteConfigRepo.materialConfigs().getDependencyMaterial().setStageName(new CaseInsensitiveString("new_name"));
         partialWithStageRenamed.setOrigin(new RepoConfigOrigin(configRepo, "r2"));
@@ -932,7 +936,7 @@ public class CachedGoConfigIntegrationTest {
         cachedGoPartials.clear();
         PartialConfig invalidPartial = PartialConfigMother.invalidPartial("invalid", new RepoConfigOrigin(configRepo, "revision1"));
         partialConfigService.onSuccessPartialConfig(configRepo, invalidPartial);
-        CruiseConfig updatedConfig = ClonerFactory.instance().deepClone(goConfigService.getConfigForEditing());
+        CruiseConfig updatedConfig = GoConfigMother.deepClone(goConfigService.getConfigForEditing());
         updatedConfig.server().setJobTimeout("10");
         String updatedXml = goFileConfigDataSource.configAsXml(updatedConfig, false);
         FileUtils.writeStringToFile(new File(goConfigDao.fileLocation()), updatedXml, UTF_8);
@@ -1059,7 +1063,7 @@ public class CachedGoConfigIntegrationTest {
         assertThat(cachedGoPartials.lastValidPartials().contains(validPartial)).isTrue();
         assertThat(cachedGoPartials.lastKnownPartials().contains(validPartial)).isTrue();
 
-        CruiseConfig config = ClonerFactory.instance().deepClone(cachedGoConfig.loadForEditing());
+        CruiseConfig config = GoConfigMother.deepClone(cachedGoConfig.loadForEditing());
 
         config.addEnvironment(UUID.randomUUID().toString());
 
@@ -1087,7 +1091,7 @@ public class CachedGoConfigIntegrationTest {
         assertThat(cachedGoPartials.lastValidPartials().isEmpty()).isTrue();
         assertThat(cachedGoPartials.lastKnownPartials().contains(invalidPartial)).isTrue();
 
-        CruiseConfig config = ClonerFactory.instance().deepClone(cachedGoConfig.loadForEditing());
+        CruiseConfig config = GoConfigMother.deepClone(cachedGoConfig.loadForEditing());
 
         config.addEnvironment(UUID.randomUUID().toString());
 
@@ -1117,7 +1121,7 @@ public class CachedGoConfigIntegrationTest {
         assertThat(cachedGoPartials.lastValidPartials().contains(validPartial)).isTrue();
         assertThat(cachedGoPartials.lastKnownPartials().contains(invalidPartial)).isTrue();
 
-        CruiseConfig config = ClonerFactory.instance().deepClone(cachedGoConfig.loadForEditing());
+        CruiseConfig config = GoConfigMother.deepClone(cachedGoConfig.loadForEditing());
 
         config.addEnvironment(UUID.randomUUID().toString());
 
@@ -1141,7 +1145,7 @@ public class CachedGoConfigIntegrationTest {
         setupExternalConfigRepoWithDependencyMaterialOnPipelineInMainXml("upstream", "downstream");
         String gitShaBeforeSave = configRepository.getCurrentRevCommit().getName();
         CruiseConfig originalConfig = cachedGoConfig.loadForEditing();
-        CruiseConfig editedConfig = ClonerFactory.instance().deepClone(originalConfig);
+        CruiseConfig editedConfig = GoConfigMother.deepClone(originalConfig);
 
         editedConfig.getGroups().remove(editedConfig.findGroup("default"));
 
@@ -1172,7 +1176,7 @@ public class CachedGoConfigIntegrationTest {
         assertThat(cachedGoPartials.lastValidPartials().isEmpty()).isTrue();
 
         CruiseConfig originalConfig = cachedGoConfig.loadForEditing();
-        CruiseConfig editedConfig = ClonerFactory.instance().deepClone(originalConfig);
+        CruiseConfig editedConfig = GoConfigMother.deepClone(originalConfig);
 
         editedConfig.addPipeline("default", upstream);
         ConfigSaveState state = cachedGoConfig.writeFullConfigWithLock(new FullConfigUpdateCommand(editedConfig, goConfigService.configFileMd5()));
@@ -1200,7 +1204,7 @@ public class CachedGoConfigIntegrationTest {
         ArtifactStore artifactStore = new ArtifactStore("dockerhub", "cd.go.artifact.docker.registry");
         artifactStoreService.create(Username.ANONYMOUS, artifactStore, new HttpLocalizedOperationResult());
         File configFile = new File(new SystemEnvironment().getCruiseConfigFile());
-        String config = goConfigMigration.upgradeIfNecessary(IOUtils.toString(getClass().getResourceAsStream("/data/pluggable_artifacts_with_params.xml"), UTF_8));
+        String config = goConfigMigration.upgradeIfNecessary(IOUtils.toString(getClass().getResource("/data/pluggable_artifacts_with_params.xml"), UTF_8));
         FileUtils.writeStringToFile(configFile, config, UTF_8);
 
         cachedGoConfig.forceReload();
@@ -1221,7 +1225,7 @@ public class CachedGoConfigIntegrationTest {
         ArtifactStore artifactStore = new ArtifactStore("dockerhub", "cd.go.artifact.docker.registry");
         artifactStoreService.create(Username.ANONYMOUS, artifactStore, new HttpLocalizedOperationResult());
         File configFile = new File(new SystemEnvironment().getCruiseConfigFile());
-        String config = goConfigMigration.upgradeIfNecessary(IOUtils.toString(getClass().getResourceAsStream("/data/pluggable_artifacts_with_params.xml"), UTF_8));
+        String config = goConfigMigration.upgradeIfNecessary(IOUtils.toString(getClass().getResource("/data/pluggable_artifacts_with_params.xml"), UTF_8));
         FileUtils.writeStringToFile(configFile, config, UTF_8);
 
         cachedGoConfig.forceReload();

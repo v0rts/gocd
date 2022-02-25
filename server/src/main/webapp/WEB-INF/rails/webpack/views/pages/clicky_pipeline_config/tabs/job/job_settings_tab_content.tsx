@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ export class JobSettingsTabContentWidget extends MithrilViewComponent<Attrs> {
                          helpText={<div>The Elastic Agent Profile that the current job requires to run. Visit <a href="/go/admin/elastic_agent_configurations" title="Elastic Agents Configurations">Elastic Agent Configurations</a> page to manage elastic agent profiles.</div>}
                          property={entity.elasticProfileId}/>
       <h3>Job Timeout</h3>
-      <RadioField onchange={(val) => this.toggleJobTimeout((val as "never" | "default" | "number"), entity)}
+      <RadioField onchange={(val: any) => this.toggleJobTimeout((val as "never" | "default" | "number"), entity)}
                   dataTestId={"job-timout"}
                   readonly={vnode.attrs.readonly}
                   property={entity.jobTimeoutType}
@@ -121,7 +121,7 @@ export class JobSettingsTabContentWidget extends MithrilViewComponent<Attrs> {
       <h3>Run Type</h3>
       <RadioField property={entity.runType}
                   readonly={vnode.attrs.readonly}
-                  onchange={(val) => this.toggleRunInstance((val as "one" | "all" | "number"), entity)}
+                  onchange={(val: any) => this.toggleRunInstance((val as "one" | "all" | "number"), entity)}
                   dataTestId={"run-type"}
                   possibleValues={[
                     {

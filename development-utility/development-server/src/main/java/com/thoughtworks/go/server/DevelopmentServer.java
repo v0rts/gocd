@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,6 @@ public class DevelopmentServer {
         systemEnvironment.set(SystemEnvironment.DEFAULT_PLUGINS_ZIP, "/plugins.zip");
         systemEnvironment.set(SystemEnvironment.PLUGIN_ACTIVATOR_JAR_PATH, "go-plugin-activator.jar");
         systemEnvironment.set(SystemEnvironment.FAIL_STARTUP_ON_DATA_ERROR, true);
-        systemEnvironment.setProperty(GoConstants.I18N_CACHE_LIFE, "0"); //0 means reload when stale
         systemEnvironment.set(SystemEnvironment.GO_SERVER_MODE, "development");
         setupPeriodicGC(systemEnvironment);
         assertPluginsZipExists();

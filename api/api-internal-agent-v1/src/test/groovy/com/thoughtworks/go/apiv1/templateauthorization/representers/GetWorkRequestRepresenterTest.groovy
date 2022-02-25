@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,10 @@
 package com.thoughtworks.go.apiv1.templateauthorization.representers
 
 import com.thoughtworks.go.apiv1.internalagent.representers.GetWorkRequestRepresenter
-import com.thoughtworks.go.apiv1.internalagent.representers.WorkRepresenter
 import com.thoughtworks.go.config.Agent
 import com.thoughtworks.go.domain.AgentRuntimeStatus
-import com.thoughtworks.go.remote.work.DeniedAgentWork
 import com.thoughtworks.go.server.service.AgentRuntimeInfo
 import com.thoughtworks.go.server.service.ElasticAgentRuntimeInfo
-import org.apache.commons.lang.builder.EqualsBuilder
 import org.junit.jupiter.api.Test
 
 import static com.thoughtworks.go.util.SystemUtil.currentWorkingDirectory

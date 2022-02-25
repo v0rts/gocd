@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import com.thoughtworks.go.apiv1.webhook.request.payload.push.GitLabPush;
 import com.thoughtworks.go.junit5.FileSource;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GitLabRequestTest implements WithMockRequests {
@@ -32,7 +34,7 @@ class GitLabRequestTest implements WithMockRequests {
     }
 
     private void assertPayload(GitLabPush payload) {
-        assertEquals("release", payload.branch());
+        assertEquals(Set.of("release"), payload.branches());
         assertEquals("gocd/spaceship", payload.fullName());
         assertEquals("gitlab.example.com", payload.hostname());
     }

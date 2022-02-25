@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,7 @@ import com.thoughtworks.go.domain.JobResult;
 import com.thoughtworks.go.domain.JobState;
 import com.thoughtworks.go.server.messaging.JobStatusMessage;
 import com.thoughtworks.go.server.messaging.JobStatusTopic;
-import com.thoughtworks.go.server.service.AgentRuntimeInfo;
-import com.thoughtworks.go.server.service.AgentService;
-import com.thoughtworks.go.server.service.AgentWithDuplicateUUIDException;
-import com.thoughtworks.go.server.service.BuildRepositoryService;
+import com.thoughtworks.go.server.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +50,7 @@ public class BuildRepositoryRemoteImpl {
             AgentInstance agentInstance = agentService.findAgentAndRefreshStatus(info.getUUId());
 
             return agentInstance.agentInstruction();
-        } catch (AgentWithDuplicateUUIDException agentException) {
+        } catch (AgentWithDuplicateUUIDException | AgentNoCookieSetException agentException) {
             throw wrappedException(agentException);
         } catch (Exception e) {
             LOGGER.error("Error occurred in {} ping.", info, e);

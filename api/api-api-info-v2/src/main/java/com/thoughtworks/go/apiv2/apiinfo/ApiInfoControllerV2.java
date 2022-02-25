@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.thoughtworks.go.api.ApiController;
 import com.thoughtworks.go.api.ApiVersion;
 import com.thoughtworks.go.api.spring.ApiAuthenticationHelper;
 import com.thoughtworks.go.apiv2.apiinfo.representers.RouteEntryRepresenter;
-import com.thoughtworks.go.spark.DeprecatedAPI;
 import com.thoughtworks.go.spark.Routes;
 import com.thoughtworks.go.spark.spring.RouteEntry;
 import com.thoughtworks.go.spark.spring.RouteInformationProvider;

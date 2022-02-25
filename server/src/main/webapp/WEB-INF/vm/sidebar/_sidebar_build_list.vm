@@ -1,5 +1,5 @@
 #*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@
                 <div class="time_ago" data="${listPresenter.scheduledTime}"></div>
 
                 </a>
-                <!-- should be ${listPresenter.tabToShow} -->
             </li>
             #end
         </ul>

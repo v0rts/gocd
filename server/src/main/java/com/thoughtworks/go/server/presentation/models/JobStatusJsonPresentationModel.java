@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,16 +122,6 @@ public class JobStatusJsonPresentationModel {
 
     public boolean isSame(long buildInstanceId) {
         return instance.getId() == buildInstanceId;
-    }
-
-    public String getTabToShow() {
-        String result = "";
-        if (instance.isPassed()) {
-            result = "#tab-artifacts";
-        } else if (instance.isFailed()) {
-            result = "#tab-failures";
-        }
-        return result;
     }
 
     public String getBuildLocator() {

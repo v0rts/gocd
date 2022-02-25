@@ -4,7 +4,7 @@ import com.thoughtworks.go.build.VerifyJarTask
 import org.apache.commons.codec.digest.DigestUtils
 
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,23 +27,23 @@ def dependencies = [
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-ldap-authentication-plugin',
-    tagName: 'v2.0.1-90',
-    asset: 'gocd-ldap-authentication-plugin-2.0.1-90.jar',
-    checksum: '53ecb45c2e45570fad585ac7ad4b2a4d9f1ae97e0fb9b81fac2495fe03c18ec0'
+    tagName: 'v2.1.0-139',
+    asset: 'gocd-ldap-authentication-plugin-2.1.0-139.jar',
+    checksum: '4a1fb6fdd232612e4b8e46c095d6c6ec0abbb2ab8b7755cf9f9a7e7aad83132e'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-filebased-authentication-plugin',
-    tagName: '2.0.0',
-    asset: 'gocd-filebased-authentication-plugin-2.0.0-63.jar',
-    checksum: '0095d3a3db8059e6406ef71269cd0ca29cc1f9411f3583fc73e28aea218110f7'
+    tagName: 'v2.1.0-123',
+    asset: 'gocd-filebased-authentication-plugin-2.1.0-123.jar',
+    checksum: '8a873b1466c9f1f8a46cec4bac1431be4fcb27f3871dcfb699d61a0adc45e626'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-yum-repository-poller-plugin',
-    tagName: 'v2.0.5-37',
-    asset: 'gocd-yum-repo-plugin-2.0.5-37.jar',
-    checksum: '7518b4f2d63e69591bf83780f3eba96183a68d0e8fe1e8feb38797df0a4b448f'
+    tagName: 'v2.0.5-92',
+    asset: 'gocd-yum-repo-plugin-2.0.5-92.jar',
+    checksum: '1e8accc81660cb2e49c4c1c423a8a4471fbf6ec0f0d56f86ffecaa666ccf9bf3'
   ),
   new GithubArtifact(
     user: 'tomzo',
@@ -62,9 +62,9 @@ def dependencies = [
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-file-based-secrets-plugin',
-    tagName: 'v1.0.0-33',
-    asset: 'gocd-file-based-secrets-plugin-1.0.0-33.jar',
-    checksum: '66207eb56aa9e3df6dbe587b1fd55f681cb3bce61865fae72b824e12a8bf08ff'
+    tagName: 'v1.1.0-80',
+    asset: 'gocd-file-based-secrets-plugin-1.1.0-80.jar',
+    checksum: '41611dcceff2cb3c1923baac051a7993f055b3876edb3b3956282e47e0c2e359'
   )
 ]
 

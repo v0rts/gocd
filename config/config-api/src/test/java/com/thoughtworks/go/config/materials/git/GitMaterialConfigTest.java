@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -266,6 +266,16 @@ class GitMaterialConfigTest {
             gitMaterialConfig.setPassword("badger");
 
             assertFalse(validating(gitMaterialConfig).errors().containsKey(GitMaterialConfig.URL));
+        }
+
+        @Test
+        void rejectsObviouslyWrongURL() {
+            assertTrue(validating(git("-url-not-starting-with-an-alphanumeric-character")).errors().containsKey(GitMaterialConfig.URL));
+            assertTrue(validating(git("_url-not-starting-with-an-alphanumeric-character")).errors().containsKey(GitMaterialConfig.URL));
+            assertTrue(validating(git("@url-not-starting-with-an-alphanumeric-character")).errors().containsKey(GitMaterialConfig.URL));
+
+            assertFalse(validating(git("url-starting-with-an-alphanumeric-character")).errors().containsKey(GitMaterialConfig.URL));
+            assertFalse(validating(git("#{url}")).errors().containsKey(GitMaterialConfig.URL));
         }
 
         private GitMaterialConfig validating(GitMaterialConfig git) {

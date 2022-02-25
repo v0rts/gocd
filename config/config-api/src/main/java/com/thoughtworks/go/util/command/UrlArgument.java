@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,16 @@ import org.apache.http.client.utils.URIBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 import static com.thoughtworks.go.util.ExceptionUtils.bombIfNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @ConfigAttributeValue(fieldName = "url")
 public class UrlArgument extends CommandArgument {
+    private static final String URL_DUMB_VALIDATION_REGEX = "^[a-zA-Z0-9/#].*";
+    private static final Pattern pattern = Pattern.compile(URL_DUMB_VALIDATION_REGEX);
+
     protected String url;
 
     public UrlArgument(String url) {
@@ -122,5 +126,9 @@ public class UrlArgument extends CommandArgument {
         } catch (URISyntaxException e) {
             return url;
         }
+    }
+
+    public boolean isValidURLOrLocalPath() {
+        return pattern.matcher(url).matches();
     }
 }

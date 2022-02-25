@@ -1,5 +1,5 @@
 ##########################################################################
-# Copyright 2021 ThoughtWorks, Inc.
+# Copyright 2022 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -262,6 +262,7 @@ server-launcher/out/
 server-launcher/target/
 server/agent-launcher.jar
 server/agent.jar
+server/defaultFiles/
 server/artifacts/
 server/artifactsDir/
 server/config/agentkeystore
@@ -283,7 +284,6 @@ server/target/
 server/test-repo/
 server/testdata/test-agent.jar
 server/tfs-impl-14.jar
-server/src/main/webapp/WEB-INF/rails/.bundle/
 server/src/main/webapp/WEB-INF/rails/db/config.git/
 server/src/main/webapp/WEB-INF/rails/logs/
 server/src/main/webapp/WEB-INF/rails/node_modules/
@@ -314,6 +314,7 @@ tw-go-plugins/target/
 util/logs/
 util/out/
 util/target/
+util/data
 plugin-infra/go-plugin-infra/felix-cache/
 **/*.log
 api/api-cctray/out/
@@ -422,10 +423,6 @@ api/api-job-instance-v1/out/
 api/api-job-instance-v1/target/
 api/api-job-instance-v1/logs/
 api/api-job-instance-v1/config/
-api/api-stage-instance-v2/out/
-api/api-stage-instance-v2/target/
-api/api-stage-instance-v2/logs/
-api/api-stage-instance-v2/config/
 api/api-notification-filter-v2/out/
 api/api-notification-filter-v2/target/
 api/api-notification-filter-v2/logs/
@@ -438,10 +435,6 @@ api/api-internal-material-test-v1/out/
 api/api-internal-material-test-v1/target/
 api/api-internal-material-test-v1/logs/
 api/api-internal-material-test-v1/config/
-api/api-api-info-v1/out/
-api/api-api-info-v1/target/
-api/api-api-info-v1/logs/
-api/api-api-info-v1/config/
 api/api-webhook-v1/out/
 api/api-webhook-v1/target/
 api/api-webhook-v1/logs/

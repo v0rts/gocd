@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-
-import com.github.jk1.license.task.ReportTask
 import com.github.jk1.license.filter.LicenseBundleNormalizer
 import com.github.jk1.license.render.JsonReportRenderer
+import com.github.jk1.license.task.ReportTask
+import com.thoughtworks.go.build.InstallerType
 import groovy.io.FileType
 import nl.javadude.gradle.plugins.license.License
 import org.apache.tools.ant.filters.FixCrLfFilter
+import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 
 import java.security.SecureRandom
 import java.util.stream.Collectors
@@ -33,10 +34,10 @@ buildscript {
   }
 
   dependencies {
-    classpath 'org.owasp:dependency-check-gradle:6.4.1.1'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.39.0'
-    classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.15.0'
-    classpath 'com.github.jk1:gradle-license-report:1.17'
+    classpath 'org.owasp:dependency-check-gradle:6.5.3'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.42.0'
+    classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
+    classpath 'com.github.jk1:gradle-license-report:2.1'
     classpath "com.github.jruby-gradle:jruby-gradle-core-plugin:2.0.2"
   }
 }
@@ -111,9 +112,9 @@ List<String> partitionFiles(Collection originalFiles) {
   return currentPartition ?: [] as List<String>
 }
 
-def GO_VERSION_PREVIOUS = '21.2.0'
-def GO_VERSION_SEGMENTS = [year: 21, releaseInYear: 3, patch: 0]
-def GO_VERSION_NEXT = '21.4.0'
+def GO_VERSION_PREVIOUS = '21.4.0'
+def GO_VERSION_SEGMENTS = [year: 22, releaseInYear: 1, patch: 0]
+def GO_VERSION_NEXT = '22.2.0'
 
 def GO_VERSION = [GO_VERSION_SEGMENTS.year, GO_VERSION_SEGMENTS.releaseInYear, GO_VERSION_SEGMENTS.patch].join('.')
 def DIST_VERSION = releaseRevision()
@@ -156,19 +157,22 @@ rootProject.ext.fullVersion = DIST_VERSION ? "${GO_VERSION}-${DIST_VERSION}" : G
 rootProject.ext.gitRevision = GIT_REVISION
 rootProject.ext.copyrightYear = Calendar.getInstance().get(Calendar.YEAR)
 
-project.ext.defaultJvmArgs = []
-
 project.ext.compilerOptions = [
-  sourceCompatibility: 13,
-  targetCompatibility: 13,
+  // source and target compatibility
+  release: 11,
+]
+
+project.ext.toolchains = [
+  compilerVersion: 17,
+  testLauncherVersion: 17,
 ]
 
 project.ext.packaging = [
   adoptOpenjdk: [
-    featureVersion: 15,
+    featureVersion: 17,
     interimVersion: 0, // set to `null` for the first release
     updateVersion : 2, // set to `null` for the first release
-    buildVersion  : 7
+    buildVersion  : 8
   ]
 ]
 
@@ -240,13 +244,19 @@ allprojects {
 
   repositories {
     mavenCentral()
+    maven {
+      // Only for velocity-tools-view 1.4
+      url 'https://repo1.maven.org/maven2'
+      metadataSources { artifact() }
+    }
   }
 }
 
 idea {
   project {
-    jdkName = project.compilerOptions.targetCompatibility
-    languageLevel = project.compilerOptions.sourceCompatibility
+    jdkName = project.toolchains.compilerVersion
+    targetBytecodeVersion = JavaVersion.toVersion(project.compilerOptions.release)
+    languageLevel = new IdeaLanguageLevel(project.compilerOptions.release)
   }
 }
 
@@ -363,7 +373,7 @@ subprojects {
       excludeGroups = ["com.thoughtworks.go"]
       filters = [new LicenseBundleNormalizer()]
       outputDir = file("${project.buildDir}/reports/dependency-license")
-      configurations = ['compileClasspath', 'packagingInLibDir']
+      configurations = ['runtimeClasspath', 'packagingInLibDir']
     }
 
     tasks.withType(ReportTask) { ReportTask reportTask ->
@@ -393,12 +403,10 @@ subprojects {
       }
     }
 
-    sourceCompatibility = project.compilerOptions.sourceCompatibility
-    targetCompatibility = project.compilerOptions.targetCompatibility
     buildDir = "${projectDir}/target"
 
     configurations {
-      packagingOnly { transitive = false }
+      packagingOnly
       extractedAtTopLevel { transitive = false }
       fatJarConfig
 
@@ -440,8 +448,8 @@ subprojects {
         'Go-Revision': project.gitRevision,
         'Implementation-Title': project.name,
         'Implementation-Version': project.version,
-        'Source-Compatibility': project.compilerOptions.sourceCompatibility,
-        'Target-Compatibility': project.compilerOptions.targetCompatibility
+        'Source-Compatibility': project.compilerOptions.release,
+        'Target-Compatibility': project.compilerOptions.release
       )
     }
 
@@ -481,6 +489,11 @@ subprojects {
     options.warnings = false
     options.encoding = "UTF-8"
     options.compilerArgs += '-Xlint:-deprecation'
+    options.release = project.compilerOptions.release
+
+    javaCompiler = javaToolchains.compilerFor {
+      languageVersion = JavaLanguageVersion.of(project.toolchains.compilerVersion)
+    }
   }
 
   project.afterEvaluate {
@@ -509,6 +522,10 @@ subprojects {
 //    outputs.upToDateWhen { false }
 
     testTask.useJUnitPlatform()
+    javaLauncher = javaToolchains.launcherFor {
+      languageVersion = JavaLanguageVersion.of(project.toolchains.testLauncherVersion)
+    }
+
     def allTestClasses
 
     maxParallelForks = project.hasProperty('maxParallelForks') ? project.maxParallelForks as int : 1
@@ -516,7 +533,7 @@ subprojects {
     // fixup a tempdir that is predictable and we can clean it up later
     def tmpDir = project.file("${System.getProperty('java.io.tmpdir')}/gocd-tests/${new BigInteger(32, new SecureRandom()).toString(32)}")
     systemProperty 'java.io.tmpdir', tmpDir
-    jvmArgs += project.defaultJvmArgs
+    jvmArgs += testTask.project.name.startsWith("agent") ? InstallerType.agent.jvmModuleOpensArgs : InstallerType.server.jvmModuleOpensArgs
 
     doFirst {
       // workaround for https://github.com/unbroken-dome/gradle-testsets-plugin/issues/40
@@ -622,6 +639,7 @@ subprojects {
       "com.fasterxml.jackson.core:jackson-databind"   : project.versions.jackson,
       "commons-beanutils:commons-beanutils"           : project.versions.commonsBeanutils,
       "org.apache.commons:commons-pool2"              : project.versions.commonsPool,
+      "org.objenesis:objenesis"                       : project.versions.objenesis,
     ]
 
 
@@ -645,6 +663,7 @@ subprojects {
   }
 
   project.configurations*.exclude(group: 'junit')
+  project.configurations*.exclude(group: 'dom4j')
   project.configurations*.exclude(group: 'xalan')
   project.configurations*.exclude(group: 'xml-apis')
 }
@@ -677,9 +696,9 @@ task sparkTest { thisTask ->
 task sparkTestJunitHtmlReport(type: TestReport) {
   dependsOn sparkTest
 
-  reportOn project(':api').subprojects*.test
-  reportOn project(':spark').subprojects*.test
-  destinationDir = file("${project.buildDir}/reports/tests/sparkTest")
+  testResults.from(project(':api').subprojects*.test)
+  testResults.from(project(':spark').subprojects*.test)
+  destinationDirectory = file("${project.buildDir}/reports/tests/sparkTest")
 }
 
 private void forAllTask(Closure<Task> closure) {
@@ -713,10 +732,10 @@ task allTestsJunitHtmlReport(type: TestReport) { TestReport thisTask ->
   description = "Run all api tests"
 
   forAllTask { Test eachTestTask ->
-    thisTask.reportOn eachTestTask.binResultsDir
+    testResults.from(eachTestTask)
     eachTestTask.finalizedBy(thisTask)
   }
-  destinationDir = file("${project.buildDir}/reports/tests/allTests")
+  destinationDirectory = file("${project.buildDir}/reports/tests/allTests")
 }
 
 static def toCamelCase(String input) {

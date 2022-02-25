@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ task verifyJar(type: VerifyJarTask) {
           "base-${project.version}.jar",
           "bcpkix-jdk15on-${project.versions.bouncyCastle}.jar",
           "bcprov-jdk15on-${project.versions.bouncyCastle}.jar",
+          "bcutil-jdk15on-${project.versions.bouncyCastle}.jar",
           "commons-codec-${project.versions.commonsCodec}.jar",
           "commons-io-${project.versions.commonsIO}.jar",
           "commons-lang3-${project.versions.commonsLang3}.jar",

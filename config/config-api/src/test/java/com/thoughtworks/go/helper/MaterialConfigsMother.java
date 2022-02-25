@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,6 +166,10 @@ public class MaterialConfigsMother {
 
     public static TfsMaterialConfig tfs(GoCipher goCipher, String url, String userName, String domain, String projectPath) {
         return tfs(goCipher, new UrlArgument(url), userName, domain, null, projectPath);
+    }
+
+    public static TfsMaterialConfig tfs(String url) {
+        return tfs(new GoCipher(), new UrlArgument(url), null, null, "password");
     }
 
     public static TfsMaterialConfig tfs(UrlArgument urlArgument, String password, String encryptedPassword, GoCipher goCipher) {

@@ -1,5 +1,5 @@
 #
-# Copyright 2021 ThoughtWorks, Inc.
+# Copyright 2022 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ describe "/layouts/application" do
   it "should show content" do
     render :inline => '<div>content</div>', :layout => @layout_name
 
-    expect(response).to have_selector('html body div div', 'content')
+    expect(response).to have_selector('html body div div', :text => 'content')
   end
 
   it "should render reload option when the config file MD5 has changed under the message" do

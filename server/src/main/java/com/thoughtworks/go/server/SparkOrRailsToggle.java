@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.thoughtworks.go.server;
 import com.thoughtworks.go.server.service.support.toggle.Toggles;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class SparkOrRailsToggle {
 
@@ -31,7 +30,4 @@ public class SparkOrRailsToggle {
         }
     }
 
-    public void preferenceSPA(HttpServletRequest request, HttpServletResponse response) {
-        basedOnToggle(Toggles.SHOW_OLD_PREFERENCE_SPA, request);
-    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import {MithrilComponent} from "jsx/mithril-component";
-import m from "mithril";
+import m, { _NoLifecycle } from "mithril";
 import {FlashMessageModelWithTimeout} from "views/components/flash_message";
 import {HeaderPanel} from "views/components/header_panel";
 import {PageLoadError} from "views/components/page_load_error";

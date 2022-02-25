@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2021 ThoughtWorks, Inc.
+  ~ Copyright 2022 ThoughtWorks, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@
   <context:component-scan base-package="com.thoughtworks.go.apiv7.admin.templateconfig"/>
   <context:component-scan base-package="com.thoughtworks.go.apiv1.webhook"/>
   <context:component-scan base-package="com.thoughtworks.go.apiv1.feedsapi"/>
-  <context:component-scan base-package="com.thoughtworks.go.apiv1.apiinfo"/>
   <context:component-scan base-package="com.thoughtworks.go.apiv2.notificationfilter"/>
   <context:component-scan base-package="com.thoughtworks.go.apiv1.internalmaterialtest"/>
   <context:component-scan base-package="com.thoughtworks.go.apiv6.admin.templateconfig"/>

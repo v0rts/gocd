@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,26 @@
 
 package com.thoughtworks.go.build.docker
 
+import com.thoughtworks.go.build.OperatingSystem
 import org.gradle.api.Project
 
 enum Distro implements DistroBehavior {
 
   alpine{
     @Override
+    OperatingSystem getOperatingSystem() {
+      OperatingSystem.linux
+    }
+
+    @Override
     List<DistroVersion> getSupportedVersions() {
       def installSasl_Post_3_9 = ['apk add --no-cache libsasl']
 
       return [
-        new DistroVersion(version: '3.11', releaseName: '3.11', eolDate: parseDate('2021-11-01'), installPrerequisitesCommands: installSasl_Post_3_9, continueToBuild: true),
-        new DistroVersion(version: '3.12', releaseName: '3.12', eolDate: parseDate('2022-05-01'), installPrerequisitesCommands: installSasl_Post_3_9),
+        new DistroVersion(version: '3.12', releaseName: '3.12', eolDate: parseDate('2022-05-01'), installPrerequisitesCommands: installSasl_Post_3_9, continueToBuild: true),
         new DistroVersion(version: '3.13', releaseName: '3.13', eolDate: parseDate('2022-11-01'), installPrerequisitesCommands: installSasl_Post_3_9),
+        new DistroVersion(version: '3.14', releaseName: '3.14', eolDate: parseDate('2023-05-01'), installPrerequisitesCommands: installSasl_Post_3_9),
+        new DistroVersion(version: '3.15', releaseName: '3.15', eolDate: parseDate('2023-11-01'), installPrerequisitesCommands: installSasl_Post_3_9),
       ]
     }
 
@@ -92,18 +99,18 @@ enum Distro implements DistroBehavior {
 
   centos{
     @Override
-    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
-      String git = gitPackage(distroVersion)
+    String getBaseImageRegistry(DistroVersion distroVersion) {
+      distroVersion.version >= "8" ? "quay.io/centos" : super.baseImageRegistry
+    }
 
+    @Override
+    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
       def commands = ['yum update -y']
 
-      if (version6Or7(distroVersion)) {
-        commands.add('yum install --assumeyes centos-release-scl')
-      }
+      String git = gitPackageFor(distroVersion)
+      commands.add("yum install --assumeyes ${git} mercurial subversion openssh-clients bash unzip curl procps ${versionBelow8(distroVersion) ? 'sysvinit-tools coreutils' : 'procps-ng coreutils-single'}")
 
-      commands.add("yum install --assumeyes ${git} mercurial subversion openssh-clients bash unzip curl procps ${version6Or7(distroVersion) ? 'sysvinit-tools coreutils' : 'procps-ng coreutils-single'}")
-
-      if (version6Or7(distroVersion)) {
+      if (versionBelow8(distroVersion)) {
         commands.add("cp /opt/rh/${git}/enable /etc/profile.d/${git}.sh")
       }
 
@@ -112,25 +119,20 @@ enum Distro implements DistroBehavior {
       return commands
     }
 
-    private boolean version6Or7(DistroVersion distroVersion) {
-      distroVersion.version == "6" || distroVersion.version == "7"
+    private boolean versionBelow8(DistroVersion distroVersion) {
+      distroVersion.version < "8"
     }
 
-    String gitPackage(DistroVersion distroVersion) {
-      if (version6Or7(distroVersion)) {
-        return "sclo-git212"
-      } else if (distroVersion.version == "8") {
-        return "git"
-      }
-      throw new IllegalArgumentException("Unknown centos version: " + distroVersion.version)
+    String gitPackageFor(DistroVersion distroVersion) {
+      return versionBelow8(distroVersion) ? "rh-git218" : "git"
     }
 
     @Override
     Map<String, String> getEnvironmentVariables(DistroVersion distroVersion) {
       def vars = super.getEnvironmentVariables(distroVersion)
 
-      if (version6Or7(distroVersion)) {
-        String git = gitPackage(distroVersion)
+      if (versionBelow8(distroVersion)) {
+        String git = gitPackageFor(distroVersion)
         return vars + [
           BASH_ENV: "/opt/rh/${git}/enable",
           ENV     : "/opt/rh/${git}/enable"
@@ -143,8 +145,8 @@ enum Distro implements DistroBehavior {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [
-        new DistroVersion(version: '7', releaseName: '7', eolDate: parseDate('2024-06-01')),
-        new DistroVersion(version: '8', releaseName: '8', eolDate: parseDate('2029-05-01'), installPrerequisitesCommands: ['yum install --assumeyes glibc-langpack-en'])
+        new DistroVersion(version: '7', releaseName: '7', eolDate: parseDate('2024-06-01'), installPrerequisitesCommands: ['yum install --assumeyes centos-release-scl-rh']),
+        new DistroVersion(version: '8', releaseName: 'stream8', eolDate: parseDate('2024-05-31'), installPrerequisitesCommands: ['yum install --assumeyes glibc-langpack-en'])
       ]
     }
   },
@@ -163,9 +165,10 @@ enum Distro implements DistroBehavior {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [
-        new DistroVersion(version: '9', releaseName: 'stretch', eolDate: parseDate('2022-06-30')),
+        new DistroVersion(version: '9', releaseName: 'stretch-slim', eolDate: parseDate('2022-06-30')),
         // No EOL-LTS specified for buster release. Checkout https://wiki.debian.org/DebianReleases for more info
-        new DistroVersion(version: '10', releaseName: 'buster', eolDate: parseDate('2024-06-30'))
+        new DistroVersion(version: '10', releaseName: 'buster-slim', eolDate: parseDate('2024-06-01')),
+        new DistroVersion(version: '11', releaseName: 'bullseye-slim', eolDate: parseDate('2026-08-15')),
       ]
     }
   },
@@ -186,6 +189,11 @@ enum Distro implements DistroBehavior {
   },
 
   docker{
+    @Override
+    OperatingSystem getOperatingSystem() {
+      return alpine.getOperatingSystem()
+    }
+
     @Override
     boolean isPrivilegedModeSupport() {
       return true
@@ -214,7 +222,6 @@ enum Distro implements DistroBehavior {
     List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
       return alpine.getInstallPrerequisitesCommands(distroVersion)
     }
-
 
     @Override
     List<String> getInstallJavaCommands(Project project) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ public class BuildWork implements Work {
         try {
             goPublisher.reportErrorMessage(messageOf(e), e);
         } catch (Exception reportException) {
-            LOGGER.error("Unable to report error message - %s.", messageOf(e), reportException);
+            LOGGER.error("Unable to report error message - {}.", messageOf(e), reportException);
         }
         reportCompletion(JobResult.Failed);
     }
@@ -270,10 +270,10 @@ public class BuildWork implements Work {
     private void createWorkingDirectoryIfNotExist(File buildWorkingDirectory) {
         if (assignment.shouldCleanWorkingDir() && buildWorkingDirectory.exists()) {
             try {
-                FileUtils.cleanDirectory(buildWorkingDirectory);
                 goPublisher.consumeLineWithPrefix("Cleaning working directory \"" + buildWorkingDirectory.getAbsolutePath() + "\" since stage is configured to clean working directory");
+                FileUtils.cleanDirectory(buildWorkingDirectory);
             } catch (IOException e) {
-                bomb("Clean working directory is set to true. Unable to clean working directory for agent: " + buildWorkingDirectory.getAbsolutePath() + ", with error: " + e.getMessage());
+                bomb("Clean working directory is set to true. Unable to clean working directory for agent: " + buildWorkingDirectory.getAbsolutePath() + ", with error: " + e.getMessage(), e);
             }
         }
         if (!buildWorkingDirectory.exists()) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import org.jdom2.input.SAXBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -69,10 +68,7 @@ public class SvnLogXmlParserTest {
 
     @Test
     public void shouldParseSvnLogContainingNullComments() throws IOException {
-        String xml;
-        try (InputStream stream = getClass().getResourceAsStream("jemstep_svn_log.xml")) {
-            xml = IOUtils.toString(stream, UTF_8);
-        }
+        String xml = IOUtils.toString(getClass().getResource("jemstep_svn_log.xml"), UTF_8);
         SvnLogXmlParser parser = new SvnLogXmlParser();
         List<Modification> revisions = parser.parse(xml, "", new SAXBuilder());
 

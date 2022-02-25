@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,15 @@ import com.rits.cloning.Cloner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClonerFactoryTest {
     private Cloner cloner;
@@ -91,6 +96,42 @@ class ClonerFactoryTest {
 
         assertEquals(5, dupe.size());
         assertEquals(set, dupe);
+    }
+
+    @Test
+    void cloneDate() {
+        Date date = new Date();
+        Date dupe = cloner.deepClone(date);
+        assertThat(dupe)
+                .isExactlyInstanceOf(Date.class)
+                .isEqualTo(date);
+    }
+
+    @Test
+    void cloneSqlDate() {
+        Date date = new java.sql.Date(System.currentTimeMillis());
+        Date dupe = cloner.deepClone(date);
+        assertThat(dupe)
+                .isExactlyInstanceOf(java.sql.Date.class)
+                .isEqualTo(date);
+    }
+
+    @Test
+    void cloneTimestamp() {
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        date.setNanos(1);
+        Timestamp dupe = cloner.deepClone(date);
+        assertThat(dupe)
+                .isExactlyInstanceOf(Timestamp.class)
+                .isEqualTo(date);
+    }
+
+    @Test
+    void cloneFile() {
+        File file = new File("hello/world");
+        assertThat(cloner.deepClone(file))
+                .isExactlyInstanceOf(File.class)
+                .isEqualTo(file);
     }
 
 }

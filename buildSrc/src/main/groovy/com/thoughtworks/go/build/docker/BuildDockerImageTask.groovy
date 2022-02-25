@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,7 @@ class BuildDockerImageTask extends DefaultTask {
           // delete the parent image, to save space
           project.exec {
             workingDir = project.rootProject.projectDir
-            commandLine = ["docker", "rmi", "${distro.name()}:${distroVersion.releaseName}"]
+            commandLine = ["docker", "rmi", "${distro.getBaseImageLocation(distroVersion)}"]
           }
         }
       }

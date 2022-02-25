@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Optional;
 
@@ -48,7 +47,6 @@ public class BackupFilterTest {
     private FilterChain chain;
     private BackupService backupService;
     private PrintWriter writer;
-    private InputStream inputStream;
 
     @BeforeEach
     public void setUp() throws ServletException, IOException {
@@ -57,7 +55,6 @@ public class BackupFilterTest {
         res = mock(HttpServletResponse.class);
         backupService = mock(BackupService.class);
         chain = mock(FilterChain.class);
-        inputStream = BackupFilter.class.getClassLoader().getResourceAsStream("backup_in_progress.html");
         writer = mock(PrintWriter.class);
         when(res.getWriter()).thenReturn(writer);
         this.backupFilter = new BackupFilter(backupService);
@@ -99,7 +96,7 @@ public class BackupFilterTest {
         when(backupService.backupRunningSinceISO8601()).thenReturn(BACKUP_STARTED_AT);
         when(backupService.backupStartedBy()).thenReturn(BACKUP_STARTED_BY);
 
-        String content = IOUtils.toString(inputStream, UTF_8);
+        String content = IOUtils.toString(BackupFilter.class.getClassLoader().getResource("backup_in_progress.html"), UTF_8);
         content = backupFilter.replaceStringLiterals(content);
         Request request = request(HttpMethod.GET, "", "/go/agents");
 
@@ -200,7 +197,7 @@ public class BackupFilterTest {
     }
 
     private Request request(HttpMethod method, String contentType, String uri) {
-        Request request = new Request(mock(HttpChannel.class), mock(HttpInput.class));
+        Request request = new Request(mock(HttpChannel.class, RETURNS_DEEP_STUBS), mock(HttpInput.class));
         HttpURI httpURI = new HttpURI("http", "url", 8153, uri);
         MetaData.Request metadata = new MetaData.Request(method.asString(), httpURI, HttpVersion.HTTP_2, new HttpFields());
         request.setMetaData(metadata);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 
-import com.thoughtworks.go.build.AdoptOpenJDKUrlHelper
+import com.thoughtworks.go.build.AdoptiumUrlHelper
 import com.thoughtworks.go.build.DownloadFile
 import com.thoughtworks.go.build.InstallerType
 import org.apache.commons.codec.digest.DigestUtils
@@ -26,7 +26,7 @@ private File destFile(String url) {
 }
 
 task downloadWindowsJreChecksum(type: DownloadFile) {
-  def srcUrl = AdoptOpenJDKUrlHelper.sha256sumURL(
+  def srcUrl = AdoptiumUrlHelper.sha256sumURL(
     com.thoughtworks.go.build.OperatingSystem.windows,
     project.packaging.adoptOpenjdk.featureVersion,
     project.packaging.adoptOpenjdk.interimVersion,
@@ -39,7 +39,7 @@ task downloadWindowsJreChecksum(type: DownloadFile) {
 
 task downloadWindowsJre(type: DownloadFile) {
   dependsOn downloadWindowsJreChecksum
-  def srcUrl = AdoptOpenJDKUrlHelper.downloadURL(
+  def srcUrl = AdoptiumUrlHelper.downloadURL(
     com.thoughtworks.go.build.OperatingSystem.windows,
     project.packaging.adoptOpenjdk.featureVersion,
     project.packaging.adoptOpenjdk.interimVersion,
@@ -61,7 +61,7 @@ def configureWindowsFilesystem(Task windowsInstallerTask, InstallerType installe
 
     doFirst {
       project.delete(buildRoot)
-      project.mkdir(project.file("${project.convention.plugins.get("base").distsDirectory.get().asFile.path}/win"))
+      project.mkdir(project.file("${project.buildDir}/distributions/win"))
 
       def genericZipTree = zipTree(genericZipTask.archiveFile)
 
@@ -70,6 +70,7 @@ def configureWindowsFilesystem(Task windowsInstallerTask, InstallerType installe
 
         // dont include the wrapper.conf, and tanuki wrappers for OSes other than windows
         from(genericZipTree) {
+          exclude "${installerType.baseName}-${project.goVersion}/wrapper-config/wrapper.conf"
           exclude "${installerType.baseName}-${project.goVersion}/wrapper/wrapper-*"
           exclude "${installerType.baseName}-${project.goVersion}/wrapper/libwrapper-*"
           exclude "${installerType.baseName}-${project.goVersion}/bin/*"
@@ -171,7 +172,7 @@ def executeNSIS(InstallerType installerType, File buildRoot, File destDir) {
 task agentWindows64bitExe { DefaultTask thisTask ->
   def installerType = InstallerType.agent
   def buildRoot = project.file("${project.buildDir.path}/${installerType.baseName}/win/BUILD_ROOT")
-  def destDir = project.file("${project.convention.plugins.get("base").distsDirectory.get().asFile.path}/win")
+  def destDir = project.file("${project.buildDir}/distributions/win")
 
   configureWindowsFilesystem(thisTask, installerType, agentGenericZip, buildRoot)
 
@@ -187,7 +188,7 @@ task agentWindows64bitExe { DefaultTask thisTask ->
 task serverWindows64bitExe { DefaultTask thisTask ->
   def installerType = InstallerType.server
   def buildRoot = project.file("${project.buildDir.path}/${installerType.baseName}/win/BUILD_ROOT")
-  def destDir = project.file("${project.convention.plugins.get("base").distsDirectory.get().asFile.path}/win")
+  def destDir = project.file("${project.buildDir}/distributions/win")
 
   configureWindowsFilesystem(thisTask, installerType, serverGenericZip, buildRoot)
 

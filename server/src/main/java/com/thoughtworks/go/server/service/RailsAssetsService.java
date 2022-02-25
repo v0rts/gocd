@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,12 +58,12 @@ public class RailsAssetsService implements ServletContextAware {
         if (!assetsDir.exists()) {
             throw new RuntimeException(String.format("Assets directory does not exist %s", assetsDirPath));
         }
-        Collection files = FileUtils.listFiles(assetsDir, new RegexFileFilter(MANIFEST_FILE_PATTERN), null);
+        Collection<File> files = FileUtils.listFiles(assetsDir, new RegexFileFilter(MANIFEST_FILE_PATTERN), null);
         if (files.isEmpty()) {
             throw new RuntimeException(String.format("Manifest json file was not found at %s", assetsDirPath));
         }
 
-        File manifestFile = (File) files.iterator().next();
+        File manifestFile = files.iterator().next();
 
         LOG.info("Found rails assets manifest file named {} ", manifestFile.getName());
         String manifest = FileUtils.readFileToString(manifestFile, UTF_8);

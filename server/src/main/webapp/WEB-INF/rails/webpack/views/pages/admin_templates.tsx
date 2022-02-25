@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,19 +142,15 @@ export class AdminTemplatesPage extends Page<null, State> {
     };
 
     vnode.state.editPermissions = (template) => {
-      if (this.getMeta().showRailsTemplateAuthorization) {
-        window.location.href = SparkRoutes.editTemplatePermissions(template.name);
-      } else {
-        this.pageState = PageState.LOADING;
-        TemplatesCRUD.getAuthorization(template.name).then((result) => {
-          this.pageState = PageState.OK;
-          result.do(
-            (successResponse) => {
-              new EditTemplatePermissionsModal(template.name, successResponse.body.object, successResponse.body.etag, vnode.state.usersAutoCompleteHelper(), vnode.state.rolesAutoCompleteHelper(), vnode.state.onSuccessfulSave)
-                .render();
-            }, this.setErrorState);
-        });
-      }
+      this.pageState = PageState.LOADING;
+      TemplatesCRUD.getAuthorization(template.name).then((result) => {
+        this.pageState = PageState.OK;
+        result.do(
+          (successResponse) => {
+            new EditTemplatePermissionsModal(template.name, successResponse.body.object, successResponse.body.etag, vnode.state.usersAutoCompleteHelper(), vnode.state.rolesAutoCompleteHelper(), vnode.state.onSuccessfulSave)
+              .render();
+          }, this.setErrorState);
+      });
     };
 
     vnode.state.doShowTemplate = (templateName) => {

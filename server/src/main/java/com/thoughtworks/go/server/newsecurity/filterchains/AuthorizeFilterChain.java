@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,7 +114,6 @@ public class AuthorizeFilterChain extends FilterChainProxy {
                 .addAuthorityFilterChain("/api/admin/**", apiAccessDeniedHandler, ROLE_SUPERVISOR)
 
                 .addAuthorityFilterChain("/api/config-repository.git/**", apiAccessDeniedHandler, ROLE_SUPERVISOR)
-                .addAuthorityFilterChain("/api/jobs/scheduled.xml", apiAccessDeniedHandler, ROLE_SUPERVISOR)
                 .addAuthorityFilterChain("/api/support", apiAccessDeniedHandler, ROLE_SUPERVISOR)
 
                 // any other APIs require `ROLE_USER`

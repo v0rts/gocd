@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ public class ConfigRepository {
     static final String BRANCH_AT_REVISION = "branch-at-revision";
     static final String BRANCH_AT_HEAD = "branch-at-head";
     public static final String CURRENT = "current";
+    private static final String REFS_MASTER = "refs/heads/master";
     private final SystemEnvironment systemEnvironment;
 
     private File workingDir;
@@ -77,10 +78,14 @@ public class ConfigRepository {
         workingDir = this.systemEnvironment.getConfigRepoDir();
         File configRepoDir = new File(workingDir, ".git");
         gitRepo = new FileRepositoryBuilder().setGitDir(configRepoDir).build();
-        gitRepo.getConfig().setInt("gc", null, "auto", 0);
+        updateWithDefaults(gitRepo.getConfig());
         git = new Git(gitRepo);
     }
 
+    private void updateWithDefaults(StoredConfig config) {
+        config.setInt(ConfigConstants.CONFIG_GC_SECTION, null, ConfigConstants.CONFIG_KEY_AUTO, 0);
+        config.setBoolean(ConfigConstants.CONFIG_COMMIT_SECTION, null, ConfigConstants.CONFIG_KEY_GPGSIGN, false);
+    }
 
     public Repository getGitRepo() {
         return gitRepo;
@@ -368,7 +373,9 @@ public class ConfigRepository {
     void cleanAndResetToMaster() throws IOException {
         try {
             git.reset().setMode(ResetCommand.ResetType.HARD).call();
-            checkout("master");
+            if (hasMaster()) {
+                checkout("master");
+            }
             deleteBranch(BRANCH_AT_REVISION);
             deleteBranch(BRANCH_AT_HEAD);
         } catch (Exception e) {
@@ -376,6 +383,10 @@ public class ConfigRepository {
             LOGGER.error("Error while trying to clean up config repository, CurrentBranch: {} \n : \n Message: {} \n StackTrace: {}", currentBranch, e.getMessage(), e.getStackTrace(), e);
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean hasMaster() throws GitAPIException {
+        return git.branchList().call().stream().anyMatch(ref -> ref.getName().equals(REFS_MASTER));
     }
 
     public void garbageCollect() throws Exception {
@@ -421,7 +432,7 @@ public class ConfigRepository {
         // and we don't care about number of commits on those branches.
         List<Ref> branches = git.branchList().call();
         for (Ref branch : branches) {
-            if (branch.getName().equals("refs/heads/master")) {
+            if (branch.getName().equals(REFS_MASTER)) {
                 Iterable<RevCommit> commits = git.log().add(branch.getObjectId()).call();
                 return StreamSupport.stream(commits.spliterator(), false).count();
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,19 @@ class InstallerTypeAgent implements InstallerType {
     ]
   }
 
+  // Note that these apply to the launcher, but not necessarily the agent itself
+  @Override
+  List<String> getJvmModuleOpensArgs() {
+    []
+  }
+
+  // Note that these apply to the launcher, but not necessarily the agent itself
   @Override
   List<String> getJvmArgs() {
     []
   }
 
+  // Note that these apply to the launcher, but not the agent itself
   @Override
   List<String> getLinuxJvmArgs() {
     [

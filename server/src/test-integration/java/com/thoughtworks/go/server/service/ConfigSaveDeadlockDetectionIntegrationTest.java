@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import com.thoughtworks.go.helper.PartialConfigMother;
 import com.thoughtworks.go.server.domain.Username;
 import com.thoughtworks.go.server.service.result.HttpLocalizedOperationResult;
 import com.thoughtworks.go.server.service.support.ServerStatusService;
-import com.thoughtworks.go.util.ClonerFactory;
 import com.thoughtworks.go.util.GoConfigFileHelper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -242,7 +241,7 @@ public class ConfigSaveDeadlockDetectionIntegrationTest {
             public void run() {
                 try {
                     CruiseConfig cruiseConfig = cachedGoConfig.loadForEditing();
-                    CruiseConfig cruiseConfig1 = ClonerFactory.instance().deepClone(cruiseConfig);
+                    CruiseConfig cruiseConfig1 = configHelper.deepClone(cruiseConfig);
                     cruiseConfig1.addEnvironment(UUID.randomUUID().toString());
 
                     goConfigDao.updateFullConfig(new FullConfigUpdateCommand(cruiseConfig1, cruiseConfig.getMd5()));

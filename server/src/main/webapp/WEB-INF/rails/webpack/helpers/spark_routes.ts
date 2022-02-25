@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -460,10 +460,6 @@ export class SparkRoutes {
 
   static jobTimeoutPath() {
     return "/go/api/admin/config/server/default_job_timeout";
-  }
-
-  static editTemplatePermissions(templateName: string) {
-    return `/go/admin/templates/${templateName}/permissions`;
   }
 
   static getEnvironmentPathOnSPA(environmentName: string) {

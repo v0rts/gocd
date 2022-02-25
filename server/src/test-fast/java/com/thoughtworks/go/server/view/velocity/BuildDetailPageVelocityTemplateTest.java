@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +117,6 @@ public class BuildDetailPageVelocityTemplateTest {
         view.setupAdditionalRealTemplate("build_detail/_test_output_config.vm");
         view.setupAdditionalRealTemplate("build_detail/_artifacts.vm");
         view.setupAdditionalRealTemplate("build_detail/_materials.vm");
-        view.setupAdditionalRealTemplate("build_detail/_properties.vm");
         view.setupAdditionalRealTemplate("build_detail/_material_revisions_jstemplate.vm");
         view.setupAdditionalRealTemplate("build_detail/_build_detail_summary_jstemplate.vm");
 

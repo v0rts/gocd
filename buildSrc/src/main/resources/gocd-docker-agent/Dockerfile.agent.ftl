@@ -17,26 +17,21 @@
 # Please file any issues or PRs at https://github.com/gocd/gocd
 ###############################################################################################
 
-FROM alpine:latest as gocd-agent-unzip
-
+FROM curlimages/curl:latest as gocd-agent-unzip
+USER root
 ARG UID=1000
-
 <#if useFromArtifact >
 COPY go-agent-${fullVersion}.zip /tmp/go-agent-${fullVersion}.zip
 <#else>
-RUN \
-  apk --no-cache upgrade && \
-  apk add --no-cache curl && \
-  curl --fail --location --silent --show-error "https://download.gocd.org/binaries/${fullVersion}/generic/go-agent-${fullVersion}.zip" > /tmp/go-agent-${fullVersion}.zip
+RUN curl --fail --location --silent --show-error "https://download.gocd.org/binaries/${fullVersion}/generic/go-agent-${fullVersion}.zip" > /tmp/go-agent-${fullVersion}.zip
 </#if>
-
 RUN unzip /tmp/go-agent-${fullVersion}.zip -d /
 RUN mv /go-agent-${goVersion} /go-agent && chown -R ${r"${UID}"}:0 /go-agent && chmod -R g=u /go-agent
 
-FROM ${distro.name()}:${distroVersion.releaseName}
+FROM ${distro.getBaseImageLocation(distroVersion)}
 
 LABEL gocd.version="${goVersion}" \
-  description="GoCD agent based on ${distro.name()} version ${distroVersion.version}" \
+  description="GoCD agent based on ${distro.getBaseImageLocation(distroVersion)}" \
   maintainer="ThoughtWorks, Inc. <support@thoughtworks.com>" \
   url="https://www.gocd.org" \
   gocd.full.version="${fullVersion}" \

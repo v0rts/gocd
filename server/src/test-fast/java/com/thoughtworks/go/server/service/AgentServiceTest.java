@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static com.thoughtworks.go.CurrentGoCDVersion.docsUrl;
@@ -1506,7 +1508,7 @@ class AgentServiceTest {
             AgentInstance agentInstance = mock(AgentInstance.class);
 
             when(agentInstances.agentsStuckInCancel()).thenReturn(singletonList(agentInstance));
-            when(agentInstance.cancelledAt()).thenReturn(new Date());
+            when(agentInstance.cancelledAt()).thenReturn(new Date(Instant.now().minus(20, ChronoUnit.MINUTES).toEpochMilli()));
             when(agentInstance.getHostname()).thenReturn("test_agent");
 
             agentService.refresh();
@@ -1517,6 +1519,7 @@ class AgentServiceTest {
             ServerHealthState serverHealthState = argument.getValue();
             assertThat(serverHealthState.getMessage(), is("Agent `test_agent` is stuck in cancel."));
             assertThat(serverHealthState.getLogLevel(), is(HealthStateLevel.WARNING));
+            assertThat(serverHealthState.getDescription(), is("Looks like the agent is stuck cancelling a job, the job was cancelled 20 minutes ago."));
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class FolderDirectoryEntry extends DirectoryEntry {
                 HtmlElement.div(cssClass("dir-container")).content(
                     HtmlElement.span(cssClass("directory")).content(
                         HtmlElement.a(onclick("BuildDetail.tree_navigator(this)"))
-                                .content(getFileName())
+                                .safecontent(getFileName())
                     )
                 ),
                 HtmlElement.div(cssClass("subdir-container"), style("display:none"))

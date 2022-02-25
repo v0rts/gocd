@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ interface InstallerType {
   Map<String, String> getAdditionalEnvVars()
   Map<String, String> getAdditionalLinuxEnvVars()
 
+  List<String> getJvmModuleOpensArgs()
   List<String> getJvmArgs()
-
   List<String> getLinuxJvmArgs()
 
   boolean getAllowPassthrough()

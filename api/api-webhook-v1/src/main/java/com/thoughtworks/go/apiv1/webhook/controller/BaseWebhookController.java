@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,10 @@ import spark.Response;
 public abstract class BaseWebhookController extends ApiController implements SparkSpringController, WebhookValidation {
     public static final String PING_RESPONSE = "pong";
 
+    public static final String SUCCESS_RESPONSE = "OK!";
+
+    public static final String NO_MATCHING_MATERIALS_RESPONSE = "No matching materials!";
+
     protected BaseWebhookController(ApiVersion apiVersion) {
         super(apiVersion);
     }
@@ -37,7 +41,7 @@ public abstract class BaseWebhookController extends ApiController implements Spa
     }
 
     protected String success(final Response response) {
-        return accepted(response, "OK!");
+        return accepted(response, SUCCESS_RESPONSE);
     }
 
     protected String acknowledge(final Response response) {

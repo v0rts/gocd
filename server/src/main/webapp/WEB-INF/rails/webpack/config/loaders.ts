@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,11 @@
 import {ConfigOptions} from "config/variables";
 import {getBabelLoader} from "./loaders/babel-loader";
 import {getMiniCssExtractLoader} from "./loaders/css-loader";
-import {getEslintLoader} from "./loaders/eslint-loader";
 import {getStaticAssetsLoader} from "./loaders/static-assets-loader";
 import {getTypescriptLoader} from "./loaders/ts-loader";
 
 export function loaders(configOptions: ConfigOptions) {
   return [
-    getEslintLoader(configOptions),
     getTypescriptLoader(configOptions),
     getBabelLoader(configOptions),
     getMiniCssExtractLoader(configOptions),

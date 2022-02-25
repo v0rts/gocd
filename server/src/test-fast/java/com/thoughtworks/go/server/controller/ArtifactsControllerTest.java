@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import java.io.InputStream;
 
 import static com.thoughtworks.go.util.GoConstants.*;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.any;
@@ -118,6 +119,33 @@ public class ArtifactsControllerTest {
         ResponseCodeView view = (ResponseCodeView) modelAndView.getView();
         assertThat(view.getStatusCode(), is(SC_INTERNAL_SERVER_ERROR));
         assertThat(view.getContent(), is("Error saving checksum file for the artifact at path 'some-path'"));
+    }
+
+    @Test
+    void shouldFailToPostAndPutWhenStageCounterIsNotAPositiveInteger() throws Exception {
+        ModelAndView modelAndView = artifactsController.postArtifact("pipeline-1", "1", "stage-1", "NOT_AN_INTEGER", "job-1", 122L, "some-path", 1, null);
+        assertThat(((ResponseCodeView) modelAndView.getView()).getStatusCode(), is(SC_NOT_FOUND));
+
+        modelAndView = artifactsController.postArtifact("pipeline-1", "1", "stage-1", "-123", "job-1", 122L, "some-path", 1, null);
+        assertThat(((ResponseCodeView) modelAndView.getView()).getStatusCode(), is(SC_NOT_FOUND));
+
+        modelAndView = artifactsController.putArtifact("pipeline-1", "1", "stage-1", "NOT_AN_INTEGER", "job-1", 122L, "some-path", "1", null);
+        assertThat(((ResponseCodeView) modelAndView.getView()).getStatusCode(), is(SC_NOT_FOUND));
+
+        modelAndView = artifactsController.putArtifact("pipeline-1", "1", "stage-1", "-123", "job-1", 122L, "some-path", "1", null);
+        assertThat(((ResponseCodeView) modelAndView.getView()).getStatusCode(), is(SC_NOT_FOUND));
+    }
+
+    @Test
+    void shouldFailToGetConsoleOutWhenStageCounterIsNotAPositiveInteger() throws Exception {
+        ModelAndView modelAndView = artifactsController.consoleout("pipeline-1", "1", "stage-1", "job-1", "NOT_AN_INTEGER", 122L);
+        assertThat(((ResponseCodeView) modelAndView.getView()).getStatusCode(), is(SC_NOT_FOUND));
+    }
+
+    @Test
+    void shouldFailToGetArtifactWhenStageCounterIsNotAPositiveInteger() throws Exception {
+        ModelAndView modelAndView = artifactsController.getArtifactAsHtml("pipeline-1", "1", "stage-1",  "NOT_AN_INTEGER", "job-1", "some-path", "sha1", "alias");
+        assertThat(((ResponseCodeView) modelAndView.getView()).getStatusCode(), is(SC_NOT_FOUND));
     }
 
     @Test

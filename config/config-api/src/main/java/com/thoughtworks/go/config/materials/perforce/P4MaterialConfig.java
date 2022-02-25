@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 ThoughtWorks, Inc.
+ * Copyright 2022 ThoughtWorks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,6 +149,7 @@ public class P4MaterialConfig extends ScmMaterialConfig implements ParamsAttribu
         if (StringUtils.isBlank(getServerAndPort())) {
             errors.add(SERVER_AND_PORT, "P4 port cannot be empty.");
         }
+
         validateEncryptedPassword();
     }
 
