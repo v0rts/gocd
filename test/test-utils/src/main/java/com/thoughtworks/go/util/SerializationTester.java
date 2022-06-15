@@ -13,7 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//=require jasmine-jquery
+package com.thoughtworks.go.util;
 
-jasmine.getFixtures().fixturesPath = "./../../spec/javascripts/fixtures/";
-jasmine.getFixtures().containerId  = "jasmine_content";
+import java.io.*;
+
+/**
+ * @understands how to test serialization of classes
+ */
+public class SerializationTester {
+    @SuppressWarnings("unchecked")
+    public static <T> T objectSerializeAndDeserialize(T o) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(buffer);
+        out.writeObject(o);
+        ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()));
+        return (T) in.readObject();
+    }
+
+}

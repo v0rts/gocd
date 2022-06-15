@@ -29,13 +29,11 @@ enum Distro implements DistroBehavior {
 
     @Override
     List<DistroVersion> getSupportedVersions() {
-      def installSasl_Post_3_9 = ['apk add --no-cache libsasl']
-
       return [
-        new DistroVersion(version: '3.12', releaseName: '3.12', eolDate: parseDate('2022-05-01'), installPrerequisitesCommands: installSasl_Post_3_9, continueToBuild: true),
-        new DistroVersion(version: '3.13', releaseName: '3.13', eolDate: parseDate('2022-11-01'), installPrerequisitesCommands: installSasl_Post_3_9),
-        new DistroVersion(version: '3.14', releaseName: '3.14', eolDate: parseDate('2023-05-01'), installPrerequisitesCommands: installSasl_Post_3_9),
-        new DistroVersion(version: '3.15', releaseName: '3.15', eolDate: parseDate('2023-11-01'), installPrerequisitesCommands: installSasl_Post_3_9),
+        new DistroVersion(version: '3.13', releaseName: '3.13', eolDate: parseDate('2022-11-01'), continueToBuild: true),
+        new DistroVersion(version: '3.14', releaseName: '3.14', eolDate: parseDate('2023-05-01')),
+        new DistroVersion(version: '3.15', releaseName: '3.15', eolDate: parseDate('2023-11-01')),
+        new DistroVersion(version: '3.16', releaseName: '3.16', eolDate: parseDate('2024-05-23')),
       ]
     }
 
@@ -165,7 +163,7 @@ enum Distro implements DistroBehavior {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [
-        new DistroVersion(version: '9', releaseName: 'stretch-slim', eolDate: parseDate('2022-06-30')),
+        new DistroVersion(version: '9', releaseName: 'stretch-slim', eolDate: parseDate('2022-06-30'), continueToBuild: true),
         // No EOL-LTS specified for buster release. Checkout https://wiki.debian.org/DebianReleases for more info
         new DistroVersion(version: '10', releaseName: 'buster-slim', eolDate: parseDate('2024-06-01')),
         new DistroVersion(version: '11', releaseName: 'bullseye-slim', eolDate: parseDate('2026-08-15')),
@@ -183,7 +181,8 @@ enum Distro implements DistroBehavior {
     List<DistroVersion> getSupportedVersions() {
       return [
         new DistroVersion(version: '18.04', releaseName: 'bionic', eolDate: parseDate('2023-04-01')),
-        new DistroVersion(version: '20.04', releaseName: 'focal', eolDate: parseDate('2030-04-01'))
+        new DistroVersion(version: '20.04', releaseName: 'focal', eolDate: parseDate('2030-04-01')),
+        new DistroVersion(version: '22.04', releaseName: 'jammy', eolDate: parseDate('2032-04-01')),
       ]
     }
   },
@@ -201,15 +200,8 @@ enum Distro implements DistroBehavior {
 
     @Override
     List<DistroVersion> getSupportedVersions() {
-      def installSasl = [
-              'apk add --no-cache libsasl sudo',
-              // Workaround for https://github.com/docker-library/docker/commit/75e26edc9ea7fff4aa3212fafa5966f4d6b00022
-              // which causes a clash with glibc, which is installed later for AdoptOpenJDK and will serve the same purpose
-              'apk del --purge libc6-compat'
-      ]
-
       return [
-        new DistroVersion(version: 'dind', releaseName: 'dind', eolDate: parseDate('2099-01-01'), installPrerequisitesCommands: installSasl)
+        new DistroVersion(version: 'dind', releaseName: 'dind', eolDate: parseDate('2099-01-01'))
       ]
     }
 
@@ -220,12 +212,22 @@ enum Distro implements DistroBehavior {
 
     @Override
     List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
-      return alpine.getInstallPrerequisitesCommands(distroVersion)
+      return alpine.getInstallPrerequisitesCommands(distroVersion) +
+        [
+          'apk add --no-cache sudo',
+        ]
     }
 
     @Override
     List<String> getInstallJavaCommands(Project project) {
-      return alpine.getInstallJavaCommands(project)
+      return [
+        // Workaround for https://github.com/docker-library/docker/commit/75e26edc9ea7fff4aa3212fafa5966f4d6b00022
+        // which causes a clash with glibc, which is installed later due to being needed for Tanuki Java Wrapper (and
+        // thus used by the particular Adoptium builds we are using Alpine Adoptium builds seemingly can't co-exist happily).
+        // We could avoid doing this once https://github.com/containerd/containerd/issues/5824 is fixed and makes its
+        // way to the relevant docker:dind image version.
+        'apk del --purge libc6-compat'
+      ] + alpine.getInstallJavaCommands(project)
     }
 
     @Override

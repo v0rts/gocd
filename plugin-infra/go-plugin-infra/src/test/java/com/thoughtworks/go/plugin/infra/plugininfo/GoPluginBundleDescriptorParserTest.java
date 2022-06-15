@@ -17,7 +17,7 @@ package com.thoughtworks.go.plugin.infra.plugininfo;
 
 import org.junit.jupiter.api.Test;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
@@ -38,7 +38,7 @@ class GoPluginBundleDescriptorParserTest {
         final GoPluginDescriptor pluginDescriptor1 = bundle.descriptors().get(0);
         assertPluginDescriptor(pluginDescriptor1, "testplugin.multipluginbundle.plugin1",
                 "Plugin 1", "1.0.0", "19.5",
-                "Example plugin 1", "ThoughtWorks GoCD Team", "www.thoughtworks.com", asList("Linux", "Windows"),
+                "Example plugin 1", "GoCD Team", "https://gocd.org", asList("Linux", "Windows"),
                 asList("cd.go.contrib.package1.TaskExtension", "cd.go.contrib.package1.ElasticAgentExtension"));
 
         final GoPluginDescriptor pluginDescriptor2 = bundle.descriptors().get(1);

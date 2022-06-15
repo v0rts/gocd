@@ -1,15 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    faraday (2.2.0)
+    faraday (2.3.0)
       faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
-    faraday-net_http (2.0.1)
+    faraday-net_http (2.0.3)
     ruby2_keywords (0.0.5)
 
 PLATFORMS
-  x86_64-darwin-18
-  x86_64-darwin-20
+  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -17,4 +16,4 @@ DEPENDENCIES
   faraday-net_http
 
 BUNDLED WITH
-   2.2.24
+   2.3.11

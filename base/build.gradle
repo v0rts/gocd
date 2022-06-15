@@ -20,6 +20,11 @@ dependencies {
   providedAtPackageTime project.deps.bouncyCastle
   providedAtPackageTime project.deps.bouncyCastlePkix
 
+  // Use BOMs to control versions of dependencies for other projects, all of which consume 'base'.
+  // This is following https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import
+  api enforcedPlatform(project.deps.jacksonBom)
+  api platform(project.deps.jaxbBom)
+
   api(project.deps.apacheAnt)  {
     transitive = false
   }
@@ -36,7 +41,6 @@ dependencies {
   testImplementation project.deps.junit5
   testRuntimeOnly project.deps.junit5Engine
   testImplementation project.deps.hamcrest
-  testImplementation project.deps.hamcrestLibrary
   testImplementation project.deps.mockito
   testImplementation project.deps.assertJ
 }

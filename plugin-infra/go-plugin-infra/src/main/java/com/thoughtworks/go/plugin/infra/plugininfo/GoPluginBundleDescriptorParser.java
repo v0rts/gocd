@@ -16,10 +16,10 @@
 package com.thoughtworks.go.plugin.infra.plugininfo;
 
 import com.thoughtworks.go.plugin.infra.monitor.BundleOrPluginFileDetails;
+import jakarta.xml.bind.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
-import javax.xml.bind.*;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -39,8 +39,8 @@ import java.io.InputStream;
         <target-go-version>19.5</target-go-version>
         <description>Example plugin 1</description>
         <vendor>
-          <name>ThoughtWorks GoCD Team</name>
-          <url>www.thoughtworks.com</url>
+          <name>GoCD Team</name>
+          <url>https://gocd.org</url>
         </vendor>
         <target-os>
           <value>Linux</value>

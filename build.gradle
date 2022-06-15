@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 import com.github.jk1.license.filter.LicenseBundleNormalizer
 import com.github.jk1.license.render.JsonReportRenderer
 import com.github.jk1.license.task.ReportTask
@@ -34,7 +35,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'org.owasp:dependency-check-gradle:6.5.3'
+    classpath 'org.owasp:dependency-check-gradle:7.1.1'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.42.0'
     classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
     classpath 'com.github.jk1:gradle-license-report:2.1'
@@ -112,9 +113,9 @@ List<String> partitionFiles(Collection originalFiles) {
   return currentPartition ?: [] as List<String>
 }
 
-def GO_VERSION_PREVIOUS = '21.4.0'
-def GO_VERSION_SEGMENTS = [year: 22, releaseInYear: 1, patch: 0]
-def GO_VERSION_NEXT = '22.2.0'
+def GO_VERSION_PREVIOUS = '22.1.0'
+def GO_VERSION_SEGMENTS = [year: 22, releaseInYear: 2, patch: 0]
+def GO_VERSION_NEXT = '22.3.0'
 
 def GO_VERSION = [GO_VERSION_SEGMENTS.year, GO_VERSION_SEGMENTS.releaseInYear, GO_VERSION_SEGMENTS.patch].join('.')
 def DIST_VERSION = releaseRevision()
@@ -171,8 +172,8 @@ project.ext.packaging = [
   adoptOpenjdk: [
     featureVersion: 17,
     interimVersion: 0, // set to `null` for the first release
-    updateVersion : 2, // set to `null` for the first release
-    buildVersion  : 8
+    updateVersion : 3, // set to `null` for the first release
+    buildVersion  : 7
   ]
 ]
 
@@ -192,7 +193,10 @@ dependencyCheck {
 
   analyzers {
     bundleAuditEnabled = false // Currently there is a separate bundle audit security check job independent of Gradle
-    assemblyEnabled  = false
+    assemblyEnabled = false
+    retirejs {
+      filterNonVulnerable = true
+    }
   }
   skipConfigurations = ['pmd']
   suppressionFile = rootProject.file('buildSrc/dependency-check-suppress.xml').toPath().toString()
@@ -533,6 +537,7 @@ subprojects {
     // fixup a tempdir that is predictable and we can clean it up later
     def tmpDir = project.file("${System.getProperty('java.io.tmpdir')}/gocd-tests/${new BigInteger(32, new SecureRandom()).toString(32)}")
     systemProperty 'java.io.tmpdir', tmpDir
+    systemProperty 'jdk.attach.allowAttachSelf', 'true'
     jvmArgs += testTask.project.name.startsWith("agent") ? InstallerType.agent.jvmModuleOpensArgs : InstallerType.server.jvmModuleOpensArgs
 
     doFirst {
@@ -631,19 +636,15 @@ subprojects {
     }
   }
 
-  configurations.all { configuration ->
+  configurations.all {
 
     def versionOverrides = [
-      "com.fasterxml.jackson.core:jackson-annotations": project.versions.jackson,
-      "com.fasterxml.jackson.core:jackson-core"       : project.versions.jackson,
-      "com.fasterxml.jackson.core:jackson-databind"   : project.versions.jackson,
-      "commons-beanutils:commons-beanutils"           : project.versions.commonsBeanutils,
-      "org.apache.commons:commons-pool2"              : project.versions.commonsPool,
-      "org.objenesis:objenesis"                       : project.versions.objenesis,
+      "commons-beanutils:commons-beanutils": project.versions.commonsBeanutils,
+      "org.apache.commons:commons-pool2"   : project.versions.commonsPool,
+      "org.objenesis:objenesis"            : project.versions.objenesis,
     ]
 
-
-    configuration.resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
       def overrideVersion = versionOverrides[details.requested.group + ":" + details.requested.name]
 
       if (overrideVersion != null && details.requested.version != overrideVersion) {
@@ -653,19 +654,30 @@ subprojects {
 
       // replace log4j and commons-logging implementations with the slf4j apis that redirect logs to slf4j
       // see https://www.slf4j.org/legacy.html
-      if (details.requested.name == 'log4j' && details.requested.group == 'log4j') {
+      if (details.requested.group == 'log4j' && details.requested.name == 'log4j') {
         details.useTarget project.deps.slf4jLog4j
       }
-      if (details.requested.name == 'commons-logging' && details.requested.group == 'commons-logging') {
+      if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
         details.useTarget project.deps.slf4jJcl
       }
+      // Hamcrest core/library/all have been merged together: https://hamcrest.org/JavaHamcrest/distributables
+      if (details.requested.group == 'org.hamcrest' && details.requested.name ==~ /hamcrest-(core|library|all)/) {
+        details.useTarget project.deps.hamcrest
+      }
+      // Javax Annotation has migrated to jakarta annotations
+      if (details.requested.group == 'javax.annotation' && details.requested.name == 'javax.annotation-api') {
+        details.useTarget project.deps.jakartaAnnotation
+      }
+      // Javax Servlet API has migrated to jakarta Servlet API
+      if (details.requested.group == 'javax.servlet' && details.requested.name == 'javax.servlet-api') {
+        details.useTarget project.deps.servletApi
+      }
     }
-  }
 
-  project.configurations*.exclude(group: 'junit')
-  project.configurations*.exclude(group: 'dom4j')
-  project.configurations*.exclude(group: 'xalan')
-  project.configurations*.exclude(group: 'xml-apis')
+    exclude(group: 'javax.xml.bind') // Moved to jakarta.xml.bind
+    exclude(group: 'junit') // Moved to org.junit
+    exclude(group: 'dom4j') // Moved to org.dom4j
+  }
 }
 
 task allDependencies {
