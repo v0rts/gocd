@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class SecretConfigRepresenter {
 
     public static SecretConfig fromJSON(JsonReader jsonReader) {
         SecretConfig secretConfig = new SecretConfig(jsonReader.getString("id"), jsonReader.getString("plugin_id"));
-        jsonReader.optString("description").ifPresent(description -> secretConfig.setDescription(description));
+        jsonReader.optString("description").ifPresent(secretConfig::setDescription);
         secretConfig.addConfigurations(ConfigurationPropertyRepresenter.fromJSONArray(jsonReader, "properties"));
 
         jsonReader.readArrayIfPresent("rules", array -> {

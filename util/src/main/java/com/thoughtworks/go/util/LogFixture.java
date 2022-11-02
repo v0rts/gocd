@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ public class LogFixture implements Closeable {
     private static class ListAppender extends AppenderBase<ILoggingEvent> {
 
         private final PatternLayoutEncoder encoder;
-        private Queue<ILoggingEvent> events = new ConcurrentLinkedQueue<ILoggingEvent>();
+        private final Queue<ILoggingEvent> events = new ConcurrentLinkedQueue<>();
 
         ListAppender(PatternLayoutEncoder encoder) {
             this.encoder = encoder;

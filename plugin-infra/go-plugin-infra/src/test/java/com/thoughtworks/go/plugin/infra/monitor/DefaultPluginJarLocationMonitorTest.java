@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class DefaultPluginJarLocationMonitorTest extends AbstractDefaultPluginJarLocati
     private File bundledPluginDir;
     private File pluginExternalDir;
 
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private SystemEnvironment systemEnvironment;
     @Mock
     private PluginJarChangeListener changeListener;

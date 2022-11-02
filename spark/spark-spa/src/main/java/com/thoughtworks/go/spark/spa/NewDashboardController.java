@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class NewDashboardController implements SparkController {
             response.redirect("/go/admin/pipelines/create?group=defaultGroup");
             return null;
         }
-        HashMap<Object, Object> object = new HashMap<Object, Object>() {{
+        HashMap<Object, Object> object = new HashMap<>() {{
             put("viewTitle", "Dashboard");
             put("showEmptyPipelineGroups", Toggles.isToggleOn(Toggles.ALLOW_EMPTY_PIPELINE_GROUPS_DASHBOARD));
             put("shouldShowAnalyticsIcon", showAnalyticsIcon());

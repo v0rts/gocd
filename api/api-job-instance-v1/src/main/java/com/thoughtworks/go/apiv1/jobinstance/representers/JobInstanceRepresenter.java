@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.thoughtworks.go.apiv1.jobinstance.representers;
 
 import com.thoughtworks.go.api.base.OutputWriter;
 import com.thoughtworks.go.domain.JobInstance;
-
-import static java.util.Collections.emptyList;
 
 public class JobInstanceRepresenter {
     public static void toJSON(OutputWriter outputWriter, JobInstance jobInstance) {

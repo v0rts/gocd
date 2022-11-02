@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 rootProject.name = 'gocd'
 
-include ':addon-api:database'
 include ':agent'
 include ':agent-bootstrapper'
 include ':agent-common'
@@ -104,6 +103,7 @@ include ':api:api-version-v1'
 include ':api:api-webhook-v1'
 include ':app-server'
 include ':base'
+include ':build-platform'
 include ':commandline'
 include ':common'
 include ':config:config-api'
@@ -135,7 +135,6 @@ include ':server-launcher'
 include ':spark:spark-base'
 include ':spark:spark-spa'
 include ':test:http-mocks'
-include ':test:test-addon'
 include ':test:test-agent'
 include ':test:test-utils'
 include ':tfs-impl:tfs-impl-14'

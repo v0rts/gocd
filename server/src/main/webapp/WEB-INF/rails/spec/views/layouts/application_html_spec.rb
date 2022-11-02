@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 require 'rails_helper'
 require_relative 'layout_html_examples'
 
-describe "/layouts/application" do
+describe "layouts/application" do
   it_should_behave_like :layout
 
   before do

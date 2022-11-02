@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -104,8 +104,5 @@ module Services
     :external_artifacts_service,
     :secret_param_resolver
   )
-
-  service_with_alias_name(:go_config_service_for_url, "goConfigService")
-
   extend Services
 end

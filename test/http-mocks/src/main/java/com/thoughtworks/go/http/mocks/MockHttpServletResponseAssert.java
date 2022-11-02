@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.error.ShouldContainCharSequence;
 import org.assertj.core.internal.Failures;
 import org.hamcrest.text.MatchesPattern;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.util.InvalidMimeTypeException;
 import org.springframework.util.MimeType;
 

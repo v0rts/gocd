@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ public abstract class TestRepo {
 
     public abstract List<Modification> latestModification() throws IOException;
 
-    public void onSetup() throws Exception {
-
+    public TestRepo onSetup() {
+        return null;
     }
 
     public abstract Material material();

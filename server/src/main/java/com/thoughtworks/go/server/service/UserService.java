@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -202,7 +202,7 @@ public class UserService {
     }
 
     private Set<String> allAdmins() {
-        return allUsersForDisplay().stream().filter(userModel -> userModel.isAdmin()).map(userModel -> userModel.getUser().getName()).collect(Collectors.toSet());
+        return allUsersForDisplay().stream().filter(UserModel::isAdmin).map(userModel -> userModel.getUser().getName()).collect(Collectors.toSet());
     }
 
     public Set<String> allUsernames() {

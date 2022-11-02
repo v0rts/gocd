@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.thoughtworks.go.domain.materials.perforce;
 
 import com.thoughtworks.go.config.materials.perforce.P4Material;
+import com.thoughtworks.go.config.materials.perforce.P4MaterialConfig;
 import com.thoughtworks.go.helper.P4TestRepo;
 import com.thoughtworks.go.util.command.CommandLineException;
 import com.thoughtworks.go.util.command.ConsoleResult;
@@ -72,7 +73,10 @@ public class P4Fixture {
 
     public P4Material material(String view) {
         return repo.material(view);
+    }
 
+    public P4MaterialConfig materialConfig(String view) {
+        return repo.materialConfig(view);
     }
 
     public P4Material material(String view, String dest) {

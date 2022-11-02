@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,12 +79,12 @@ public class AnalyticsController implements SparkController {
     }
 
     public ModelAndView index(Request request, Response response) {
-        HashMap<String, String> locals = new HashMap<String, String>() {{
+        HashMap<String, String> locals = new HashMap<>() {{
             List<String> pipelines = new ArrayList<>();
             pipelineConfigService.viewableGroupsFor(SessionUtils.currentUsername()).forEach(
-                    (PipelineConfigs config) -> config.getPipelines().forEach(
-                            (p) -> pipelines.add(p.name().toString())
-                    )
+                (PipelineConfigs config) -> config.getPipelines().forEach(
+                    (p) -> pipelines.add(p.name().toString())
+                )
             );
             put("viewTitle", "Analytics");
             put("pipelines", GSON.toJson(pipelines));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,9 @@ export class ShowForceBuildActionWidget extends MithrilViewComponent<ShowForceBu
         {vnode.attrs.group.config().stages().map((stage, index) => {
           return <div class={classnames(styles.stageBoxPipelineActivity, styles.disabledIcon)}>
             {ShowForceBuildActionWidget.getStageApprovalIcon(index, stage)}
-            <span class={classnames(styles.stageStatus, styles.unknown)}/>
+            <div className={styles.stageStatusWrapper}>
+              <span class={classnames(styles.stageStatus, styles.unknown)}/>
+            </div>
           </div>;
         })}
       </td>

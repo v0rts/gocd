@@ -1,5 +1,5 @@
 <#--
- Copyright 2022 ThoughtWorks, Inc.
+ Copyright 2022 Thoughtworks, Inc.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@
     </#list>
 
     <script src="/go/${railsAssetsService.getAssetPath("application.js")}"></script>
-    <#list webpackAssetsService.getJSAssetPathsFor("single_page_apps/polyfill", "single_page_apps/header_footer_shim") as js>
+    <#list webpackAssetsService.getJSAssetPathsFor("single_page_apps/polyfill", "single_page_apps/angular_mounter", "single_page_apps/header_footer_shim") as js>
       <script src="${js}"></script>
     </#list>
 </head>

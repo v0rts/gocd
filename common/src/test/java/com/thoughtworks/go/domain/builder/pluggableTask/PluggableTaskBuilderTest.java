@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class PluggableTaskBuilderTest {
     private RunIfConfigs runIfConfigs;
     @Mock
     private Builder cancelBuilder;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private PluggableTask pluggableTask;
     @Mock
     private PluginManager pluginManager;

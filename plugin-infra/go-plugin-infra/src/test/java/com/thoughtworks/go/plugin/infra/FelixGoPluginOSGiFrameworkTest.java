@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,9 +55,9 @@ class FelixGoPluginOSGiFrameworkTest {
     private BundleContext bundleContext;
     @Mock
     private Bundle bundle;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private Framework framework;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private PluginRegistry registry;
     @Mock
     private SystemEnvironment systemEnvironment;

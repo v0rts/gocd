@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public abstract class AbstractVersionableElasticAgentProcessor implements Versio
         }
 
         LOGGER.debug("Deleting agents from plugin {} {}", pluginId, agentInstances);
-        agentService.deleteAgentsWithoutValidations(agentInstances.stream().map(agentInstance -> agentInstance.getUuid()).collect(toList()));
+        agentService.deleteAgentsWithoutValidations(agentInstances.stream().map(AgentInstance::getUuid).collect(toList()));
         LOGGER.debug("Done deleting agents from plugin {} {}", pluginId, agentInstances);
     }
 

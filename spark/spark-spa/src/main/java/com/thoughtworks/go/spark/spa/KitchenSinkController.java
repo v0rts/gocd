@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class KitchenSinkController implements SparkController {
     }
 
     private ModelAndView index(Request request, Response response) {
-        HashMap<Object, Object> object = new HashMap<Object, Object>() {{
+        HashMap<Object, Object> object = new HashMap<>() {{
             put("viewTitle", "Kitchen Sink");
         }};
 

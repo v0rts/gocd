@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ describe('EmailSettingsWidgetSpec', () => {
     expect(helper.byTestId('save-email-settings')).toBeInDOM();
     expect(helper.byTestId('save-email-settings')).toBeDisabled();
 
-    expect(helpText('form-field-input-email')).toContainText('The email to which the notification is send.');
+    expect(helpText('form-field-input-email')).toContainText('The email to which the notification is sent.');
     expect(helpText('form-field-input-my-check-in-aliases')).toContainText("Usually the commits will be either in 'user' or 'username'. Specify both the values here.");
   });
 

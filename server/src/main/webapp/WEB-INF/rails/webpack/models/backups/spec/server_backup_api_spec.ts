@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -206,13 +206,13 @@ describe("ServerBackupAPI", () => {
                                            href : "https://api.gocd.org/19.2.0/#users"
                                          },
                                          self : {
-                                           href : "https://localhost:8154/go/api/users/admin"
+                                           href : "http://localhost:8153/go/api/users/admin"
                                          },
                                          find : {
-                                           href : "https://localhost:8154/go/api/users/:login_name"
+                                           href : "http://localhost:8153/go/api/users/:login_name"
                                          },
                                          current_user : {
-                                           href : "https://localhost:8154/go/api/current_user"
+                                           href : "http://localhost:8153/go/api/current_user"
                                          }
                                        },
                                        login_name : "admin"

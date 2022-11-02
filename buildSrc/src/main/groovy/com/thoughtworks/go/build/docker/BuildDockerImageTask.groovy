@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,12 +51,16 @@ class BuildDockerImageTask extends DefaultTask {
 
   @TaskAction
   def perform() {
-    if (distroVersion.eolDate.before(new Date())) {
-      throw new RuntimeException("The image $distro:v$distroVersion.version is unsupported. EOL was ${distroVersion.eolDate}.")
+    if (distroVersion.pastEolGracePeriod) {
+      throw new RuntimeException("The image $distro:v$distroVersion.version is unsupported. EOL was ${distroVersion.eolDate}, and GoCD build grace period has passed.")
     }
 
-    if (distroVersion.aboutToEol && !distroVersion.continueToBuild) {
-      throw new RuntimeException("The image $distro:v$distroVersion.version is supposed to be EOL in ${(distroVersion.eolDate - new Date())} day(s), on ${distroVersion.eolDate}. Set :continueToBuild option to continue building.")
+    if (distroVersion.eol && !distroVersion.continueToBuild) {
+      throw new RuntimeException("The image $distro:v$distroVersion.version was EOL on ${distroVersion.eolDate}. Set :continueToBuild option to continue building through the grace period.")
+    }
+
+    if (distroVersion.aboutToEol) {
+      println("WARNING: The image $distro:v$distroVersion.version is supposed to be EOL on ${distroVersion.eolDate}. Derived GoCD image will be marked as deprecated.")
     }
 
     project.delete(gitRepoDirectory)

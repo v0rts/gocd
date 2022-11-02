@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 ThoughtWorks, Inc.
+  ~ Copyright 2022 Thoughtworks, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -87,16 +87,6 @@
   <context-param>
     <param-name>public.root</param-name>
     <param-value>/WEB-INF/rails/public</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>gem.home</param-name>
-    <param-value>/WEB-INF/rails/gems/jruby/2.5.0</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>gem.path</param-name>
-    <param-value>/WEB-INF/rails/gems/jruby/2.5.0</param-value>
   </context-param>
 
   <context-param>

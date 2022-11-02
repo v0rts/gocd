@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,54 +13,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@import "../base/mixins.sass";
+@import "../base/mixins";
 
 .header #application_logo {
-    background-image: image_url('g9/logo_go.png');
-    background-repeat: no-repeat;
-    background-position: 0px 4px;
-    float: left;
-    height: 35px;
-    width: 114px;
+  background-image: image_url("g9/logo_go.png");
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  float: left;
+  height: 35px;
+  width: 114px;
 }
 
 .user {
-    a:hover {
-        color: #ffffff;
-    }
+  a:hover {
+    color: #fff;
+  }
 }
 
 .current_user.selected {
-    a {
-        color: white;
-    }
+  a {
+    color: white;
+  }
 }
 
-/* dropdown nav starts*/
+/* dropdown nav starts */
 .dropdown-menu {
-    position: absolute;
-    width: 200px;
-    top: 46px;
-    display: none;
-    padding: 5px;
-    border-radius: 0 0 10px 10px;
-    background: #222;
+  position: absolute;
+  width: 200px;
+  top: 46px;
+  display: none;
+  padding: 5px;
+  border-radius: 0 0 10px 10px;
+  background: #222;
 
-    li {
-        margin-left: 0;
-        float: none;
+  li {
+    margin-left: 0;
+    float: none;
 
-        a {
-            border-radius: 5px;
-            padding: 0 10px;
-        }
+    a {
+      border-radius: 5px;
+      padding: 0 10px;
     }
+  }
 }
 
 .open {
-    .dropdown-menu {
-        display: block;
-    }
+  .dropdown-menu {
+    display: block;
+  }
 }
 
-/* dropdown nav ends*/
+/* dropdown nav ends */

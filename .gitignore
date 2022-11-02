@@ -1,5 +1,5 @@
 ##########################################################################
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,11 +47,13 @@ tags
 
 # virtual machine crash logs
 hs_err_pid*
+*.hprof
 
 # intellij has a tendency to cache rake tasks
 .rakeTasks
 
 # ignore cipher file generated at runtime
+server/config/cipher
 server/config/cipher.aes
 server/config/db.properties
 
@@ -60,8 +62,6 @@ resources-generated/
 
 go.feature.toggles
 /build/
-addon-api/database/out/
-addon-api/database/target/
 agent-bootstrapper/.tmp.file.list
 agent-bootstrapper/logs/
 agent-bootstrapper/out/
@@ -299,8 +299,6 @@ spark/spark-spa/target/
 target/
 test/http-mocks/out/
 test/http-mocks/target/
-test/test-addon/out/
-test/test-addon/target/
 test/test-agent/out/
 test/test-agent/target/
 test/test-utils/out/

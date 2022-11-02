@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Component
 public class PrimaryServerEndPoint {
 
-    private final String DEFAULT_PRIMARY = "https://localhost:8154";
+    private final String DEFAULT_PRIMARY = "http://localhost:8153";
     private static Map<ConfigFileType, String> urlMap = new HashMap<>();
     private final SystemEnvironment systemEnvironment;
 

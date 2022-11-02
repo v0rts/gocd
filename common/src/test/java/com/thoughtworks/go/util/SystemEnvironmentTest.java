@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,11 +81,6 @@ class SystemEnvironmentTest {
         assertThat(systemEnvironment.useCompressedJs()).isFalse();
         systemEnvironment.setProperty(GoConstants.USE_COMPRESSED_JAVASCRIPT, Boolean.TRUE.toString());
         assertThat(systemEnvironment.useCompressedJs()).isTrue();
-    }
-
-    @Test
-    void shouldSetTrueAsDefaultForUseIframeSandbox() {
-        assertThat(systemEnvironment.useIframeSandbox()).isTrue();
     }
 
     @Test

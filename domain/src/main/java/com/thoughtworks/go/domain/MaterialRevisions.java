@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -278,7 +278,7 @@ public class MaterialRevisions implements Serializable, Iterable<MaterialRevisio
     }
 
     public List<DependencyMaterial> getDependencyMaterials() {
-        List<DependencyMaterial> mats = new ArrayList<DependencyMaterial>();
+        List<DependencyMaterial> mats = new ArrayList<>();
         for (MaterialRevision materialRevision : this) {
             Material material = materialRevision.getMaterial();
             if (material instanceof DependencyMaterial) {

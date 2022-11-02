@@ -10,14 +10,14 @@
       <span class="label">Revision</span>
       <h1><%= params[:revision] %> </h1></li>
   </ul>
-  <% if (supports_vsm_analytics?) %>
+  <% if supports_vsm_analytics? %>
     <button class="btn-primary enable-analytics"><i class="icon_vsm_analytics"></i>Analytics</button>
   <% end %>
 </div>
 
 <div class="content">
   <% if supports_vsm_analytics? %>
-    <%= render :partial => "analytics_panel.html", :locals => {:scope =>
+    <%= render :partial => "analytics_panel", :locals => {:scope =>
                                                                  {:current => @material_display_name,
                                                                   :title => vsm_analytics_chart_info["title"],
                                                                   :message => "Select a downstream pipeline"}} -%>

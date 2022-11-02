@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class ConfigurationPropertyRepresenter {
             writer.add("encrypted_value", configurationProperty.getEncryptedValue());
         }
         if (configurationProperty.hasErrors()) {
-            writer.addChild("errors", errorWriter -> new ErrorGetter(new LinkedHashMap<String, String>() {{
+            writer.addChild("errors", errorWriter -> new ErrorGetter(new LinkedHashMap<>() {{
                 put("encryptedValue", "encrypted_value");
                 put("configurationValue", "configuration_value");
                 put("configurationKey", "configuration_key");

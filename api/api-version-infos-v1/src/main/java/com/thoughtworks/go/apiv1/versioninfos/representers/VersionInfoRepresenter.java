@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,11 @@ import com.thoughtworks.go.api.base.OutputWriter;
 import com.thoughtworks.go.domain.VersionInfo;
 import com.thoughtworks.go.spark.Routes;
 import com.thoughtworks.go.util.SystemEnvironment;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
 
 import static com.thoughtworks.go.CurrentGoCDVersion.apiDocsUrl;
 

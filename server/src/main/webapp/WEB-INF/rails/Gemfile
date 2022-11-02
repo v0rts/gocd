@@ -1,33 +1,33 @@
 source 'https://rubygems.org'
 ruby '2.6.8'
 
-gem 'rails'
-gem 'sass-rails'
+platforms :jruby do
+  gem 'rails'
 
-gem 'dynamic_form'
+  # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+  gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'js-routes'
-gem 'ts_routes'
+  group :assets do
+    gem 'sassc-rails'
+    # Switch sassc to be able to use sass-embedded (and dart-sass) rather than libsass.
+    # See https://github.com/sass/sassc-ruby/pull/233
+    gem 'sassc', github: 'sass/sassc-ruby', ref: 'refs/pull/233/head'
+    gem 'sassc-embedded'
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+    gem 'js-routes'
+    gem 'ts_routes'
+  end
 
-group :development, :test do
-  # make sure to `System.setProperty("jruby.runtime.arguments", "--debug")` before opening up pry
-  gem 'pry-debugger-jruby', platforms: :jruby
-end
+  group :development, :test do
+    # make sure to `System.setProperty("jruby.runtime.arguments", "--debug")` before opening up pry
+    gem 'pry-debugger-jruby'
+  end
 
-group :test do
-  gem 'capybara'
-  gem 'rspec-rails'
-  gem 'rspec-instafail', require: false
-  gem 'rspec_junit_formatter'
-  gem 'rails-controller-testing'
-end
-
-group :development do
-  gem 'scss_lint', require: false
-  gem 'brakeman', require: false
-  gem 'bundler-audit', require: false
-  gem 'ruby_audit', require: false
+  group :test do
+    gem 'capybara'
+    gem 'rspec-rails'
+    gem 'rspec-instafail', require: false
+    gem 'rspec_junit_formatter'
+    gem 'rails-controller-testing'
+  end
 end

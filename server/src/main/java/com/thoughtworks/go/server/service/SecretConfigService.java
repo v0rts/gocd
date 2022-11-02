@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,13 +81,13 @@ public class SecretConfigService extends RuleAwarePluginProfileService<SecretCon
         final Set<SecretConfigUsage> usages = new HashSet<>();
 
         for (PipelineConfig pipelineConfig : goConfigService.getAllPipelineConfigs()) {
-            getPipelineUsage(pipelineConfig, configId).ifPresent(usage -> usages.add(usage));
+            getPipelineUsage(pipelineConfig, configId).ifPresent(usages::add);
 
             for (StageConfig stage : pipelineConfig.getStages()) {
-                getStageUSage(pipelineConfig, stage, configId).ifPresent(usage -> usages.add(usage));
+                getStageUSage(pipelineConfig, stage, configId).ifPresent(usages::add);
 
                 for (JobConfig job : stage.getJobs()) {
-                    getJobUSage(pipelineConfig, stage, job, configId).ifPresent(usage -> usages.add(usage));
+                    getJobUSage(pipelineConfig, stage, job, configId).ifPresent(usages::add);
                 }
             }
         }

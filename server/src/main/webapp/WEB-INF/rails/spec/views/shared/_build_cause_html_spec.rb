@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'rails_helper'
 
-describe "/shared/_build_cause.html.erb" do
+describe "shared/_build_cause.html.erb" do
   include StageModelMother
 
   before do
@@ -41,7 +41,7 @@ describe "/shared/_build_cause.html.erb" do
   end
 
   it "should not display modified files if the flag is not set" do
-    allow(view).to receive(:go_config_service).and_return(config_service = double('go_config_service'));
+    allow(view).to receive(:go_config_service).and_return(config_service = double('go_config_service'))
     allow(config_service).to receive(:getCommentRendererFor).with("foo").and_return(TrackingTool.new("http://pavan/${ID}", "#(\\d+)"))
 
     render :partial => "shared/build_cause", :locals => {:scope => {:material_revisions => @revisions, :show_files => false, :pipeline_name => "foo"}}
@@ -127,7 +127,7 @@ describe "/shared/_build_cause.html.erb" do
   end
 
   it "should html espace all the user entered fields" do
-    allow(view).to receive(:go_config_service).and_return(config_service = double('go_config_service'));
+    allow(view).to receive(:go_config_service).and_return(config_service = double('go_config_service'))
     allow(config_service).to receive(:getCommentRendererFor).with("foo").and_return(TrackingTool.new("http://pavan/${ID}", "#(\\d+)"))
 
     @modification.setComment("<script>alert('Check-in comment')</script>")
@@ -151,7 +151,7 @@ describe "/shared/_build_cause.html.erb" do
   end
 
   it "should html espace all the user entered fields" do
-    allow(view).to receive(:go_config_service).and_return(config_service = double('go_config_service'));
+    allow(view).to receive(:go_config_service).and_return(config_service = double('go_config_service'))
     allow(config_service).to receive(:getCommentRendererFor).with("foo").and_return(TrackingTool.new("http://pavan/${ID}", "#(\\d+)"))
 
     @modification.setComment("<script>alert('Check-in comment')</script>")

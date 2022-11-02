@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,9 @@ dependencies {
 
   testImplementation project(':test:test-utils')
   testImplementation project.deps.jaxen
-  testImplementation project.deps.junit5
+  testImplementation project.deps.junit5Api
   testRuntimeOnly project.deps.junit5Engine
-  testImplementation project.deps.mockito
+  testImplementation project.deps.mockitoCore
   testImplementation project.deps.mockitoJunit5
   testImplementation project.deps.junit5Params
 }

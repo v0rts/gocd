@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,11 @@ public class ArtifactRequestProcessor implements GoPluginApiRequestProcessor {
     private enum ProcessType {
         FETCH, PUBLISH
     }
-    private static final Map<LogLevel, String> FETCH_ARTIFACT_LOG_LEVEL_TAG = new HashMap<LogLevel, String>() {{
+    private static final Map<LogLevel, String> FETCH_ARTIFACT_LOG_LEVEL_TAG = new HashMap<>() {{
         put(LogLevel.INFO, TaggedStreamConsumer.OUT);
         put(LogLevel.ERROR, TaggedStreamConsumer.ERR);
     }};
-    private static final Map<LogLevel, String> PUBLISH_ARTIFACT_LOG_LEVEL_TAG = new HashMap<LogLevel, String>() {{
+    private static final Map<LogLevel, String> PUBLISH_ARTIFACT_LOG_LEVEL_TAG = new HashMap<>() {{
         put(LogLevel.INFO, TaggedStreamConsumer.PUBLISH);
         put(LogLevel.ERROR, TaggedStreamConsumer.PUBLISH_ERR);
     }};

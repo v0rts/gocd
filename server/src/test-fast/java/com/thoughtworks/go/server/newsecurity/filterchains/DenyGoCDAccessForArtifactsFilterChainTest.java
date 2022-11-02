@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 package com.thoughtworks.go.server.newsecurity.filterchains;
 
 import com.thoughtworks.go.http.mocks.HttpRequestBuilder;
-import com.thoughtworks.go.http.mocks.MockHttpServletRequest;
-import com.thoughtworks.go.http.mocks.MockHttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -38,28 +37,22 @@ class DenyGoCDAccessForArtifactsFilterChainTest {
     private FilterChain filterChain;
 
     public static ServletResponse wrap(MockHttpServletResponse response) {
-        return argThat(new ArgumentMatcher<ServletResponse>() {
-            @Override
-            public boolean matches(ServletResponse actualResponse) {
-                while (actualResponse instanceof HttpServletResponseWrapper) {
-                    actualResponse = ((HttpServletResponseWrapper) actualResponse).getResponse();
-                }
-
-                return actualResponse == response;
+        return argThat(actualResponse -> {
+            while (actualResponse instanceof HttpServletResponseWrapper) {
+                actualResponse = ((HttpServletResponseWrapper) actualResponse).getResponse();
             }
+
+            return actualResponse == response;
         });
     }
 
     public static ServletRequest wrap(MockHttpServletRequest request) {
-        return argThat(new ArgumentMatcher<ServletRequest>() {
-            @Override
-            public boolean matches(ServletRequest actualRequest) {
-                while (actualRequest instanceof HttpServletRequestWrapper) {
-                    actualRequest = ((HttpServletRequestWrapper) actualRequest).getRequest();
-                }
-
-                return actualRequest == request;
+        return argThat(actualRequest -> {
+            while (actualRequest instanceof HttpServletRequestWrapper) {
+                actualRequest = ((HttpServletRequestWrapper) actualRequest).getRequest();
             }
+
+            return actualRequest == request;
         });
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import m from "mithril";
-import {State} from "../../../../models/agent_job_run_history";
+import {JobState} from "models/shared/job_state";
 import {TestHelper} from "../../../pages/spec/test_helper";
 import {JobStateWidget} from "../job_state_widget";
 import {Result} from "../models/types";
@@ -66,7 +66,7 @@ describe("Job State Widget", () => {
     expect(helper.root).toContainText('Cancelled');
   });
 
-  function mount(state: State, result: Result | string = Result[Result.Passed]) {
+  function mount(state: JobState, result: Result | string = Result[Result.Passed]) {
     const jobJSON = TestData.stageInstanceJSON().jobs[0];
     jobJSON.state = state;
     jobJSON.result = result;

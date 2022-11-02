@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,7 +162,7 @@ describe("Personalization View Model", () => {
       jasmine.Ajax.stubRequest(SparkRoutes.pipelineSelectionPath(), undefined, 'GET').andReturn({
         responseText:    JSON.stringify({filters: [{ name:"New", type: "whitelist", pipelines: ["a"] }]}),
         responseHeaders: {
-          ETag:           `"1234567"`,
+          ETag:           `W/"1234567"`,
           'Content-Type': 'application/vnd.go.cd.v1+json'
         },
         status:          200

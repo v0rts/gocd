@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,6 @@
 Java::JavaUtil::Date.class_eval do
   def iso8601
     Time.at(self.getTime()/1000).iso8601
-  end
-
-  def display_time
-    com.thoughtworks.go.util.TimeConverter.convert(self);
   end
 
   def to_long_display_date_time

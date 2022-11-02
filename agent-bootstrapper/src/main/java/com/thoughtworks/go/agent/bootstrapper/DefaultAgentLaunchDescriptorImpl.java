@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 class DefaultAgentLaunchDescriptorImpl implements AgentLaunchDescriptor {
 
     private final AgentBootstrapper bootstrapper;
-    private final Map context = new ConcurrentHashMap();
+    private final Map<String, String> context = new ConcurrentHashMap<>();
 
     public DefaultAgentLaunchDescriptorImpl(AgentBootstrapperArgs bootstrapperArgs, AgentBootstrapper agentBootstrapper) {
         this.bootstrapper = agentBootstrapper;
@@ -38,7 +38,7 @@ class DefaultAgentLaunchDescriptorImpl implements AgentLaunchDescriptor {
     }
 
     @Override
-    public Map context() {
+    public Map<String, String> context() {
         return context;
     }
 

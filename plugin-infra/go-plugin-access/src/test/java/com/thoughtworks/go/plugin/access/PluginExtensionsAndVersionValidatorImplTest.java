@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PluginExtensionsAndVersionValidatorImplTest {
     private static final String PLUGIN_ID = "Some-Plugin-Id";
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private ExtensionsRegistry extensionsRegistry;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private GoPluginDescriptor descriptor;
     private PluginExtensionsAndVersionValidatorImpl pluginExtensionsAndVersionValidator;
 

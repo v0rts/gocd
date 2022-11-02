@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ unless defined? NonApiController
         match 'rails/quux', via: :all, to: 'api/test#localized_not_found_action_with_message_ending_in_newline'
         match 'rails/boom', via: :all, to: 'api/test#localized_operation_result_without_message'
         match 'rails/test/test_action', via: :all, to: 'api/test#test_action'
-        match 'rails/auto_refresh', via: :all, to: 'api/test#auto_refresh'
 
         match 'rails/non_api_404', via: :all, to: 'non_api#not_found_action'
         match 'rails/non_api_localized_404', via: :all, to: 'non_api#localized_not_found_action'
@@ -52,10 +51,7 @@ defined? NonApiController && Object.send(:remove_const, :NonApiController)
 
 class NonApiController < ApplicationController
   include ActionRescue
-  include ParamEncoder
   helper FlashMessagesHelper
-
-  decode_params :decodable_param, :only => :encoded_param_user_action
 
   def not_found_action
     hor = HttpOperationResult.new()
@@ -73,16 +69,6 @@ class NonApiController < ApplicationController
     render :plain => "first render"
     render :plain => "second render"
   end
-
-  def encoded_param_user_action
-    @decodable_param = params[:decodable_param]
-    render :plain => ""
-  end
-
-  def non_encoded_param_user_action
-    @decodable_param = params[:decodable_param]
-    render :plain => ""
-  end
 end
 
 defined?(Api) && defined?(Api::TestController) && Api.send(:remove_const, :TestController)
@@ -95,12 +81,6 @@ module Api
       hor = HttpOperationResult.new()
       hor.notFound("it was not found", 'description', HealthStateType.general(HealthStateScope::GLOBAL))
       render_operation_result(hor)
-    end
-
-    def another_not_found_action
-      hor = HttpOperationResult.new()
-      hor.notFound("it was again not found", 'description', HealthStateType.general(HealthStateScope::GLOBAL))
-      render_operation_result_if_failure(hor)
     end
 
     def unauthorized_action
@@ -126,11 +106,7 @@ module Api
       render_localized_operation_result(hor)
     end
 
-    def test_action;
-    end
-
-    def auto_refresh
-      render :plain => root_url
+    def test_action
     end
   end
 end

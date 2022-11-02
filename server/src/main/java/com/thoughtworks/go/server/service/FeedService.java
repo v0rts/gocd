@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ public class FeedService {
 
     public Document jobXml(Username username, String pipelineName, Integer pipelineCounter, String stageName,
                            Integer stageCounter, String jobName, String baseUrl) {
-        JobInstance jobInstance = jobInstanceService.findJobInstance(pipelineName, stageName, jobName, pipelineCounter, stageCounter, username);
+        JobInstance jobInstance = jobInstanceService.findJobInstanceWithTransitions(pipelineName, stageName, jobName, pipelineCounter, stageCounter, username);
         return xmlApiService.write(new JobXmlRepresenter(jobInstance), baseUrl);
     }
 

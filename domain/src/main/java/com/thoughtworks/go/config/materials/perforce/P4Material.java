@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import com.thoughtworks.go.domain.MaterialInstance;
 import com.thoughtworks.go.domain.materials.*;
 import com.thoughtworks.go.domain.materials.perforce.P4Client;
 import com.thoughtworks.go.domain.materials.perforce.P4MaterialInstance;
-import com.thoughtworks.go.security.GoCipher;
 import com.thoughtworks.go.util.FileUtil;
 import com.thoughtworks.go.util.GoConstants;
 import com.thoughtworks.go.util.SystemUtil;

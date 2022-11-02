@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import {CaseInsensitiveMap} from "helpers/collections";
+import {mrequest} from "helpers/mrequest";
 import _ from "lodash";
 import m from "mithril";
 
@@ -78,7 +79,7 @@ export class ApiResult<T> {
   }
 
   getEtag(): string | null {
-    return this.header("etag") || null;
+    return mrequest.normalizeEtag(this.header("etag"));
   }
 
   getRedirectUrl(): string {

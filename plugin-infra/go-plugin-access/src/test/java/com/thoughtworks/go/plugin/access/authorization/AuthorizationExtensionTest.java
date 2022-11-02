@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.thoughtworks.go.domain.packagerepository.ConfigurationPropertyMother.*;
+import static com.thoughtworks.go.domain.packagerepository.ConfigurationPropertyMother.create;
 import static com.thoughtworks.go.plugin.access.authorization.AuthorizationPluginConstants.*;
 import static com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse.BAD_REQUEST;
 import static com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse.SUCCESS_RESPONSE_CODE;
@@ -60,7 +60,7 @@ import static org.mockito.Mockito.*;
 public class AuthorizationExtensionTest {
     public static final String PLUGIN_ID = "plugin-id";
 
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private PluginManager pluginManager;
     @Mock
     ExtensionsRegistry extensionsRegistry;

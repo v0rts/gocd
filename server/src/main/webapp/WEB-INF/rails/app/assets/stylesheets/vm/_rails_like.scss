@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.rounded-corner-for-body {
-    background: #FFF
-}
 
 #hd {
   background: #343226;
-  color:white;
-  height:6em;
-  margin-left:1em;
-  margin-right:1em;
+  color: white;
+  height: 6em;
+  margin-left: 1em;
+  margin-right: 1em;
   padding-top: 1em;
 }
 
-.c1, .c2, .c3, .c4 {
+.c1,
+.c2,
+.c3,
+.c4 {
   background: none !important;
 }
 
-#hd div, #hd ul {
+#hd div,
+#hd ul {
   clear: none;
   display: inline;
   float: right;
@@ -44,29 +45,20 @@ ul#head-links {
   display: none;
 }
 
-#hd #user, #hd #user strong {
+#hd #user,
+#hd #user strong {
   color: #fff !important;
 }
 
-#hd a:link, #hd a:visited {
+#hd a:link,
+#hd a:visited {
   color: #fff !important;
 }
 
-.logo-enterprise {
-  background:transparent image_url('logo-cruise-enterprise.png') no-repeat scroll 0 0;
-  display:block;
-  float:left;
-  height:37px;
-  left:1em;
-  margin:1.5em 0 1.5em 3em;
-  overflow:hidden;
-  text-indent:-10000px;
-  top:20px;
-  width:99px;
-}
-
-
-ul#tabs li a, ul#tabs li a:visited, ul#tabs li span, ul#tabs li.admin {
+ul#tabs li a,
+ul#tabs li a:visited,
+ul#tabs li span,
+ul#tabs li.admin {
   background: none;
   margin: 0;
 }
@@ -76,93 +68,90 @@ ul#tabs li {
 }
 
 ul#tabs li {
-  background-image:image_url('bg-header-tabs.png') !important;
-  background-position:left 50%;
-  background-repeat:repeat-x;
-}
-ul#tabs li {
-  background-color:#444034;
-  border-color:#343226 -moz-use-text-color #343226 #343226;
-  border-style:solid none solid solid;
-  border-width:1px medium 1px 1px;
-  display:inline;
-  padding:1.5em 0;
-}
-ul#tabs li {
-  list-style-image:none;
-  list-style-position:outside;
-  list-style-type:none;
+  background-image: image_url("bg-header-tabs.png") !important;
+  background-position: left 50%;
+  background-repeat: repeat-x;
 }
 
+ul#tabs li {
+  background-color: #444034;
+  border-color: #343226 -moz-use-text-color #343226 #343226;
+  border-style: solid none solid solid;
+  border-width: 1px medium 1px 1px;
+  display: inline;
+  padding: 1.5em 0;
+}
+
+ul#tabs li {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+}
 
 /*
  * #BD  // the main body region overrides
  */
-#bd{
-    background: #FFF;
-    /*border: 2px solid #A6A080;*/
-    /*margin: 0 20px;*/
-    clear: both;
+#bd {
+  background: #fff;
+
+  /* border: 2px solid #A6A080; */
+
+  /* margin: 0 20px; */
+  clear: both;
 }
+
 .yui-t6 #yui-main .yui-b {
-    padding-top: 0;
-    background-color: #FFF;
+  padding-top: 0;
+  background-color: #fff;
 }
 
-#yui-main{
-    border:0;
+#yui-main {
+  border: 0;
 }
-
 
 .yui-t7 #yui-main .yui-b {
-    padding:0;
+  padding: 0;
 }
 
-ul#tabs li{
-    padding: 1em 0;
-    font-family: helvetica,clean,sans-serif;
+ul#tabs li {
+  padding: 1em 0;
+  font-family: helvetica, clean, sans-serif;
 }
 
-#tabs li a, #tabs li a:visited, #tabs li span{
-    padding: 0.5em 1em;
-    font-size: 1em;
+#tabs li a,
+#tabs li a:visited,
+#tabs li span {
+  padding: 0.5em 1em;
+  font-size: 1em;
 }
+
 #tabs li.currenttab {
-    background-image :image_url('bg-header-tabs-current.png') !important;
-    background-position: top left;
-    background-repeat: repeat-x;
-    background-color: #AEA888;
+  background-image: image_url("bg-header-tabs-current.png") !important;
+  background-position: top left;
+  background-repeat: repeat-x;
+  background-color: #aea888;
 }
 
-#tabs li.currenttab a, #tabs li.currenttab a:visited, #tabs li.currenttab span{
-    font-weight: normal;
+#tabs li.currenttab a,
+#tabs li.currenttab a:visited,
+#tabs li.currenttab span {
+  font-weight: normal;
 }
 
-ul#tabs li.admin{
-    background: image_url('bg-header-tabs-admin.png') left 50% repeat-x !important;
-}
-
-
-/**
- * LOGO: override logos on logged in pages
- */
-
-.logo-enterprise{
-  background: transparent image_url('logo/cruise_blank_343226.jpg') no-repeat 0 0;
+ul#tabs li.admin {
+  background: image_url("bg-header-tabs-admin.png") left 50% repeat-x !important;
 }
 
 /*
  * #footer  // footer region overrides
  */
-#footer, #footer #copyright, #footer a, #footer li a{
-    color: #FFF;
+#footer,
+#footer #copyright,
+#footer a,
+#footer li a {
+  color: #fff;
 }
 
-
-#tabs #cruise-header-tab-administration.disabled-when-no-admin-rights span, #tabs #cruise-header-tab-my-cruise.disabled-when-scecurity-disabled span{
-    color: #FFF;
-}
-
-#tabs li.currenttab{
-    top: 0;
+#tabs li.currenttab {
+  top: 0;
 }

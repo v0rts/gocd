@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2022 ThoughtWorks, Inc.
+  ~ Copyright 2022 Thoughtworks, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
         http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
   <context:annotation-config/>
-  <import resource="velocity-config.xml"/>
+  <import resource="freemarker-config.xml"/>
   <context:component-scan base-package="com.thoughtworks.go.addon"/>
   <context:component-scan base-package="com.thoughtworks.go.util"/>
   <context:component-scan base-package="com.thoughtworks.go.server.controller"/>

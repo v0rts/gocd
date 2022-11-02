@@ -1,6 +1,5 @@
-import groovy.json.JsonOutput
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +13,8 @@ import groovy.json.JsonOutput
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import groovy.json.JsonOutput
 
 description = 'GoCD Installers'
 apply plugin: 'base'

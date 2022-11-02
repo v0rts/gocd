@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,7 +105,7 @@ function AjaxRefresher(url, redirectUrl, options) {
 
     //TODO: Can't get this under unit test because of window.location being set. Need to figure out a way to do this.
     function _redirectToLoginPage() {
-        redirectToLoginPage(redirectUrl);
+      window.location = window.location.protocol + '//' + window.location.host + redirectUrl;
     }
 
     var _request = function() {

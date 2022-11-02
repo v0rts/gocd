@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +85,11 @@ public class AgentBootstrapper {
                 resetContextClassLoader(tccl);
                 forceGCToPreventOOM();
             }
-            waitForRelaunchTime();
+
+            // Immediately restart if launcher isn't up to date.
+            if (returnValue != AgentLauncher.NOT_UP_TO_DATE) {
+                waitForRelaunchTime();
+            }
         } while (loop);
 
         LOG.info("Agent Bootstrapper stopped");
@@ -105,7 +109,7 @@ public class AgentBootstrapper {
         try {
             Thread.sleep(waitTimeBeforeRelaunch);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
 import com.github.jk1.license.filter.LicenseBundleNormalizer
 import com.github.jk1.license.render.JsonReportRenderer
 import com.github.jk1.license.task.ReportTask
+import com.thoughtworks.go.build.AdoptiumVersion
 import com.thoughtworks.go.build.InstallerType
-import groovy.io.FileType
 import nl.javadude.gradle.plugins.license.License
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
@@ -35,11 +35,9 @@ buildscript {
   }
 
   dependencies {
-    classpath 'org.owasp:dependency-check-gradle:7.1.1'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.42.0'
+    classpath 'org.owasp:dependency-check-gradle:7.3.0'
     classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
     classpath 'com.github.jk1:gradle-license-report:2.1'
-    classpath "com.github.jruby-gradle:jruby-gradle-core-plugin:2.0.2"
   }
 }
 
@@ -113,9 +111,9 @@ List<String> partitionFiles(Collection originalFiles) {
   return currentPartition ?: [] as List<String>
 }
 
-def GO_VERSION_PREVIOUS = '22.1.0'
-def GO_VERSION_SEGMENTS = [year: 22, releaseInYear: 2, patch: 0]
-def GO_VERSION_NEXT = '22.3.0'
+def GO_VERSION_PREVIOUS = '22.2.0'
+def GO_VERSION_SEGMENTS = [year: 22, releaseInYear: 3, patch: 0]
+def GO_VERSION_NEXT = '23.1.0'
 
 def GO_VERSION = [GO_VERSION_SEGMENTS.year, GO_VERSION_SEGMENTS.releaseInYear, GO_VERSION_SEGMENTS.patch].join('.')
 def DIST_VERSION = releaseRevision()
@@ -169,15 +167,17 @@ project.ext.toolchains = [
 ]
 
 project.ext.packaging = [
-  adoptOpenjdk: [
-    featureVersion: 17,
-    interimVersion: 0, // set to `null` for the first release
-    updateVersion : 3, // set to `null` for the first release
-    buildVersion  : 7
-  ]
+  adoptiumJavaVersion: new AdoptiumVersion(
+    feature: 17,
+    interim: 0,    // set to `null` for the first release of a new featureVersion
+    update : 5,    // set to `null` for the first release of a new featureVersion
+    patch  : null, // set to `null` for most releases. Patch releases are "exceptional".
+    build  : 8
+  )
 ]
 
 dependencyCheck {
+  failBuildOnCVSS = 1
   cve {
     def baseUrl
 
@@ -207,6 +207,14 @@ allprojects {
   group = 'com.thoughtworks.go'
   version = project.fullVersion
   buildDir = "${projectDir}/target"
+
+  repositories {
+    mavenCentral()
+  }
+
+  if (project.name == 'build-platform') {
+    return
+  }
 
   configurations {
     providedAtPackageTime {
@@ -245,15 +253,6 @@ allprojects {
       canBeResolved = true
     }
   }
-
-  repositories {
-    mavenCentral()
-    maven {
-      // Only for velocity-tools-view 1.4
-      url 'https://repo1.maven.org/maven2'
-      metadataSources { artifact() }
-    }
-  }
 }
 
 idea {
@@ -269,100 +268,93 @@ subprojects {
     return
   }
   apply plugin: 'base'
-  apply plugin: 'com.github.ben-manes.versions'
+  apply plugin: "com.github.hierynomus.license"
+  license {
+    skipExistingHeaders = false
+    strictCheck = true
+    ext.year = project.copyrightYear
+    exclude '**/*.erb'
+    exclude '**/*.ejs'
+    exclude '**/*.keep'
+    exclude '**/*.md'
+    exclude '**/*.jar'
+    exclude '**/*.json'
+    exclude '**/*.html'
+    exclude '**/*.zip'
+    exclude '**/*.png'
+    exclude '**/*.jpg'
+    exclude '**/*.jpeg'
+    exclude '**/*.gif'
+    exclude '**/*.woff'
+    exclude '**/*.woff2'
+    exclude '**/*.ttf'
+    exclude '**/*.eot'
+    exclude '**/*.svg'
+    exclude '**/*.json'
+    exclude '**/*.scss.d.ts'
+    exclude '**/.*.json'
+    exclude '**/hg.template'
+    exclude '**/available.toggles'
+    exclude '**/META-INF/services/*'
+    exclude '**/node_modules/**'
+    exclude '**/node-vendor/**'
+    exclude '**/vendor/**'
+    exclude '**/javascripts/lib/**'
+    exclude '**/gems/jruby/**'
+    exclude '**/tmp/**'
+    exclude '**/logs/**'
+    exclude '**/log/**'
+    exclude '**/reset-fonts-grids.scss'
+    exclude '**/JavaVersion.java'
+    exclude '**/robots.txt'
+    exclude '**/rails/bin/**'
 
-  if (project.path != ':test:http-mocks') {
-    apply plugin: "com.github.hierynomus.license"
-    license {
-      skipExistingHeaders = false
-      strictCheck = true
-      ext.year = project.copyrightYear
-      exclude '**/*.erb'
-      exclude '**/*.ejs'
-      exclude '**/*.keep'
-      exclude '**/*.md'
-      exclude '**/*.jar'
-      exclude '**/*.json'
-      exclude '**/*.html'
-      exclude '**/*.zip'
-      exclude '**/*.png'
-      exclude '**/*.jpg'
-      exclude '**/*.jpeg'
-      exclude '**/*.gif'
-      exclude '**/*.woff'
-      exclude '**/*.woff2'
-      exclude '**/*.ttf'
-      exclude '**/*.eot'
-      exclude '**/*.svg'
-      exclude '**/*.json'
-      exclude '**/*.scss.d.ts'
-      exclude '**/.*.json'
-      exclude '**/hg.template'
-      exclude '**/available.toggles'
-      exclude '**/META-INF/services/*'
-      exclude '**/node_modules/**'
-      exclude '**/javascripts/lib/**'
-      exclude '**/gems/jruby/**'
-      exclude '**/tmp/**'
-      exclude '**/logs/**'
-      exclude '**/log/**'
-      exclude '**/RubyRipper.java'
-      exclude '**/reset-fonts-grids.scss'
-      exclude '**/mock-ajax.js'
-      exclude '**/mithril.js'
-      exclude '**/crel.js'
-      exclude '**/JavaVersion.java'
-      exclude '**/ansi_up.js'
-      exclude '**/robots.txt'
-      exclude '**/rails/bin/**'
-
-      // used by intellij for type hints when editing ftl files, intellij gets confused if it sees a license header in this file
-      exclude '**/freemarker_implicit.ftl'
-      header rootProject.file('buildSrc/Apache-2.0.txt')
-      headerDefinitions {
-        intellijStyleXML {
-          firstLine = "<!--"
-          beforeEachLine = '  ~ '
-          endLine = "  -->"
-          afterEachLine = ''
-          skipLinePattern = "^<\\?xml.*>\$"
-          firstLineDetectionPattern = "(\\s|\\t)*<!--.*\$"
-          lastLineDetectionPattern = ".*-->(\\s|\\t)*\$"
-          allowBlankLines = true
-          isMultiline = true
-          padLines = false
-        }
-
-        intellijStyleFTL {
-          firstLine = "<#--"
-          beforeEachLine = ' '
-          endLine = "  -->"
-          afterEachLine = ''
-          firstLineDetectionPattern = "(\\s|\\t)*<#--.*\$"
-          lastLineDetectionPattern = ".*-->(\\s|\\t)*\$"
-          allowBlankLines = true
-          isMultiline = true
-          padLines = false
-        }
+    // used by intellij for type hints when editing ftl files, intellij gets confused if it sees a license header in this file
+    exclude '**/freemarker_implicit.ftl'
+    header rootProject.file('buildSrc/Apache-2.0.txt')
+    headerDefinitions {
+      intellijStyleXML {
+        firstLine = "<!--"
+        beforeEachLine = '  ~ '
+        endLine = "  -->"
+        afterEachLine = ''
+        skipLinePattern = "^<\\?xml.*>\$"
+        firstLineDetectionPattern = "(\\s|\\t)*<!--.*\$"
+        lastLineDetectionPattern = ".*-->(\\s|\\t)*\$"
+        allowBlankLines = true
+        isMultiline = true
+        padLines = false
       }
-      mapping {
-        java = 'SLASHSTAR_STYLE'
-        groovy = 'SLASHSTAR_STYLE'
-        scss = 'SLASHSTAR_STYLE'
-        sass = 'SLASHSTAR_STYLE'
-        css = 'SLASHSTAR_STYLE'
 
-        xml = 'intellijStyleXML'
-        xsl = 'intellijStyleXML'
-        xsd = 'intellijStyleXML'
-
-        ftl = 'intellijStyleFTL'
-        ftlh = 'intellijStyleFTL'
-        ts = 'SLASHSTAR_STYLE'
-        tsx = 'SLASHSTAR_STYLE'
-        msx = 'SLASHSTAR_STYLE'
-        js = 'SLASHSTAR_STYLE'
+      intellijStyleFTL {
+        firstLine = "<#--"
+        beforeEachLine = ' '
+        endLine = "  -->"
+        afterEachLine = ''
+        firstLineDetectionPattern = "(\\s|\\t)*<#--.*\$"
+        lastLineDetectionPattern = ".*-->(\\s|\\t)*\$"
+        allowBlankLines = true
+        isMultiline = true
+        padLines = false
       }
+    }
+    mapping {
+      java = 'SLASHSTAR_STYLE'
+      groovy = 'SLASHSTAR_STYLE'
+      scss = 'SLASHSTAR_STYLE'
+      sass = 'SLASHSTAR_STYLE'
+      css = 'SLASHSTAR_STYLE'
+
+      xml = 'intellijStyleXML'
+      xsl = 'intellijStyleXML'
+      xsd = 'intellijStyleXML'
+
+      ftl = 'intellijStyleFTL'
+      ftlh = 'intellijStyleFTL'
+      ts = 'SLASHSTAR_STYLE'
+      tsx = 'SLASHSTAR_STYLE'
+      msx = 'SLASHSTAR_STYLE'
+      js = 'SLASHSTAR_STYLE'
     }
   }
 
@@ -394,19 +386,6 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'pmd'
 
-    dependencyUpdates.resolutionStrategy {
-      componentSelection { rules ->
-        rules.all { ComponentSelection selection ->
-          boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
-            selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-+]*/
-          }
-          if (rejected) {
-            selection.reject('Release candidate')
-          }
-        }
-      }
-    }
-
     buildDir = "${projectDir}/target"
 
     configurations {
@@ -430,6 +409,43 @@ subprojects {
       ruleSetFiles = files(rootProject.file('buildSrc/pmd.xml'))
       ruleSets = []
       incrementalAnalysis = true
+    }
+
+    dependencies {
+      // Force all sub-projects to have managed dependency versions for certain transitive dependencies
+      implementation platform(project(':build-platform'))
+
+      modules {
+        module("dom4j:dom4j") {
+          replacedBy("org.dom4j:dom4j", "Upgrade the legacy dom4j in old Hibernate 3.6; dom4j 2 should be sufficiently compatible")
+        }
+      }
+      components {
+        // workaround for dom4j Gradle metadata optional dependency issues to avoid it pulling in
+        // optional dependencies when it should not (https://github.com/dom4j/dom4j/issues/99)
+        withModule('org.dom4j:dom4j', { details -> details.allVariants { withDependencies { clear() } } })
+      }
+    }
+  }
+
+  configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+      // replace  commons-logging implementations with the slf4j apis that redirect logs to slf4j per https://www.slf4j.org/legacy.html
+      if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
+        details.useTarget project.deps.slf4jJcl
+      }
+      // Hamcrest core/library/all have been merged together: https://hamcrest.org/JavaHamcrest/distributables
+      if (details.requested.group == 'org.hamcrest' && details.requested.name ==~ /hamcrest-(core|library|all)/) {
+        details.useTarget project.deps.hamcrest
+      }
+      // Javax Annotation has migrated to jakarta annotations
+      if (details.requested.group == 'javax.annotation' && details.requested.name == 'javax.annotation-api') {
+        details.useTarget project.deps.jakartaAnnotation
+      }
+      // Javax Servlet API has migrated to jakarta Servlet API
+      if (details.requested.group == 'javax.servlet' && details.requested.name == 'javax.servlet-api') {
+        details.useTarget project.deps.servletApi
+      }
     }
   }
 
@@ -559,7 +575,7 @@ subprojects {
       List<String> files = []
       testTask.testClassesDirs.files.each { File classDir ->
         if (classDir.exists()) {
-          classDir.eachFileRecurse(FileType.FILES) { f ->
+          classDir.eachFileRecurse(groovy.io.FileType.FILES) { f ->
             def relPath = new File(classDir.toURI().relativize(f.toURI()).toString()).toString().replaceAll(/\$.*/, '.*').replaceAll(/\.class/, '.*')
             files << relPath
           }
@@ -634,49 +650,6 @@ subprojects {
         }
       }
     }
-  }
-
-  configurations.all {
-
-    def versionOverrides = [
-      "commons-beanutils:commons-beanutils": project.versions.commonsBeanutils,
-      "org.apache.commons:commons-pool2"   : project.versions.commonsPool,
-      "org.objenesis:objenesis"            : project.versions.objenesis,
-    ]
-
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-      def overrideVersion = versionOverrides[details.requested.group + ":" + details.requested.name]
-
-      if (overrideVersion != null && details.requested.version != overrideVersion) {
-        logger.info "Overriding dependency ${details.requested.group}:${details.requested.name} version ${details.requested.version} --> $overrideVersion"
-        details.useVersion overrideVersion
-      }
-
-      // replace log4j and commons-logging implementations with the slf4j apis that redirect logs to slf4j
-      // see https://www.slf4j.org/legacy.html
-      if (details.requested.group == 'log4j' && details.requested.name == 'log4j') {
-        details.useTarget project.deps.slf4jLog4j
-      }
-      if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
-        details.useTarget project.deps.slf4jJcl
-      }
-      // Hamcrest core/library/all have been merged together: https://hamcrest.org/JavaHamcrest/distributables
-      if (details.requested.group == 'org.hamcrest' && details.requested.name ==~ /hamcrest-(core|library|all)/) {
-        details.useTarget project.deps.hamcrest
-      }
-      // Javax Annotation has migrated to jakarta annotations
-      if (details.requested.group == 'javax.annotation' && details.requested.name == 'javax.annotation-api') {
-        details.useTarget project.deps.jakartaAnnotation
-      }
-      // Javax Servlet API has migrated to jakarta Servlet API
-      if (details.requested.group == 'javax.servlet' && details.requested.name == 'javax.servlet-api') {
-        details.useTarget project.deps.servletApi
-      }
-    }
-
-    exclude(group: 'javax.xml.bind') // Moved to jakarta.xml.bind
-    exclude(group: 'junit') // Moved to org.junit
-    exclude(group: 'dom4j') // Moved to org.dom4j
   }
 }
 
@@ -771,17 +744,15 @@ task newSPA {
     String modelsBase = "${project(':server').webAppDir}/WEB-INF/rails/webpack/models/${spaName}"
     String pagesBase = "${project(':server').webAppDir}/WEB-INF/rails/webpack/views/pages"
     String widgetBase = "${pagesBase}/${spaName}"
-    String vmBase = "spark/spark-spa/src/main/resources/velocity/${spaName}"
     String mountPoint = "${project(':server').webAppDir}/WEB-INF/rails/webpack/single_page_apps"
 
-    project.delete(modelsBase, widgetBase, vmBase)
+    project.delete(modelsBase, widgetBase)
     project.mkdir(modelsBase)
     project.mkdir(widgetBase)
-    project.mkdir(vmBase)
 
     String licenseHeader =
       """
-      * Copyright ${project.copyrightYear} ThoughtWorks, Inc.
+      * Copyright ${project.copyrightYear} Thoughtworks, Inc.
       *
       * Licensed under the Apache License, Version 2.0 (the "License");
       * you may not use this file except in compliance with the License.
@@ -1029,7 +1000,7 @@ task newApi {
       def contents =
         """
           /*
-           * Copyright ${project.copyrightYear} ThoughtWorks, Inc.
+           * Copyright ${project.copyrightYear} Thoughtworks, Inc.
            *
            * Licensed under the Apache License, Version 2.0 (the "License");
            * you may not use this file except in compliance with the License.
@@ -1051,7 +1022,7 @@ task newApi {
 
             testImplementation project(path: ':api:api-base', configuration: 'testOutput')
 
-            testImplementation project.deps.junit5
+            testImplementation project.deps.junit5Api
             testRuntimeOnly project.deps.junit5Engine
           }
         """
@@ -1062,7 +1033,7 @@ task newApi {
       def contents =
         """
           /*
-           * Copyright ${project.copyrightYear} ThoughtWorks, Inc.
+           * Copyright ${project.copyrightYear} Thoughtworks, Inc.
            *
            * Licensed under the Apache License, Version 2.0 (the "License");
            * you may not use this file except in compliance with the License.
@@ -1173,7 +1144,7 @@ task newApi {
       def contents =
         """
           /*
-           * Copyright ${project.copyrightYear} ThoughtWorks, Inc.
+           * Copyright ${project.copyrightYear} Thoughtworks, Inc.
            *
            * Licensed under the Apache License, Version 2.0 (the "License");
            * you may not use this file except in compliance with the License.
@@ -1359,7 +1330,7 @@ private Object addProjectToSettingsGradle(String newProjectName, it) {
     def contents =
       """
           /*
-           * Copyright ${project.copyrightYear} ThoughtWorks, Inc.
+           * Copyright ${project.copyrightYear} Thoughtworks, Inc.
            *
            * Licensed under the Apache License, Version 2.0 (the "License");
            * you may not use this file except in compliance with the License.

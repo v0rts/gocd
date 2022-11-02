@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ export class MaterialModal extends Modal {
             if (errorResponse) {
               const parse            = JSON.parse(JSON.parse(errorResponse).body);
               const unconsumedErrors = this.entity().consumeErrorsResponse(parse.data);
-              this.errorMessage(<span>{parse.message}<br/> {unconsumedErrors.allErrorsForDisplay()}</span>);
+              this.errorMessage(<span>{parse.message}<br/> {unconsumedErrors.allErrorsForDisplay().join(" ")}</span>);
               this.parentFlashMessage.clear();
             }
 

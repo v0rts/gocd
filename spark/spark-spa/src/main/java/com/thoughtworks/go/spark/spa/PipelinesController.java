@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.thoughtworks.go.spark.spa;
 
 import com.thoughtworks.go.server.cache.GoCache;
-import com.thoughtworks.go.server.service.support.toggle.Toggles;
 import com.thoughtworks.go.spark.SparkController;
 import com.thoughtworks.go.spark.spring.SPAAuthenticationHelper;
 import spark.ModelAndView;
@@ -55,7 +54,7 @@ public class PipelinesController implements SparkController {
     }
 
     public ModelAndView create(Request req, Response res) {
-        HashMap<Object, Object> object = new HashMap<Object, Object>() {{
+        HashMap<Object, Object> object = new HashMap<>() {{
             put("viewTitle", "Create a pipeline");
         }};
 

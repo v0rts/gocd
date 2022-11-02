@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,9 @@ buildscript {
     classpath project.deps.jgit
   }
 }
-apply plugin: 'com.github.jruby-gradle.core'
 
 repositories {
-  ruby.gems()
-  maven { url 'https://jitpack.io' }
+  maven { url 'https://jitpack.io' } // Needed for spring-test-junit5
 }
 
 sourceSets {
@@ -104,14 +102,6 @@ configurations {
     transitive = true
   }
 
-  compileClasspath {
-    exclude group: 'commons-lang', module: 'commons-lang'
-    exclude group: 'commons-collections', module: 'commons-collections'
-    exclude group: 'org.springframework', module: 'spring-support'
-  }
-  runtimeClasspath {
-    exclude group: 'org.springframework', module: 'spring-support'
-  }
   apiBase
   allApis
   spark
@@ -134,7 +124,10 @@ project.ext.jrubyOptimizationJvmArgs = [
   '-XX:+TieredCompilation',
   '-XX:TieredStopAtLevel=1',
   '-Xss2048k',
-  '-client'
+  '-client',
+  // Enable native sub-process control by default, required on JDK 17+ and often needed by bundler and such to fork processes
+  '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+  '--add-opens=java.base/java.io=ALL-UNNAMED',
 ]
 
 project.ext.jrubyOptimizationSystemProperties = [
@@ -154,10 +147,12 @@ project.ext.jrubyScriptsDir = project.file("scripts")
 
 project.ext.additionalJRubyPaths = [jrubyScriptsDir, project.file("${project.bundledGemDir}/bin")]
 
+def forwardSlashedString = { File file -> file.toString().replaceAll('\\\\', '/') }
+
 project.ext.defaultJRubyEnvironment = [
   GEM_HOME: project.bundledGemDir,
   GEM_PATH: project.bundledGemDir,
-  RUBY    : project.file("${project.ext.jrubyScriptsDir}/jruby${org.gradle.internal.os.OperatingSystem.current().isWindows() ? '.bat' : ''}")
+  RUBY    : forwardSlashedString(project.file("${project.ext.jrubyScriptsDir}/jruby${org.gradle.internal.os.OperatingSystem.current().isWindows() ? '.bat' : ''}"))
 ]
 
 project.ext.rails = [:]
@@ -229,7 +224,6 @@ dependencies {
   apiBase project(':api:api-base')
   allApis project(':api').subprojects
   spark project(':spark').subprojects
-  implementation project(':addon-api:database')
   implementation project(':config:config-api')
   implementation project(':config:config-server')
   implementation project(':plugin-infra:go-plugin-access')
@@ -253,7 +247,6 @@ dependencies {
   implementation project.deps.commonsDbcp
   api(project.deps.hibernate) {
     exclude(module: 'ehcache-core')
-    exclude(module: 'commons-collections')
   }
 
   implementation project.deps.commonsFileUpload
@@ -283,27 +276,7 @@ dependencies {
   implementation project.deps.aspectjWeaver
   implementation project.deps.urlrewrite
 
-  implementation project.deps.velocity
-  constraints {
-    implementation(project.deps.commonsCollections) {
-      because 'used by both velocity/velocityToolsView, but out of date'
-    }
-    implementation(project.deps.commonsLang) {
-      because 'used by velocity, but out of date'
-    }
-  }
-
-  runtimeOnly project.deps.velocityToolsView
-  sharedTestRuntimeOnly project.deps.velocityToolsView
-  if (project.deps.velocityToolsView) {
-    // Transitive dependencies required only for velocityTools which does not publish a POM properly: https://velocity.apache.org/tools/devel/dependencies.html#VelocityView
-    // Also see https://github.com/apache/velocity-tools/blob/1.x/pom.xml
-    sharedTestRuntimeOnly project.deps.commonsCollections
-    sharedTestRuntimeOnly project.deps.commonsLang
-    runtimeOnly project.deps.commonsDigester
-    integrationTestRuntimeOnly project.deps.commonsDigester
-  }
-
+  implementation project.deps.freemarker
   implementation project.deps.guava
   implementation project.deps.mail
   implementation project.deps.mailSmtp
@@ -327,7 +300,8 @@ dependencies {
   providedAtPackageTime project.deps.jettyWebsocket
 
   testImplementation(project.deps.dbunit) {
-    exclude(group: 'postgresql')
+    exclude(group: 'org.postgresql')
+    exclude(group: 'com.oracle.database.jdbc')
   }
   testImplementation project(path: ':common', configuration: 'testOutput')
   testImplementation project(path: ':config:config-server', configuration: 'testOutput')
@@ -344,7 +318,7 @@ dependencies {
 
   testImplementation project.deps.httpClientMock
 
-  testImplementation project.deps.junit5
+  testImplementation project.deps.junit5Api
   testImplementation project.deps.junit5Params
   testRuntimeOnly project.deps.junit5Engine
   testImplementation project.deps.mockitoJunit5
@@ -507,7 +481,7 @@ task findGemsToNotPack {
   inputs.file("${project.railsRoot}/Gemfile")
   inputs.file("${project.railsRoot}/Gemfile.lock")
   inputs.file("find-gems-to-package.rake")
-  ext.outputFile = file("${project.buildDir}/gems-to-package.json")
+  ext.outputFile = file("${project.buildDir}/gems-to-not-package.json")
   outputs.file(outputFile)
   outputs.cacheIf { true }
 
@@ -709,18 +683,34 @@ task configureWar {
     war.from(project.webAppDir) { theSpec ->
       into '/'
       exclude('WEB-INF/web.xml')
+      exclude("**/rails/.tool-versions")
+
+      // Unrelated Rails/Ruby stuff
       exclude("**/rails/*.log")
-      exclude("**/rails/log/*")
-      exclude("**/rails/node_modules/")
+      exclude("**/rails/log/")
+      exclude("**/rails/logs/")
       exclude("**/rails/spec/")
       exclude("**/rails/tmp/")
-      exclude("**/rails/**/jruby/*/cache/*.gem")
-      exclude("**/rails/app/assets/")
+
+      // Vendored pieces that are compiled and incorporated into `public` as necessary by Rails/Sprockets or Webpack
+      exclude("**/rails/node_modules/")
+      exclude("**/rails/node-vendor/")
+      exclude("**/rails/vendor/")
+
+      // Rails/Sprockets-compiled or Webpacked assets
+      exclude("**/rails/app/assets/images/")
+      exclude("**/rails/app/assets/javascripts/")
+      exclude("**/rails/app/assets/*stylesheets/")
       exclude("**/rails/webpack/")
-    new JsonSlurper().parse(findGemsToNotPack.outputFile).each { gem ->
+
+      // Unnecessary Gems and related cruft
+      exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/bin/")
+      exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/bundler/")
+      exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/cache/")
+      new JsonSlurper().parse(findGemsToNotPack.outputFile).each { gem ->
         theSpec.exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/gems/${gem}")
         theSpec.exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/specifications/${gem}.gemspec")
-        theSpec.exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/build_info/${gem}.info")
+        theSpec.exclude("**/rails/gems/jruby/${project.bundledGemRubyVersion}/extensions/**/${gem}")
       }
     }
   }
@@ -813,15 +803,12 @@ task verifyWar(type: VerifyJarTask) {
         "cloning-${project.versions.cloning}.jar",
         "commandline-${project.version}.jar",
         "common-${project.version}.jar",
-        "commons-beanutils-${project.versions.commonsBeanutils}.jar",
         "commons-codec-${project.versions.commonsCodec}.jar",
         "commons-collections-${project.versions.commonsCollections}.jar",
         "commons-collections4-${project.versions.commonsCollections4}.jar",
         "commons-dbcp2-${project.versions.commonsDbcp}.jar",
-        "commons-digester-${project.versions.commonsDigester}.jar",
         "commons-fileupload-${project.versions.commonsFileUpload}.jar",
         "commons-io-${project.versions.commonsIO}.jar",
-        "commons-lang-${project.versions.commonsLang}.jar",
         "commons-lang3-${project.versions.commonsLang3}.jar",
         "commons-text-${project.versions.commonsText}.jar",
         "commons-pool2-${project.versions.commonsPool}.jar",
@@ -861,9 +848,9 @@ task verifyWar(type: VerifyJarTask) {
         "httpmime-${project.versions.apacheHttpComponents}.jar",
         "istack-commons-runtime-4.1.1.jar",
         "j2objc-annotations-1.3.jar",
-        "jackson-annotations-${project.versions.jacksonBom}.jar",
-        "jackson-core-${project.versions.jacksonBom}.jar",
-        "jackson-databind-${project.versions.jacksonBom}.jar",
+        "jackson-annotations-2.13.4.jar",
+        "jackson-core-2.13.4.jar",
+        "jackson-databind-2.13.4.2.jar",
         "jakarta.activation-api-2.1.0.jar",
         "jakarta.annotation-api-${project.versions.jakartaAnnotation}.jar",
         "jakarta.mail-api-${project.versions.mail}.jar",
@@ -887,7 +874,7 @@ task verifyWar(type: VerifyJarTask) {
         "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
         "mybatis-${project.versions.mybatis}.jar",
         "mybatis-spring-${project.versions.mybatisSpring}.jar",
-        "mysql-connector-java-${project.versions.mysql}.jar",
+        "mysql-connector-j-${project.versions.mysql}.jar",
         "objenesis-${project.versions.objenesis}.jar",
         "org.apache.felix.framework-${project.versions.felix}.jar",
         "org.eclipse.jgit-${project.versions.jgit}.jar",
@@ -919,8 +906,6 @@ task verifyWar(type: VerifyJarTask) {
         "txw2-${project.versions.jaxb}.jar",
         "urlrewritefilter-${project.versions.urlrewrite}.jar",
         "util-${project.version}.jar",
-        "velocity-${project.versions.velocity}.jar",
-        "velocity-tools-view-${project.versions.velocityToolsView}.jar",
         "zt-exec-${project.versions.ztExec}.jar",
       ])
   ]
@@ -958,20 +943,6 @@ task licenseReportAggregate {
       ]
     ],
     [
-      moduleName    : 'org.ow2.asm:asm',
-      moduleVersion : '7.1',
-      moduleUrls    : [
-        "https://asm.ow2.io/"
-      ],
-      moduleLicenses: [
-        [
-          // License is automatically detected as 0BSD by gradle-license-report, but appears to actually be BSD-3-Clause in nature
-          moduleLicense   : 'BSD-3-Clause',
-          moduleLicenseUrl: "https://spdx.org/licenses/BSD-3-Clause.html"
-        ]
-      ]
-    ],
-    [
       moduleName    : 'com.bazaarvoice.jolt:jolt-core',
       moduleVersion : project.versions.jolt,
       moduleUrls    : [
@@ -999,7 +970,7 @@ task licenseReportAggregate {
     ],
     [
       moduleName    : ':com.microsoft.tfs.sdk',
-      moduleVersion : '14.118.0',
+      moduleVersion : project.versions.tfsSdk,
       moduleUrls    : [
         "https://github.com/Microsoft/team-explorer-everywhere"
       ],
@@ -1007,19 +978,6 @@ task licenseReportAggregate {
         [
           moduleLicense   : 'MIT',
           moduleLicenseUrl: "https://spdx.org/licenses/MIT.html"
-        ]
-      ]
-    ],
-    [
-      moduleName    : 'velocity-tools:velocity-tools-view',
-      moduleVersion : project.versions.velocityToolsView,
-      moduleUrls    : [
-        "https://velocity.apache.org"
-      ],
-      moduleLicenses: [
-        [
-          moduleLicense   : 'Apache-2.0',
-          moduleLicenseUrl: "https://spdx.org/licenses/Apache-2.0.html"
         ]
       ]
     ],

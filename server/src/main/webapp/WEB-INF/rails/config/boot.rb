@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,4 +16,12 @@
 
 ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
 
-require 'bundler/setup' # Set up gems listed in the Gemfile.
+# Set up gems listed in the Gemfile.
+#
+# When running in production (NOT just building FOR production), force bundler to ignore groups including the assets pipeline stuff
+if ENV['RAILS_ENV'] == 'production' and not ENV.has_key?('RAILS_GROUPS')
+  require 'bundler'
+  Bundler.setup(:default)
+else
+  require 'bundler/setup'
+end

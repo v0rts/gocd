@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public class PipelineActivityController implements SparkController {
 
     public ModelAndView index(Request request, Response response) {
         String pipelineName = request.params("pipeline_name");
-        Map<Object, Object> object = new HashMap<Object, Object>() {{
+        Map<Object, Object> object = new HashMap<>() {{
             put("viewTitle", "Pipeline Activity");
             put("meta", meta(pipelineName));
         }};

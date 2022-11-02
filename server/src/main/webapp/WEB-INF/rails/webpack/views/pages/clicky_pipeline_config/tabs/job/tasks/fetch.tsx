@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ export class FetchArtifactTaskModal extends AbstractTaskModal {
   private readonly task: FetchArtifactTask;
   private readonly showOnCancel: boolean;
   private readonly pluginInfos: PluginInfos;
-  private autoSuggestions: Stream<any>;
+  private readonly autoSuggestions: Stream<any>;
   private readonly readonly: boolean;
 
   constructor(task: Task | undefined,

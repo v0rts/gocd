@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class AdminController < ApplicationController
     args.inject(@asserted_variables ||= {}) do |map, name|
       unless (var = instance_variable_get("@#{name}"))
         Rails.logger.warn("Could not load '#{name}', rendering failure #{caller[0..10].join("\n")}")
-        if(@should_not_render_layout)
+        if @should_not_render_layout
           options = options.merge(:layout => nil)
         end
         render_assertion_failure(options)

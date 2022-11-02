@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import static com.thoughtworks.go.util.SystemUtil.currentWorkingDirectory;
-import static com.thoughtworks.go.util.SystemUtil.getClientIp;
 
 public abstract class AgentController {
     private static final Logger LOG = LoggerFactory.getLogger(AgentController.class);

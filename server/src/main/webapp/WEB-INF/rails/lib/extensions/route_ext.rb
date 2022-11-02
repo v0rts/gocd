@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 module RouteExt
 
-  def url_for(options = {}, route_name = nil, url_strategy = ActionDispatch::Routing::RouteSet::UNKNOWN)
+  def url_for(options = {}, route_name = nil, url_strategy = ActionDispatch::Routing::RouteSet::UNKNOWN, method_name = nil, reserved = ActionDispatch::Routing::RouteSet::RESERVED_OPTIONS)
     sorted_options_for_cache_key = java.util.TreeMap.new(options)
     cache_key = ActiveSupport::Cache.expand_cache_key(sorted_options_for_cache_key)
 

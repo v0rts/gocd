@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,7 +127,7 @@ describe("ClusterProfilesWidget", () => {
     expect(helper.byTestId("key-value-value-pluginid", helper.byTestId("collapse-body"))).toHaveText("cd.go.contrib.elastic-agent.docker");
 
     expect(helper.byTestId("key-value-key-go-server-url", helper.byTestId("collapse-body"))).toHaveText("go_server_url");
-    expect(helper.byTestId("key-value-value-go-server-url", helper.byTestId("collapse-body"))).toHaveText("https://localhost:8154/go");
+    expect(helper.byTestId("key-value-value-go-server-url", helper.byTestId("collapse-body"))).toHaveText("http://localhost:8153/go");
 
     expect(helper.byTestId("key-value-key-max-docker-containers", helper.byTestId("collapse-body"))).toHaveText("max_docker_containers");
     expect(helper.byTestId("key-value-value-max-docker-containers", helper.byTestId("collapse-body"))).toHaveText("30");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
+configurations.all {
+  // Test containers depends on legacy junit, see https://github.com/testcontainers/testcontainers-java/issues/970
+  exclude group: 'junit'
+}
+
 dependencies {
-    implementation project.deps.postgresql
-    api project(':db-support:db-support-base')
+  implementation project.deps.postgresql
+  api project(':db-support:db-support-base')
 
-    annotationProcessor project.deps.lombok
+  annotationProcessor project.deps.lombok
 
-    testImplementation project(path: ':db-support:db-migration')
-    testImplementation project(path: ':db-support:db-migration', configuration: 'testOutput')
+  testImplementation project(path: ':db-support:db-migration')
+  testImplementation project(path: ':db-support:db-migration', configuration: 'testOutput')
 
-    testImplementation project.deps.testcontainersJunit
-    testImplementation project.deps.testcontainers
-    testImplementation project.deps.testcontainersPostgresql
+  testImplementation project.deps.testcontainers
+  testImplementation project.deps.testcontainersJunit
+  testImplementation project.deps.testcontainersPostgresql
 
-    testImplementation project.deps.assertJ
-    testImplementation project.deps.junit5
-    testRuntimeOnly project.deps.junit5Engine
+  testImplementation project.deps.assertJ
+  testImplementation project.deps.junit5Api
+  testRuntimeOnly project.deps.junit5Engine
 }

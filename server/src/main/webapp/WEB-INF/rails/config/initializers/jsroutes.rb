@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,22 +14,24 @@
 # limitations under the License.
 #
 
-JsRoutes.setup do |config|
-  config.prefix = com.thoughtworks.go.util.SystemEnvironment.new.getWebappContextPath
-  config.camel_case = true
-  config.include = [
-    /analytics/,
-    /^api_internal/,
-    /^apiv\d/,
-    /^admin_elastic_profile/,
-    /^admin_status_report/,
-    /^admin_cluster_status_report/,
-    /^pipeline_groups/,
-    /^environments/,
-    /^environment/,
-    /^pipeline_group/,
-    /^pipeline_edit/,
-    /^edit_admin_pipeline_config/,
-    /stage_detail_tab/
-  ]
+if ENV['RAILS_GROUPS'] =~ /assets/
+  JsRoutes.setup do |config|
+    config.prefix = com.thoughtworks.go.util.SystemEnvironment.new.getWebappContextPath
+    config.camel_case = true
+    config.include = [
+      /analytics/,
+      /^api_internal/,
+      /^apiv\d/,
+      /^admin_elastic_profile/,
+      /^admin_status_report/,
+      /^admin_cluster_status_report/,
+      /^pipeline_groups/,
+      /^environments/,
+      /^environment/,
+      /^pipeline_group/,
+      /^pipeline_edit/,
+      /^edit_admin_pipeline_config/,
+      /stage_detail_tab/
+    ]
+  end
 end

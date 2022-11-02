@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -186,7 +186,7 @@ CrudMixins.Refresh = function (options) {
 
       const didFulfill = (data, _textStatus, jqXHR) => {
         const entity = type.fromJSON(data);
-        entity.etag(jqXHR.getResponseHeader('ETag'));
+        entity.etag(mrequest.normalizeEtag(jqXHR.getResponseHeader('ETag')));
         deferred.resolve(entity);
       };
 

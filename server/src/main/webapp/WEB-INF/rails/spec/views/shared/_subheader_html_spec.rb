@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 require 'rails_helper'
 
-describe "/shared/_subheader.html.erb" do
+describe "shared/_subheader.html.erb" do
 
   it 'should display title' do
     assign(:page_header, '<h1 class="entity_title">My Title</h1>')

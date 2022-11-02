@@ -21,7 +21,7 @@
         </div>
     <% when 'materials' %>
         <div class="material_tab">
-            <%= render :partial => 'shared/build_cause.html', :locals => {:scope => {:overview => false, :material_revisions => @pipeline.getCurrentRevisions(), :show_files => true, :pipeline_name => @pipeline.getName()}} -%>
+            <%= render :partial => 'shared/build_cause', :locals => {:scope => {:overview => false, :material_revisions => @pipeline.getCurrentRevisions(), :show_files => true, :pipeline_name => @pipeline.getName()}} -%>
         </div>
     <% when 'stats' %>
         <div id="stage_stats">
@@ -33,15 +33,20 @@
         </div>
         <script>
             window.addEventListener("message", function(event) {
-                if (event.source === document.getElementById("chart_details_iframe").contentWindow) {
+              var chartIframe = document.getElementById("chart_details_iframe");
+              if (event.source === chartIframe.contentWindow) {
                     var data = JSON.parse(event.data);
-                    window.location.href = data.openLink;
+                    if (data.inFrame) {
+                        chartIframe.src = data.openLink;
+                    } else {
+                        window.location.href = data.openLink;
+                    }
                 }
             }, false);
         </script>
     <% when 'stage_config' %>
         <div id="ran_with_config">
-            <%= render :partial => "config.html", :locals => {:scope => {:config_revision => @ran_with_config_revision}} -%>
+            <%= render :partial => "config", :locals => {:scope => {:config_revision => @ran_with_config_revision}} -%>
         </div>
     <% end %>
 </div>
@@ -60,26 +65,8 @@
 
       stage_run_timestamp_format_handler()
 
-      <% if auto_refresh? %>
-        <% unless ['stats'].include?(params[:action]) -%>
-            AjaxRefreshers.addRefresher(new StageDetailAjaxRefresher('<%= stage_detail_tab_path_for(:format => "json", :action => params[:action]) %>', '<%= url_for_login %>', {current_stage_run: wire_up_stage_runs_popup, stage_history: compare_link_handlers, stage_run_details: stage_run_timestamp_format_handler}), true);
-       <% end %>
-    <% end %>
-
-        var content_box = jQuery('#fbh_build_cause_content');
-        var popup = new MicroContentPopup('fbh_build_cause_content', new ContextualAjaxPopupHandler(content_box.get(0),
-                function(event) {
-                    return event.target.getAttribute("href");
-                }));
-        var popupShower = new MicroContentPopup.LiveShower(popup);
-
-        jQuery('.fbh_build_cause_button').live('click', function(event) {
-            popupShower.toggle_popup(event, this);
-        });
-
-        jQuery('.fbh_failure_detail_button').live('click', function(event) {
-            popupShower.toggle_popup(event, this);
-        });
-
-    });
+      <% unless ['stats'].include?(params[:action]) -%>
+          AjaxRefreshers.addRefresher(new StageDetailAjaxRefresher('<%= stage_detail_tab_path_for(:format => "json", :action => params[:action]) %>', '<%= url_for_login %>', {current_stage_run: wire_up_stage_runs_popup, stage_history: compare_link_handlers, stage_run_details: stage_run_timestamp_format_handler}), true);
+      <% end %>
+  });
 </script>

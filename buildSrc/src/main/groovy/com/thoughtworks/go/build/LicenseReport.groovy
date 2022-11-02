@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,15 +29,9 @@ import static com.thoughtworks.go.build.SpdxLicense.*
 class LicenseReport {
 
   private static Set<String> LICENSE_EXCEPTIONS = [
-    'Apple License',
     'Bouncy Castle Licence',
-    'BSD',
-    'Custom: https://raw.github.com/bjoerge/deferred.js/master/dist/dfrrd.js',
-    'dom4j BSD license',
-    'Similar to Apache License but with the acknowledgment clause removed',
+    'Similar to Apache License but with the acknowledgment clause removed', // JDOM2
     'The OpenSymphony Software License 1.1',
-    '(OFL-1.1 AND MIT)',
-    'MPL 2.0 or EPL 1.0',
   ]
 
   private static Set<String> ALLOWED_LICENSES = (LICENSE_EXCEPTIONS + [
@@ -49,16 +43,17 @@ class LicenseReport {
     BSD_3_CLAUSE,
     CDDL_1_0,
     CDDL_1_1,
-    CDDL_1_1_GPL_2_0,
     EDL_1_0,
     EPL_1_0,
     EPL_2_0,
     GPL_2_0_CLASSPATH_EXCEPTION,
+    GPL_2_0_UNIVERSAL_FOSS_EXCEPTION,
     LGPL_2_1,
     LGPL_3_0,
     LGPL_3_0_ONLY,
     MIT,
     MPL_1_1,
+    MPL_2_0_EPL_1_0,
     UNLICENSE,
     PUBLIC_DOMAIN,
     ISC
@@ -133,32 +128,11 @@ class LicenseReport {
             renderModuleData(markup, counter.incrementAndGet(), moduleName, moduleLicenseData)
           }
 
-          renderModuleData(markup, counter.incrementAndGet(), "openjdk", openJdkLicense())
-
-          div(class: "footer") {
-            span("This report was generated at ")
-            span(class: "timestamp", new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")))
-            span(".")
-          }
+          def jreLicense = project.packaging.adoptiumJavaVersion.toLicenseMetadata()
+          renderModuleData(markup, counter.incrementAndGet(), jreLicense.moduleName, jreLicense)
         }
       }
     }
-  }
-
-  private Map<String, Object> openJdkLicense() {
-    [
-      "moduleName": "openjdk",
-      "moduleVersion": "${project.packaging.adoptOpenjdk.featureVersion}",
-      "moduleUrls": [
-        "https://jdk.java.net/${project.packaging.adoptOpenjdk.featureVersion}/"
-      ],
-      "moduleLicenses": [
-        [
-          "moduleLicense": "GPLv2 with the Classpath Exception",
-          "moduleLicenseUrl": "https://openjdk.java.net/legal/gplv2+ce.html"
-        ]
-      ]
-    ]
   }
 
   private void renderModuleData(MarkupBuilder template, int counter, String moduleName, Map<String, Object> moduleLicenseData) {

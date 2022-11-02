@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -147,7 +147,6 @@ module JavaImports
   java_import com.thoughtworks.go.server.ui.JobInstanceModel unless defined? JobInstanceModel
   java_import com.thoughtworks.go.server.ui.StageSummaryModel unless defined? StageSummaryModel
   java_import com.thoughtworks.go.server.ui.StageSummaryModels unless defined? StageSummaryModels
-  java_import com.thoughtworks.go.server.ui.ViewCacheKey unless defined? ViewCacheKey
   java_import com.thoughtworks.go.server.util.Pagination unless defined? Pagination
   java_import com.thoughtworks.go.util.GoConstants unless defined? GoConstants
   java_import com.thoughtworks.go.util.SystemEnvironment unless defined? SystemEnvironment

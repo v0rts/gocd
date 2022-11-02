@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package com.thoughtworks.cruise.agent.common.launcher;
 public interface AgentLauncher {
 
     int IRRECOVERABLE_ERROR = 0xBADBAD;
+    int NOT_UP_TO_DATE = 60;
 
     int launch(AgentLaunchDescriptor descriptor);
 }

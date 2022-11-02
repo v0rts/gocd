@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ task generateJSRoutes(type: ExecuteUnderRailsTask) {
 
   environment(
     'RAILS_ENV': 'production',
+    'RAILS_GROUPS': 'assets',
     'OUTPUT_DIR': outputDir,
   )
 
@@ -124,14 +125,9 @@ task initializeRailsGems {
       workingDir = project.railsRoot
       args = ['-S', 'bundle', 'install']
       maxHeapSize = '1g'
-
-      // Workaround JDK 17.0.3 issue https://bugs.openjdk.java.net/browse/JDK-8285445 on Windows. See https://github.com/jruby/jruby/issues/7182
-      // Should be able to be removed after OpenJDK 17.0.4 (July 2022)
-      jvmArgs += '-Djdk.io.File.enableADS=true'
     }
   }
 }
-
 
 task yarnInstall(type: YarnInstallTask) {
   // delete this in the compile phase, because otherwise the yarnInstall detects a new folder and reinstalls.
@@ -171,14 +167,13 @@ task compileAssetsWebpackDev(type: YarnRunTask) {
   ext.licenseReportFile = project.file("${project.buildDir}/reports/yarn-license/license-report.json")
   outputs.dir(ext.licenseReportFile.parentFile)
 
-  workingDir = project.railsRoot
-  destinationDir = project.file("${project.railsRoot}/public/assets/webpack")
-
-  yarnCommand = ['webpack-dev', '--env', "outputDir=${destinationDir.toPath().toString()}", '--env', "licenseReportFile=${ext.licenseReportFile}"]
-
   source(project.file("${project.railsRoot}/webpack"))
   source(project.file("${project.railsRoot}/vendor/assets"))
   source(project.file("${project.railsRoot}/config"))
+
+  workingDir = project.railsRoot
+  destinationDir = project.file("${project.railsRoot}/public/assets/webpack")
+  yarnCommand = ['webpack-dev', '--env', "outputDir=${destinationDir.toPath().toString()}", '--env', "licenseReportFile=${ext.licenseReportFile}"]
 }
 
 task compileAssetsWebpackProd(type: YarnRunTask) {
@@ -200,12 +195,14 @@ task compileAssetsWebpackProd(type: YarnRunTask) {
 }
 
 task compileAssetsRailsTest(type: ExecuteUnderRailsTask) {
+  dependsOn yarnInstall
   outputs.cacheIf { true }
   onlyIf { !project.hasProperty('fastBuild') }
 
   def publicAssetsDir = file("${project.railsRoot}/public/assets")
 
   inputs.dir(file("${project.railsRoot}/config"))
+  inputs.dir(file("${project.railsRoot}/app/assets/config"))
   inputs.dir(file("${project.railsRoot}/app/assets/javascripts"))
   inputs.dir(file("${project.railsRoot}/vendor/assets/javascripts"))
 
@@ -213,13 +210,16 @@ task compileAssetsRailsTest(type: ExecuteUnderRailsTask) {
 
   environment += [
     'RAILS_ENV' : 'test',
+    'RAILS_GROUPS': 'assets',
   ]
 
-  args = ['-S', 'rake', '--trace', 'assets:clobber', "assets:precompile"]
+  // Native-subprocess control is needed for usage of Dart Sass via sass-embedded
+  jvmArgs += [
+    '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+    '--add-opens=java.base/java.io=ALL-UNNAMED'
+  ]
 
-  // Workaround JDK 17.0.3 issue https://bugs.openjdk.java.net/browse/JDK-8285445 on Windows. See https://github.com/jruby/jruby/issues/7182
-  // Should be able to be removed after OpenJDK 17.0.4 (July 2022)
-  jvmArgs += '-Djdk.io.File.enableADS=true'
+  args = ['-S', 'rake', '--trace', 'assets:clobber', 'assets:precompile']
 
   doFirst {
     delete "${project.railsRoot}/tmp"
@@ -245,14 +245,17 @@ task compileAssetsRailsProd(type: ExecuteUnderRailsTask) {
   disableJRubyOptimization = true
 
   environment(
-    'RAILS_ENV': 'production'
+    'RAILS_ENV': 'production',
+    'RAILS_GROUPS': 'assets',
   )
 
-  args = ['-S', 'rake', '--trace', 'assets:clobber', 'assets:precompile']
+  // Native-subprocess control is needed for usage of Dart Sass via sass-embedded
+  jvmArgs += [
+    '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+    '--add-opens=java.base/java.io=ALL-UNNAMED'
+  ]
 
-  // Workaround JDK 17.0.3 issue https://bugs.openjdk.java.net/browse/JDK-8285445 on Windows. See https://github.com/jruby/jruby/issues/7182
-  // Should be able to be removed after OpenJDK 17.0.4 (July 2022)
-  jvmArgs += '-Djdk.io.File.enableADS=true'
+  args = ['-S', 'rake', '--trace', 'assets:clobber', 'assets:precompile']
 
   doFirst {
     delete "${project.railsRoot}/tmp"
@@ -376,49 +379,4 @@ task railsExec(type: ExecuteUnderRailsTask) {
   description = "rails exec (pass '-Pcmd=...' to pass options)"
 
   args = Commandline.translateCommandline(project.properties.get('cmd')) as List<String>
-}
-
-task brakeman {
-  description = "Run brakeman audit (pass '-Popts=...' to pass options)"
-  outputs.cacheIf { true }
-  dependsOn initializeRailsGems
-  inputs.files(project.railsRoot)
-
-  doFirst {
-    project.jrubyexec {
-      workingDir = project.railsRoot
-      args = ['-S', 'bundle', 'exec', 'brakeman', '-o', 'report.html'] + (Commandline.translateCommandline(project.properties.get('opts')) as List<String>)
-      maxHeapSize = '1g'
-    }
-  }
-}
-
-task rubyAudit {
-  description = "Run ruby audit (pass '-Popts=...' to pass options)"
-  outputs.cacheIf { true }
-  dependsOn initializeRailsGems, createJRubyBinstubs
-  inputs.files(project.railsRoot)
-
-  doFirst {
-    project.jrubyexec {
-      workingDir = project.railsRoot
-      args = ['-S', 'ruby-audit', 'check'] + (Commandline.translateCommandline(project.properties.get('opts')) as List<String>)
-      maxHeapSize = '1g'
-    }
-  }
-}
-
-task bundlerAudit {
-  description = "Run bundler audit (pass '-Popts=...' to pass options)"
-  outputs.cacheIf { true }
-  dependsOn initializeRailsGems, createJRubyBinstubs
-  inputs.files(project.railsRoot)
-
-  doFirst {
-    project.jrubyexec {
-      workingDir = project.railsRoot
-      args = ['-S', 'bundler-audit', 'check', '--update'] + (Commandline.translateCommandline(project.properties.get('opts')) as List<String>)
-      maxHeapSize = '1g'
-    }
-  }
 }

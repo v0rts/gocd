@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ export class OnCancelTaskWidget extends MithrilComponent<Attrs, State> {
 
     return <div data-test-id="on-cancel-view">
       <CheckboxField label="On Cancel Task"
-                     helpText="Task which needs to be run, if the parent task is cancelled. Note: The default action of killing the parent task will not be performed."
+                     helpText="Run an additional task when the parent task is cancelled, instead of killing the parent task (the default behavior)."
                      readonly={vnode.attrs.readonly}
                      onchange={this.updateOnCancelTask.bind(this, vnode)}
                      property={vnode.state.onCancelCheckbox}/>

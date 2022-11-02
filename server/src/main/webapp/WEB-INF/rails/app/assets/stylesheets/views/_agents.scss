@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@
 }
 
 .page_header.isFixed {
-    position: fixed;
-    top:0;
-    z-index: 1000;
-    width: 98%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 98%;
 }
-

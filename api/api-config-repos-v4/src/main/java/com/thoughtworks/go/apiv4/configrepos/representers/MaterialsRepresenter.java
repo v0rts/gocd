@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public class MaterialsRepresenter {
         }
     }
 
-    private static final Map<String, String> ERROR_MAPPING = Collections.unmodifiableMap(new HashMap<String, String>() {
+    private static final Map<String, String> ERROR_MAPPING = Collections.unmodifiableMap(new HashMap<>() {
         {
             put("materialName", "name");
             put("folder", "destination");

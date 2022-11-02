@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import com.thoughtworks.go.util.TempDirUtils;
 import com.thoughtworks.go.util.command.CommandLine;
 import com.thoughtworks.go.util.command.EnvironmentVariableContext;
 import com.thoughtworks.go.util.command.InMemoryStreamConsumer;
-import com.thoughtworks.go.util.command.ProcessOutputStreamConsumer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -74,9 +73,10 @@ public class P4TestRepo extends TestRepo {
     }
 
     @Override
-    public void onSetup() throws Exception {
+    public P4TestRepo onSetup() {
         p4dProcess = startP4dInRepo(tempRepo);
         waitForP4dToStartup();
+        return this;
     }
 
     @Override
@@ -84,10 +84,6 @@ public class P4TestRepo extends TestRepo {
         return createMaterial();
     }
 
-    private void waitForP4dToStartup() {
-        CommandLine command = createCommandLine("p4").withArgs("-p", serverAndPort(), "info").withEncoding(UTF_8);
-        command.waitForSuccess(60 * 1000);
-    }
 
     @Override
     public void tearDown() {
@@ -126,16 +122,19 @@ public class P4TestRepo extends TestRepo {
         return createMaterial().latestModification(workingDir, new TestSubprocessExecutionContext());
     }
 
-    public void stop() {
-        CommandLine command = createCommandLine("p4").withArgs("-p", serverAndPort(), "admin", "stop").withEncoding(UTF_8);
-        ProcessOutputStreamConsumer outputStreamConsumer = inMemoryConsumer();
-        command.run(outputStreamConsumer, null);
-    }
-
     private ProcessWrapper startP4dInRepo(File tempRepo) {
         CommandLine command = createCommandLine("p4d").withArgs("-C0", "-r", tempRepo.getAbsolutePath(), "-p", String.valueOf(port)).withEncoding(UTF_8);
-        ProcessOutputStreamConsumer outputStreamConsumer = inMemoryConsumer();
-        return command.execute(outputStreamConsumer, new EnvironmentVariableContext(), null);
+        return command.execute(inMemoryConsumer(), new EnvironmentVariableContext(), null);
+    }
+
+    private void waitForP4dToStartup() {
+        CommandLine command = createCommandLine("p4").withArgs("-p", serverAndPort(), "info").withEncoding(UTF_8);
+        command.waitForSuccess(60 * 1000);
+    }
+
+    public void stopP4d() {
+        CommandLine command = createCommandLine("p4").withArgs("-p", serverAndPort(), "admin", "stop").withEncoding(UTF_8);
+        command.run(inMemoryConsumer(), null);
     }
 
     public String serverAndPort() {
@@ -143,18 +142,12 @@ public class P4TestRepo extends TestRepo {
     }
 
     public static P4TestRepo createP4TestRepo(Path tempDir, File clientFolder) throws IOException {
-        String repo = "../common/src/test/resources/data/p4repo";
-        if (SystemUtils.IS_OS_WINDOWS) {
-            repo = "../common/src/test/resources/data/p4repoWindows";
-        }
+        String repo = String.format("../common/src/test/resources/data/%s", SystemUtils.IS_OS_WINDOWS ? "p4repoWindows" : "p4repo");
         return new P4TestRepo(RandomPort.find("P4TestRepo"), repo, "cceuser", null, PerforceFixture.DEFAULT_CLIENT_NAME, false, tempDir, clientFolder);
     }
 
     public static P4TestRepo createP4TestRepoWithTickets(Path tempDir, File clientFolder) throws IOException {
-        String repo = "../common/src/test/resources/data/p4TicketedRepo";
-        if (SystemUtils.IS_OS_WINDOWS) {
-            repo = "../common/src/test/resources/data/p4TicketedRepoWindows";
-        }
+        String repo = String.format("../common/src/test/resources/data/%s", SystemUtils.IS_OS_WINDOWS ? "p4TicketedRepoWindows" : "p4TicketedRepo");
         return new P4TestRepo(RandomPort.find("P4TestRepoWithTickets"), repo, "cceuser", "1234abcd", PerforceFixture.DEFAULT_CLIENT_NAME, true, tempDir, clientFolder);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public class ValueStreamMapServiceTest {
     private PipelineService pipelineService;
     @Mock
     private MaterialRepository materialRepository;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private GoConfigService goConfigService;
     @Mock
     private RunStagesPopulator runStagesPopulator;
@@ -74,7 +74,7 @@ public class ValueStreamMapServiceTest {
     private UnrunStagesPopulator unrunStagesPopulator;
     @Mock
     private DownstreamInstancePopulator downstreaminstancepopulator;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private SecurityService securityService;
 
     private Username user;

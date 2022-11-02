@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,12 +21,6 @@ shared_examples :layout do
     render :inline => '<% @view_title = "My Title" -%>', :layout => @layout_name
 
     expect(response.body).to have_title("My Title - Go")
-  end
-
-  it "should disable mycruise tab when mycruise is not available" do
-    allow(view).to receive(:mycruise_available?).and_return(false)
-    render :inline => "<span>foo</span>", :layout => @layout_name
-    expect(response.body).to_not(have_selector("ul.current_user"))
   end
 
   it "should render page error" do

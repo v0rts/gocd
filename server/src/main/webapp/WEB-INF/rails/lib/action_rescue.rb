@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ module ActionRescue
   end
 
   def collect_stacktrace
-    java.io.StringWriter writer = java.io.StringWriter.new();
+    java.io.StringWriter writer = java.io.StringWriter.new()
     yield print_writer
-    return writer.getBuffer().toString();
+    return writer.getBuffer().toString()
   end
 end

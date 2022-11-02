@@ -1,4 +1,4 @@
-# Copyright ${copyrightYear} ThoughtWorks, Inc.
+# Copyright ${copyrightYear} Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +22,14 @@ USER root
 ARG UID=1000
 <#if useFromArtifact >
 COPY go-agent-${fullVersion}.zip /tmp/go-agent-${fullVersion}.zip
+RUN \
 <#else>
-RUN curl --fail --location --silent --show-error "https://download.gocd.org/binaries/${fullVersion}/generic/go-agent-${fullVersion}.zip" > /tmp/go-agent-${fullVersion}.zip
+RUN curl --fail --location --silent --show-error "https://download.gocd.org/binaries/${fullVersion}/generic/go-agent-${fullVersion}.zip" > /tmp/go-agent-${fullVersion}.zip && \
 </#if>
-RUN unzip /tmp/go-agent-${fullVersion}.zip -d /
-RUN mv /go-agent-${goVersion} /go-agent && chown -R ${r"${UID}"}:0 /go-agent && chmod -R g=u /go-agent
+    unzip /tmp/go-agent-${fullVersion}.zip -d / && \
+    mv /go-agent-${goVersion} /go-agent && \
+    chown -R ${r"${UID}"}:0 /go-agent && \
+    chmod -R g=u /go-agent
 
 FROM ${distro.getBaseImageLocation(distroVersion)}
 
@@ -60,7 +63,7 @@ RUN \
 </#if>
 # add our user and group first to make sure their IDs get assigned consistently,
 # regardless of whatever dependencies get added
-# add user to root group for gocd to work on openshift
+# add user to root group for GoCD to work on openshift
 <#list distro.createUserAndGroupCommands as command>
   ${command} && \
 </#list>
@@ -85,8 +88,8 @@ COPY --chown=go:root agent-bootstrapper-logback-include.xml agent-launcher-logba
 COPY --chown=root:root dockerd-sudo /etc/sudoers.d/dockerd-sudo
 </#if>
 
-RUN chown -R go:root /docker-entrypoint.d /go /godata /docker-entrypoint.sh \
-    && chmod -R g=u /docker-entrypoint.d /go /godata /docker-entrypoint.sh
+RUN chown -R go:root /docker-entrypoint.d /go /godata /docker-entrypoint.sh && \
+    chmod -R g=u /docker-entrypoint.d /go /godata /docker-entrypoint.sh
 
 <#if distro.name() == "docker">
   COPY --chown=root:root run-docker-daemon.sh /

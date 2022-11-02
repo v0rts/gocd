@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,6 @@ dependencies {
   providedAtPackageTime project.deps.bouncyCastle
   providedAtPackageTime project.deps.bouncyCastlePkix
 
-  // Use BOMs to control versions of dependencies for other projects, all of which consume 'base'.
-  // This is following https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import
-  api enforcedPlatform(project.deps.jacksonBom)
-  api platform(project.deps.jaxbBom)
-
   api(project.deps.apacheAnt)  {
     transitive = false
   }
@@ -38,10 +33,11 @@ dependencies {
   api project.deps.jodaTime
   api project.deps.slf4jJcl
   api project.deps.logback
-  testImplementation project.deps.junit5
+
+  testImplementation project.deps.junit5Api
   testRuntimeOnly project.deps.junit5Engine
   testImplementation project.deps.hamcrest
-  testImplementation project.deps.mockito
+  testImplementation project.deps.mockitoCore
   testImplementation project.deps.assertJ
 }
 

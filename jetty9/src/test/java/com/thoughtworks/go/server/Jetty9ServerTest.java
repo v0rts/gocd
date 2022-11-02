@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.thoughtworks.go.server;
 
-import com.thoughtworks.go.util.ReflectionUtil;
 import com.thoughtworks.go.util.SystemEnvironment;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.deploy.App;
@@ -57,21 +56,21 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SystemStubsExtension.class)
 @ExtendWith(MockitoExtension.class)
 public class Jetty9ServerTest {
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private Server server;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private SystemEnvironment systemEnvironment;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private SSLSocketFactory sslSocketFactory;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private DeploymentManager deploymentManager;
 
     @SystemStub
@@ -112,7 +111,7 @@ public class Jetty9ServerTest {
 
         when(sslSocketFactory.getSupportedCipherSuites()).thenReturn(new String[]{});
         jetty9Server = new Jetty9Server(systemEnvironment, server, deploymentManager);
-        ReflectionUtil.setStaticField(Jetty9Server.class, "JETTY_XML_LOCATION_IN_JAR", "config");
+        Jetty9Server.JETTY_XML_LOCATION_IN_JAR = "config";
     }
 
     @Test
@@ -239,16 +238,6 @@ public class Jetty9ServerTest {
     }
 
     @Test
-    public void shouldAddExtraJarsIntoClassPath() throws Exception {
-        jetty9Server.configure();
-        jetty9Server.addExtraJarsToClasspath("test-addons/some-addon-dir/addon-1.JAR,test-addons/some-addon-dir/addon-2.jar");
-        jetty9Server.startHandlers();
-
-        WebAppContext webAppContext = (WebAppContext) getLoadedHandlers().get(WebAppContext.class);
-        assertThat(webAppContext.getExtraClasspath(), is("test-addons/some-addon-dir/addon-1.JAR,test-addons/some-addon-dir/addon-2.jar," + configDir));
-    }
-
-    @Test
     public void shouldSetInitParams() throws Exception {
         jetty9Server.configure();
         jetty9Server.setInitParameter("name", "value");
@@ -274,7 +263,7 @@ public class Jetty9ServerTest {
         File jettyXml = Files.createFile(temporaryFolder.resolve("jetty.xml")).toFile();
         when(systemEnvironment.getJettyConfigFile()).thenReturn(jettyXml);
 
-        String originalContent = "jetty-v9.4.8.v20171121\nsome other local changes";
+        String originalContent = "jetty-v9.4.48.v20220622\nsome other local changes";
         FileUtils.writeStringToFile(jettyXml, originalContent, UTF_8);
         jetty9Server.replaceJettyXmlIfItBelongsToADifferentVersion(systemEnvironment.getJettyConfigFile());
         assertThat(FileUtils.readFileToString(systemEnvironment.getJettyConfigFile(), UTF_8), is(originalContent));

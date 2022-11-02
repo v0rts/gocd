@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -180,7 +180,6 @@ public class JobController {
         Map<String, Object> data = new HashMap<>();
         data.put("presenter", presenter);
         data.put("websocketEnabled", Toggles.isToggleOn(Toggles.BROWSER_CONSOLE_LOG_WS));
-        data.put("useIframeSandbox", systemEnvironment.useIframeSandbox());
         data.put("isEditableViaUI", goConfigService.isPipelineEditable(jobDetail.getPipelineName()));
         data.put("isAgentAlive", agentService.isRegistered(jobDetail.getAgentUuid()));
         addElasticAgentInfo(jobDetail, data);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
-import static com.thoughtworks.go.server.service.ServiceConstants.History.validateCursor;
+import static com.thoughtworks.go.server.service.HistoryUtil.validateCursor;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -171,7 +172,7 @@ public class MaterialService {
         List<Modification> modifications = materialRepository.getLatestModificationForEachMaterial();
         return modifications
                 .stream()
-                .collect(toMap(mod -> mod.getMaterialInstance().getFingerprint(), mod -> mod));
+                .collect(toMap(mod -> mod.getMaterialInstance().getFingerprint(), Function.identity()));
     }
 
     public PipelineRunIdInfo getLatestAndOldestModification(MaterialConfig materialConfig, String pattern) {

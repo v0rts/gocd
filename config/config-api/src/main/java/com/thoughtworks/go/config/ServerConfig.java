@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.thoughtworks.go.domain.ServerSiteUrlConfig;
 import com.thoughtworks.go.domain.SiteUrl;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.TestOnly;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -242,20 +243,12 @@ public class ServerConfig implements Validatable {
         this.mailHost = mailHost;
     }
 
-    /**
-     * only used for test
-     *
-     * @deprecated
-     */
+    @VisibleForTesting
     public void setSiteUrl(String siteUrl) {
         getSiteUrls().setSiteUrl(StringUtils.isBlank(siteUrl) ? new SiteUrl() : new SiteUrl(siteUrl));
     }
 
-    /**
-     * only used for test
-     *
-     * @deprecated
-     */
+    @VisibleForTesting
     public void setSecureSiteUrl(String secureSiteUrl) {
         getSiteUrls().setSecureSiteUrl(StringUtils.isBlank(secureSiteUrl) ? new SecureSiteUrl() : new SecureSiteUrl(secureSiteUrl));
     }
@@ -301,15 +294,12 @@ public class ServerConfig implements Validatable {
 
 
     public ServerSiteUrlConfig getSiteUrlPreferablySecured() {
-        SiteUrl siteUrl = getSiteUrl();
-        SecureSiteUrl secureSiteUrlConfig = getSecureSiteUrl();
-        if (secureSiteUrlConfig.hasNonNullUrl()) {
-            return secureSiteUrlConfig;
+        SecureSiteUrl secureSiteUrl = getSecureSiteUrl();
+        if (!secureSiteUrl.isBlank()) {
+            return secureSiteUrl;
+        } else {
+            return getSiteUrl();
         }
-        if (!secureSiteUrlConfig.hasNonNullUrl()) {
-            return siteUrl;
-        }
-        return new SiteUrl();
     }
 
     public ServerSiteUrlConfig getHttpsUrl() {
@@ -318,7 +308,7 @@ public class ServerConfig implements Validatable {
     }
 
     public boolean hasAnyUrlConfigured() {
-        return getSiteUrl().hasNonNullUrl() || getSecureSiteUrl().hasNonNullUrl();
+        return !getSiteUrl().isBlank() || !getSecureSiteUrl().isBlank();
     }
 
     public Double getPurgeStart() {

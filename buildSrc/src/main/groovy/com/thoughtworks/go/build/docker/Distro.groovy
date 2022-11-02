@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ enum Distro implements DistroBehavior {
     }
 
     @Override
-    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
+    List<String> getInstallPrerequisitesCommands(DistroVersion v) {
       return [
         'apk --no-cache upgrade',
         // procps is needed for tanuki wrapper shell script
@@ -55,82 +55,92 @@ enum Distro implements DistroBehavior {
 
     @Override
     List<String> getInstallJavaCommands(Project project) {
-      // Copied verbatim from https://github.com/AdoptOpenJDK/openjdk-docker/blob/ce8b120411b131e283106ab89ea5921ebb1d1759/8/jdk/alpine/Dockerfile.hotspot.releases.slim#L24-L54
+      // Originally copied verbatim from https://github.com/AdoptOpenJDK/openjdk-docker/blob/436253bad9e494ea0043da22fca197e6055a538a/15/jdk/alpine/Dockerfile.hotspot.releases.slim#L24-L55
+      // Subsequent to this, Adoptium have moved to use of native Alpine/musl libc builds for JDK 16/17 onwards.
+      // More detail at https://github.com/adoptium/temurin-build/issues/2688 and https://github.com/adoptium/containers/issues/1
+      // Unfortunately, these do not work for GoCD due to the Tanuki Wrapper which does not currently work with musl libc,
+      // nor alternate compatibility layers such as libc6-compat or gcompat.
       return [
-        '# install glibc and zlib for adoptopenjdk',
-        '# See https://github.com/AdoptOpenJDK/openjdk-docker/blob/ce8b120411b131e283106ab89ea5921ebb1d1759/8/jdk/alpine/Dockerfile.hotspot.releases.slim#L24-L54',
-        '  apk add --no-cache --virtual .build-deps binutils',
-        '  GLIBC_VER="2.29-r0"',
+        '# install glibc/gcc-libs/zlib for the Tanuki Wrapper, and use by glibc-linked Adoptium JREs',
+        '  apk add --no-cache tzdata --virtual .build-deps curl binutils zstd',
+        '  GLIBC_VER="2.34-r0"',
         '  ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download"',
-        '  GCC_LIBS_URL="https://archive.archlinux.org/packages/g/gcc-libs/gcc-libs-9.1.0-2-x86_64.pkg.tar.xz"',
-        '  GCC_LIBS_SHA256=91dba90f3c20d32fcf7f1dbe91523653018aa0b8d2230b00f822f6722804cf08',
-        '  ZLIB_URL="https://archive.archlinux.org/packages/z/zlib/zlib-1%3A1.2.11-3-x86_64.pkg.tar.xz"',
-        '  ZLIB_SHA256=17aede0b9f8baa789c5aa3f358fbf8c68a5f1228c5e6cba1a5dd34102ef4d4e5',
+        '  GCC_LIBS_URL="https://archive.archlinux.org/packages/g/gcc-libs/gcc-libs-10.2.0-6-x86_64.pkg.tar.zst"',
+        '  GCC_LIBS_SHA256="e33b45e4a10ef26259d6acf8e7b5dd6dc63800641e41eb67fa6588d061f79c1c"',
+        '  ZLIB_URL="https://archive.archlinux.org/packages/z/zlib/zlib-1%3A1.2.12-2-x86_64.pkg.tar.zst"',
+        '  ZLIB_SHA256=506577ab283c0e5dafaa61d645994c38560234a871fbc9ef2b45327a9a965d66',
         '  curl -LfsS https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub',
         '  SGERRAND_RSA_SHA256="823b54589c93b02497f1ba4dc622eaef9c813e6b0f0ebbb2f771e32adf9f4ef2"',
         '  echo "${SGERRAND_RSA_SHA256} */etc/apk/keys/sgerrand.rsa.pub" | sha256sum -c -',
         '  curl -LfsS ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-${GLIBC_VER}.apk > /tmp/glibc-${GLIBC_VER}.apk',
-        '  apk add /tmp/glibc-${GLIBC_VER}.apk',
+        '  apk add --no-cache --force-overwrite /tmp/glibc-${GLIBC_VER}.apk',
         '  curl -LfsS ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk > /tmp/glibc-bin-${GLIBC_VER}.apk',
-        '  apk add /tmp/glibc-bin-${GLIBC_VER}.apk',
+        '  apk add --no-cache /tmp/glibc-bin-${GLIBC_VER}.apk',
         '  curl -Ls ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-i18n-${GLIBC_VER}.apk > /tmp/glibc-i18n-${GLIBC_VER}.apk',
-        '  apk add /tmp/glibc-i18n-${GLIBC_VER}.apk',
+        '  apk add --no-cache /tmp/glibc-i18n-${GLIBC_VER}.apk',
         '  /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 "$LANG" || true',
         '  echo "export LANG=$LANG" > /etc/profile.d/locale.sh',
-        '  curl -LfsS ${GCC_LIBS_URL} -o /tmp/gcc-libs.tar.xz',
-        '  echo "${GCC_LIBS_SHA256} */tmp/gcc-libs.tar.xz" | sha256sum -c -',
+        '  curl -LfsS ${GCC_LIBS_URL} -o /tmp/gcc-libs.tar.zst',
+        '  echo "${GCC_LIBS_SHA256} */tmp/gcc-libs.tar.zst" | sha256sum -c -',
         '  mkdir /tmp/gcc',
-        '  tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc',
+        '  zstd -d /tmp/gcc-libs.tar.zst --output-dir-flat /tmp',
+        '  tar -xf /tmp/gcc-libs.tar -C /tmp/gcc',
         '  mv /tmp/gcc/usr/lib/libgcc* /tmp/gcc/usr/lib/libstdc++* /usr/glibc-compat/lib',
         '  strip /usr/glibc-compat/lib/libgcc_s.so.* /usr/glibc-compat/lib/libstdc++.so*',
-        '  curl -LfsS ${ZLIB_URL} -o /tmp/libz.tar.xz',
-        '  echo "${ZLIB_SHA256} */tmp/libz.tar.xz" | sha256sum -c -',
+        '  curl -LfsS ${ZLIB_URL} -o /tmp/libz.tar.zst',
+        '  echo "${ZLIB_SHA256} */tmp/libz.tar.zst" | sha256sum -c -',
         '  mkdir /tmp/libz',
-        '  tar -xf /tmp/libz.tar.xz -C /tmp/libz',
+        '  zstd -d /tmp/libz.tar.zst --output-dir-flat /tmp',
+        '  tar -xf /tmp/libz.tar -C /tmp/libz',
         '  mv /tmp/libz/usr/lib/libz.so* /usr/glibc-compat/lib',
         '  apk del --purge .build-deps glibc-i18n',
-        '  rm -rf /tmp/*.apk /tmp/gcc /tmp/gcc-libs.tar.xz /tmp/libz /tmp/libz.tar.xz /var/cache/apk/*',
-        '# end installing adoptopenjre ',
+        '  rm -rf /tmp/*.apk /tmp/gcc /tmp/gcc-libs.tar* /tmp/libz /tmp/libz.tar* /var/cache/apk/*',
+        '# end installing glibc/gcc-libs/zlib',
       ] + super.getInstallJavaCommands(project)
     }
   },
 
   centos{
     @Override
-    String getBaseImageRegistry(DistroVersion distroVersion) {
-      distroVersion.version >= "8" ? "quay.io/centos" : super.baseImageRegistry
+    String getBaseImageRegistry(DistroVersion v) {
+      v.lessThan(8) ? super.baseImageRegistry : "quay.io/centos"
     }
 
     @Override
-    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
-      def commands = ['yum update -y']
+    List<String> getInstallPrerequisitesCommands(DistroVersion v) {
+      def pkg = v.lessThan(8) ? 'yum' : 'dnf'
+      def commands = [
+        "${pkg} update -y",
+        "${pkg} upgrade -y",
+      ]
 
-      String git = gitPackageFor(distroVersion)
-      commands.add("yum install --assumeyes ${git} mercurial subversion openssh-clients bash unzip curl procps ${versionBelow8(distroVersion) ? 'sysvinit-tools coreutils' : 'procps-ng coreutils-single'}")
+      String git = gitPackageFor(v)
+      commands += "${pkg} install -y ${git} mercurial subversion openssh-clients bash unzip procps" +
+          (v.lessThan(8) ? ' sysvinit-tools coreutils' : ' procps-ng coreutils-single') +
+          (v.lessThan(9) ? ' curl' : ' curl-minimal')
 
-      if (versionBelow8(distroVersion)) {
-        commands.add("cp /opt/rh/${git}/enable /etc/profile.d/${git}.sh")
+      if (v.lessThan(8)) {
+        commands += "cp /opt/rh/${git}/enable /etc/profile.d/${git}.sh"
       }
 
-      commands.add('yum clean all')
+      commands += [
+        "${pkg} clean all",
+        "rm -rf /var/cache/${pkg}",
+      ]
 
       return commands
     }
 
-    private boolean versionBelow8(DistroVersion distroVersion) {
-      distroVersion.version < "8"
-    }
-
-    String gitPackageFor(DistroVersion distroVersion) {
-      return versionBelow8(distroVersion) ? "rh-git218" : "git"
+    String gitPackageFor(DistroVersion v) {
+      return v.lessThan(8) ? "rh-git227" : "git"
     }
 
     @Override
-    Map<String, String> getEnvironmentVariables(DistroVersion distroVersion) {
-      def vars = super.getEnvironmentVariables(distroVersion)
+    Map<String, String> getEnvironmentVariables(DistroVersion v) {
+      def vars = super.getEnvironmentVariables(v)
 
-      if (versionBelow8(distroVersion)) {
-        String git = gitPackageFor(distroVersion)
+      if (v.lessThan(8)) {
+        String git = gitPackageFor(v)
         return vars + [
           BASH_ENV: "/opt/rh/${git}/enable",
           ENV     : "/opt/rh/${git}/enable"
@@ -144,18 +154,21 @@ enum Distro implements DistroBehavior {
     List<DistroVersion> getSupportedVersions() {
       return [
         new DistroVersion(version: '7', releaseName: '7', eolDate: parseDate('2024-06-01'), installPrerequisitesCommands: ['yum install --assumeyes centos-release-scl-rh']),
-        new DistroVersion(version: '8', releaseName: 'stream8', eolDate: parseDate('2024-05-31'), installPrerequisitesCommands: ['yum install --assumeyes glibc-langpack-en'])
+        new DistroVersion(version: '8', releaseName: 'stream8', eolDate: parseDate('2024-05-31'), installPrerequisitesCommands: ['dnf install --assumeyes glibc-langpack-en']),
+        new DistroVersion(version: '9', releaseName: 'stream9', eolDate: parseDate('2027-05-31'), installPrerequisitesCommands: ['dnf install --assumeyes glibc-langpack-en epel-release']),
       ]
     }
   },
 
   debian{
     @Override
-    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
+    List<String> getInstallPrerequisitesCommands(DistroVersion v) {
       return [
         'apt-get update',
-        'apt-get install -y git subversion mercurial openssh-client bash unzip curl locales procps sysvinit-utils coreutils',
-        'apt-get autoclean',
+        'apt-get upgrade -y',
+        'apt-get install -y git subversion mercurial openssh-client bash unzip curl ca-certificates locales procps sysvinit-utils coreutils',
+        'apt-get clean all',
+        'rm -rf /var/lib/apt/lists/*',
         'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
       ]
     }
@@ -163,8 +176,6 @@ enum Distro implements DistroBehavior {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [
-        new DistroVersion(version: '9', releaseName: 'stretch-slim', eolDate: parseDate('2022-06-30'), continueToBuild: true),
-        // No EOL-LTS specified for buster release. Checkout https://wiki.debian.org/DebianReleases for more info
         new DistroVersion(version: '10', releaseName: 'buster-slim', eolDate: parseDate('2024-06-01')),
         new DistroVersion(version: '11', releaseName: 'bullseye-slim', eolDate: parseDate('2026-08-15')),
       ]
@@ -173,8 +184,8 @@ enum Distro implements DistroBehavior {
 
   ubuntu{
     @Override
-    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
-      return debian.getInstallPrerequisitesCommands(distroVersion)
+    List<String> getInstallPrerequisitesCommands(DistroVersion v) {
+      return debian.getInstallPrerequisitesCommands(v)
     }
 
     @Override
@@ -211,8 +222,8 @@ enum Distro implements DistroBehavior {
     }
 
     @Override
-    List<String> getInstallPrerequisitesCommands(DistroVersion distroVersion) {
-      return alpine.getInstallPrerequisitesCommands(distroVersion) +
+    List<String> getInstallPrerequisitesCommands(DistroVersion v) {
+      return alpine.getInstallPrerequisitesCommands(v) +
         [
           'apk add --no-cache sudo',
         ]
@@ -231,8 +242,8 @@ enum Distro implements DistroBehavior {
     }
 
     @Override
-    Map<String, String> getEnvironmentVariables(DistroVersion distroVersion) {
-      return alpine.getEnvironmentVariables(distroVersion)
+    Map<String, String> getEnvironmentVariables(DistroVersion v) {
+      return alpine.getEnvironmentVariables(v)
     }
   }
 
@@ -240,7 +251,7 @@ enum Distro implements DistroBehavior {
     return Date.parse("yyyy-MM-dd", date)
   }
 
-  GString projectName(DistroVersion distroVersion) {
-    return "${name()}-${distroVersion.version}"
+  GString projectName(DistroVersion v) {
+    return "${name()}-${v.version}"
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ import m from "mithril";
 import Stream from "mithril/stream";
 import {FetchTaskAttributes} from "models/pipeline_configs/task";
 import {CheckboxField, TextField} from "views/components/forms/input_fields";
-import {UpstreamJobToFetchArtifactFromWidget} from "views/pages/clicky_pipeline_config/tabs/job/tasks/fetch/upstream_job_info_to_fetch_artifact_from_widget";
+import {
+  UpstreamJobToFetchArtifactFromWidget
+} from "views/pages/clicky_pipeline_config/tabs/job/tasks/fetch/upstream_job_info_to_fetch_artifact_from_widget";
 
 interface BuiltInArtifactViewAttrs {
   attributes: FetchTaskAttributes;
@@ -42,7 +44,7 @@ export class BuiltInFetchArtifactView extends MithrilViewComponent<BuiltInArtifa
                  readonly={vnode.attrs.readonly}
                  errorText={attributes.errors().errorsForDisplay("source")}
                  property={attributes.source}/>
-      <CheckboxField label="Source is a file(Not a directory)"
+      <CheckboxField label="Source is a file (Not a directory)"
                      readonly={vnode.attrs.readonly}
                      property={attributes.isSourceAFile}/>
       <TextField helpText={destinationHelpText}

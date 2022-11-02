@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class MessageHandlerForServerInfoRequestProcessor2_0Test {
     public void shouldSerializeServerConfigToJSON() {
         ServerConfig serverConfig = new ServerConfig();
         serverConfig.ensureServerIdExists();
-        serverConfig.setSecureSiteUrl("https://example.com:8154/go");
+        serverConfig.setSecureSiteUrl("https://example.com/go");
         serverConfig.setSiteUrl("http://example.com:8153/go");
         CurrentGoCDVersion goCDVersion = CurrentGoCDVersion.getInstance();
 

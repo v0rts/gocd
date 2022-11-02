@@ -4,7 +4,7 @@ import com.thoughtworks.go.build.VerifyJarTask
 import org.apache.commons.codec.digest.DigestUtils
 
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,44 +27,44 @@ def dependencies = [
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-ldap-authentication-plugin',
-    tagName: 'v2.2.0-144',
-    asset: 'gocd-ldap-authentication-plugin-2.2.0-144.jar',
-    checksum: 'a13a17a5620ec202027044376081781ee8c8f5be3aca253ef254991fc580b188'
+    tagName: 'v2.2.1-181',
+    asset: 'gocd-ldap-authentication-plugin-2.2.1-181.jar',
+    checksum: 'eea61cedb83e794082cc86bf73deb6068885e12968e89d328e839c7cfb911d6c'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-filebased-authentication-plugin',
-    tagName: 'v2.1.1-137',
-    asset: 'gocd-filebased-authentication-plugin-2.1.1-137.jar',
-    checksum: '24ac7e9340a5aad52f07e6e8d992ca2e2844889618eb970011d73f7f33263f24'
+    tagName: 'v2.1.2-162',
+    asset: 'gocd-filebased-authentication-plugin-2.1.2-162.jar',
+    checksum: 'f8603c66007feb5bccda62a7a9169a7d1c6dabad2775277fcd9b8641f4687065'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-yum-repository-poller-plugin',
-    tagName: 'v2.0.5-92',
-    asset: 'gocd-yum-repo-plugin-2.0.5-92.jar',
-    checksum: '1e8accc81660cb2e49c4c1c423a8a4471fbf6ec0f0d56f86ffecaa666ccf9bf3'
+    tagName: 'v2.0.6-128',
+    asset: 'gocd-yum-repo-plugin-2.0.6-128.jar',
+    checksum: '79d81a1554699d562e51d167565e1263def579c25faa119146e53a3c496103cc'
   ),
   new GithubArtifact(
     user: 'tomzo',
     repo: 'gocd-yaml-config-plugin',
-    tagName: '0.13.0',
-    asset: 'yaml-config-plugin-0.13.0.jar',
-    checksum: 'be113ca18b8fefdb20b04cd59ec9b56c4e877c0f2b017207690c1c32efd6d772'
+    tagName: '0.14.1',
+    asset: 'yaml-config-plugin-0.14.1.jar',
+    checksum: '3d3a896a5b031f05467d095e42af4a665221fa7c09106acfe3fdb532499babbb'
   ),
   new GithubArtifact(
     user: 'tomzo',
     repo: 'gocd-json-config-plugin',
-    tagName: '0.5.0',
-    asset: 'json-config-plugin-0.5.0.jar',
-    checksum: '645bffcc0ee20ab5689714e28bb81fd34043eb247f3621371f434b4349279a96'
+    tagName: '0.6.0',
+    asset: 'json-config-plugin-0.6.0.jar',
+    checksum: '46aa86927dfb66ce10e0ae01ce5f95b52b6d4a94a6af3b446ddd9b68e9d203de'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-file-based-secrets-plugin',
-    tagName: 'v1.1.0-80',
-    asset: 'gocd-file-based-secrets-plugin-1.1.0-80.jar',
-    checksum: '41611dcceff2cb3c1923baac051a7993f055b3876edb3b3956282e47e0c2e359'
+    tagName: 'v1.1.1-120',
+    asset: 'gocd-file-based-secrets-plugin-1.1.1-120.jar',
+    checksum: '6aef5403a572ca04a5523c5a3b82afff3c89237f1cc488afe92d1bf18e1f91cf'
   )
 ]
 

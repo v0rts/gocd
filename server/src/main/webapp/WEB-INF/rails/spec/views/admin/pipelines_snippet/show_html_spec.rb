@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 require 'rails_helper'
 
 describe "admin/pipelines_snippet/show.html.erb" do
-  include ReflectiveUtil
 
   it "should render the group xml" do
     group_xml = "<foo></foo>"

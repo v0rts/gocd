@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,6 +170,17 @@ describe("External Fetch Artifact Task", () => {
     expect(pluginIdDropdown).toBeDisabled();
   });
 
+  it("should auto select plugin id based on selected artifact id with optional pipeline", () => {
+    attributes.pipeline(undefined);
+    mount();
+
+    expect(attributes.pipeline()).toBeUndefined();
+
+    const pluginIdDropdown = (helper.byTestId("form-field-input-plugin-id") as HTMLInputElement);
+    expect(pluginIdDropdown.value).toEqual("cd.go.artifact.docker.registry");
+    expect(pluginIdDropdown).toBeDisabled();
+  });
+
   it("should show plugin select error when can not auto detect plugin", () => {
     mount();
 
@@ -217,7 +228,14 @@ describe("External Fetch Artifact Task", () => {
     }
 
     const autoSuggestions = {
-      pipeline: {
+      "pipeline": {
+        stage: {
+          job: {
+            id1: "cd.go.artifact.docker.registry"
+          }
+        }
+      },
+      "": {
         stage: {
           job: {
             id1: "cd.go.artifact.docker.registry"

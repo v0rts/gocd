@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,18 +19,6 @@ require 'rails_helper'
 describe NonApiController do
   before do
     draw_test_controller_route
-  end
-
-  describe "ParamEncoder" do
-    it "should add before filter for relevant actions" do
-      get :encoded_param_user_action, params:{:decodable_param => "Zm9vL2Jhcg%3D%3D%0A"}
-      expect(assigns(:decodable_param)).to eq("foo/bar")
-    end
-
-    it "should not add before filter for excluded actions" do
-      get :non_encoded_param_user_action, params:{:decodable_param => "Zm9vL2Jhcg%3D%3D%0A"}
-      expect(assigns(:decodable_param)).to eq("Zm9vL2Jhcg%3D%3D%0A")
-    end
   end
 
   describe "with view" do
@@ -80,13 +68,6 @@ describe Api::TestController do
     draw_test_controller_route
   end
 
-  describe "disable_auto_refresh" do
-    it "should propagate autoRefresh=false" do
-      get :auto_refresh, params:{"autoRefresh" => "false"}
-      expect(response.body).to eq("http://test.host/?autoRefresh=false")
-    end
-  end
-
   describe "render_operation_result" do
     it "should render 404 responses in error template" do
       get :not_found_action, params:{:no_layout=>true}
@@ -98,14 +79,6 @@ describe Api::TestController do
       get :unauthorized_action, params:{:no_layout=>true}
       expect(response.status).to eq(403)
       expect(response.body).to eq("you are not allowed { description }\n")
-    end
-  end
-
-  describe "render_operation_result_if_failure" do
-    it "should render 404 responses in error template" do
-      get :another_not_found_action, params:{:no_layout => true}
-      expect(response.status).to eq(404)
-      expect(response.body).to eq("it was again not found { description }\n")
     end
   end
 

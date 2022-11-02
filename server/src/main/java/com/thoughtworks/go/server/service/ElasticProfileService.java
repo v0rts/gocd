@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.thoughtworks.go.i18n.LocalizedMessage.entityConfigValidationFailed;
@@ -136,7 +137,7 @@ public class ElasticProfileService {
 
     public Map<String, ElasticProfile> listAll() {
         return getPluginProfiles().stream()
-                .collect(Collectors.toMap(ElasticProfile::getId, elasticAgentProfile -> elasticAgentProfile, (a, b) -> b, HashMap::new));
+                .collect(Collectors.toMap(ElasticProfile::getId, Function.identity(), (a, b) -> b, HashMap::new));
     }
 
     //used only from tests

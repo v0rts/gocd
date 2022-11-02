@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,4 +49,13 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.java_services_cache = :ServiceCache
+
+  # Headers are far too large in development environment, possibly see https://github.com/rails/rails/pull/39939
+  config.action_view.preload_links_header = false
+
+  config.sass.line_comments = false
+  config.sass.inline_source_maps = true
+  # Workaround Sprockets encoding issue with config.assets.debug = true, either inline or non-inline sourcemaps
+  # and SCSS assets with Unicode chars in them. See https://github.com/rails/sprockets/pull/764
+  Sprockets.register_mime_type 'application/css-sourcemap+json', extensions: ['.css.map'], charset: :unicode
 end

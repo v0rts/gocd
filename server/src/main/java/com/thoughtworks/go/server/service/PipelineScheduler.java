@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ public class PipelineScheduler implements ConfigChangedListener, GoMessageListen
     }
 
     protected EntityConfigChangedListener<PipelineConfig> pipelineConfigChangedListener() {
-        return new EntityConfigChangedListener<PipelineConfig>() {
+        return new EntityConfigChangedListener<>() {
             @Override
             public void onEntityConfigChange(PipelineConfig pipelineConfig) {
                 synchronized (pipelines) {
@@ -98,7 +98,7 @@ public class PipelineScheduler implements ConfigChangedListener, GoMessageListen
 
     protected EntityConfigChangedListener<ConfigRepoConfig> configRepoConfigChangedListener() {
         final Consumer<CruiseConfig> configChangeConsumer = this::onConfigChange;
-        return new EntityConfigChangedListener<ConfigRepoConfig>() {
+        return new EntityConfigChangedListener<>() {
             @Override
             public void onEntityConfigChange(ConfigRepoConfig configRepoConfig) {
                 configChangeConsumer.accept(goConfigService.cruiseConfig());

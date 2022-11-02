@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@ dependencies {
   api project.deps.semanticVersion
   compileOnly project.deps.jetBrainsAnnotations
   testImplementation project(path: ':config:config-api', configuration: 'testOutput')
+  testImplementation project.deps.jsonUnit
   testImplementation project(':test:test-utils')
-  testImplementation project.deps.junit5
+  testImplementation project.deps.junit5Api
   testRuntimeOnly project.deps.junit5Engine
 }

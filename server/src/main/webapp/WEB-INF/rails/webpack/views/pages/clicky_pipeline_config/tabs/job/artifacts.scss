@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@
 }
 
 .artifact-type {
-  width:       220px;
+  width: 220px;
   font-weight: 600;
-  font-size:   15px;
+  font-size: 15px;
 }
 
 .built-in-artifact-header {
-  margin:    20px 0 20px 0;
+  margin: 20px 0 20px 0;
   font-size: 16px;
 
   span:nth-child(1) {
@@ -53,8 +53,8 @@
 }
 
 .add-artifact-wrapper {
-  display:         flex;
-  width:           200px;
+  display: flex;
+  width: 200px;
   justify-content: space-between;
 
   select {
@@ -67,6 +67,6 @@
 }
 
 .plugin-view {
-  width:  275px;
+  width: 275px;
   margin: 0 0 0 240px;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ TimerObserver.prototype = {
             if(this.name && this.name != jsonArray[i].building_info.name) {
                 continue;
             }
+            // relies on trimpath-template via String.prototype.process hack
             $('build-detail-summary').innerHTML = $('build-summary-template').value.process({build:jsonArray[i].building_info});
         }
     }

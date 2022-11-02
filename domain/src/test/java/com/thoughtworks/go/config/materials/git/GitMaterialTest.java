@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import com.thoughtworks.go.domain.materials.git.GitVersion;
 import com.thoughtworks.go.domain.materials.mercurial.StringRevision;
 import com.thoughtworks.go.helper.GitRepoContainingSubmodule;
 import com.thoughtworks.go.helper.MaterialsMother;
-import com.thoughtworks.go.util.JsonValue;
 import com.thoughtworks.go.util.SystemEnvironment;
 import com.thoughtworks.go.util.TempDirUtils;
 import com.thoughtworks.go.util.command.CommandLine;
@@ -45,7 +44,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,16 +60,20 @@ import java.util.*;
 import static com.thoughtworks.go.domain.materials.git.GitTestRepo.GIT_FOO_BRANCH_BUNDLE;
 import static com.thoughtworks.go.helper.MaterialConfigsMother.git;
 import static com.thoughtworks.go.matchers.FileExistsMatcher.exists;
-import static com.thoughtworks.go.util.JsonUtils.from;
 import static com.thoughtworks.go.util.command.ProcessOutputStreamConsumer.inMemoryConsumer;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(SystemStubsExtension.class)
 public class GitMaterialTest {
     public static final GitVersion GIT_VERSION_1_9 = GitVersion.parse("git version 1.9.0");
     public static final GitVersion GIT_VERSION_1_5 = GitVersion.parse("git version 1.5.4.3");
+
+    @SystemStub
+    SystemProperties systemProperties;
 
     @TempDir
     Path tempDir;
@@ -78,6 +85,7 @@ public class GitMaterialTest {
     @BeforeEach
     void setUp() {
         outputStreamConsumer = inMemoryConsumer();
+        systemProperties.set(GitCommand.GIT_SUBMODULE_ALLOW_FILE_PROTOCOL, "Y");
     }
 
     @Nested
@@ -297,8 +305,8 @@ public class GitMaterialTest {
             try (RandomAccessFile lockedFile = new RandomAccessFile(fileToBeLocked, "rw");
                  FileLock ignored = lockedFile.getChannel().lock()) {
                 assertThatThrownBy(() -> git.latestModification(workingDir, new TestSubprocessExecutionContext()),
-                        "Should have failed to check modifications since the file is locked and cannot be removed.")
-                        .hasMessageContaining("Failed to delete directory: " + workingDir.getAbsolutePath());
+                    "Should have failed to check modifications since the file is locked and cannot be removed.")
+                    .hasMessageContaining("Failed to delete directory: " + workingDir.getAbsolutePath());
                 assertThat(fileToBeLocked.exists()).isTrue();
             }
         }
@@ -336,7 +344,7 @@ public class GitMaterialTest {
             GitMaterial git = new GitMaterial(url);
 
             assertThatCode(() -> git.modificationsSince(workingDir, GitTestRepo.REVISION_0, new TestSubprocessExecutionContext()))
-                    .hasMessageContaining("Failed to run git clone command");
+                .hasMessageContaining("Failed to run git clone command");
         }
 
         @Test
@@ -429,10 +437,10 @@ public class GitMaterialTest {
         final GitMaterial git = new GitMaterial("http://0.0.0.0");
         git.toJson(json, new StringRevision("123"));
 
-        JsonValue jsonValue = from(json);
-        assertThat(jsonValue.getString("scmType")).isEqualTo("Git");
-        assertThat(new File(jsonValue.getString("location"))).isEqualTo(new File(git.getUrl()));
-        assertThat(jsonValue.getString("action")).isEqualTo("Modified");
+        assertThatJson(json)
+            .node("scmType").isEqualTo("Git")
+            .node("location").isEqualTo(git.getUrl())
+            .node("action").isEqualTo("Modified");
     }
 
     @Test
@@ -598,8 +606,8 @@ public class GitMaterialTest {
         @Test
         void shouldBuildFromConfigObject() {
             final GitMaterialConfig materialConfig = git(new UrlArgument("http://example.com"), "bob", "pass", "master", "sub_module_folder",
-                    true, Filter.create("igrnored"), false, "destination",
-                    new CaseInsensitiveString("example"), false);
+                true, Filter.create("igrnored"), false, "destination",
+                new CaseInsensitiveString("example"), false);
 
             final GitMaterial gitMaterial = new GitMaterial(materialConfig);
 

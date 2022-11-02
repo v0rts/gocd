@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,19 @@ class DistroVersion implements Serializable {
   List<String> installPrerequisitesCommands = []
 
   boolean isAboutToEol() {
-    return eolDate.before(new Date() + 95)
+    return eolDate.before(new Date() + 180)
+  }
+
+  boolean isEol() {
+    return eolDate.before(new Date())
+  }
+
+  boolean isPastEolGracePeriod() {
+    // Allow a 30 day grace period after EOL where we can keep building
+    return eolDate.before(new Date() - 30)
+  }
+
+  boolean lessThan(int target) {
+    return Integer.parseInt(version) < target
   }
 }

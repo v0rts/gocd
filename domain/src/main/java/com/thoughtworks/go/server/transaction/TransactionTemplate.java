@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.thoughtworks.go.server.transaction;
 public class TransactionTemplate {
     private org.springframework.transaction.support.TransactionTemplate transactionTemplate;
 
-    private static final ThreadLocal<TransactionContext> txnCtx = ThreadLocal.withInitial(() -> new TransactionContext());
+    private static final ThreadLocal<TransactionContext> txnCtx = ThreadLocal.withInitial(TransactionContext::new);
 
     public TransactionTemplate(org.springframework.transaction.support.TransactionTemplate transactionTemplate) {
         this.transactionTemplate = transactionTemplate;

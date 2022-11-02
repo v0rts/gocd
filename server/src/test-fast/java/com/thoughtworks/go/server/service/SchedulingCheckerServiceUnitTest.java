@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,11 @@ import static org.mockito.Mockito.*;
 public class SchedulingCheckerServiceUnitTest {
 
     private SchedulingCheckerService schedulingChecker;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private GoConfigService goConfigService;
     @Mock
     private CompositeChecker compositeChecker;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private OperationResult operationResult;
     @Captor
     private ArgumentCaptor<List<SchedulingChecker>> argumentCaptor;
@@ -179,15 +179,15 @@ public class SchedulingCheckerServiceUnitTest {
         private String stageName;
         private String pipelineName;
         private CaseInsensitiveString previousStageName;
-        @Mock(lenient = true)
+        @Mock(strictness = Mock.Strictness.LENIENT)
         private Pipeline pipeline;
-        @Mock(lenient = true)
+        @Mock(strictness = Mock.Strictness.LENIENT)
         private StageConfig previousStageConfig;
-        @Mock(lenient = true)
+        @Mock(strictness = Mock.Strictness.LENIENT)
         private StageConfig nextStageConfig;
-        @Mock(lenient = true)
+        @Mock(strictness = Mock.Strictness.LENIENT)
         private Approval approval;
-        @Mock(lenient = true)
+        @Mock(strictness = Mock.Strictness.LENIENT)
         private Stage previousStage;
 
         @BeforeEach

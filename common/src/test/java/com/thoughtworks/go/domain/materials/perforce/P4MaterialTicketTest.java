@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,7 @@ public class P4MaterialTicketTest extends P4MaterialTestBase {
 
     @Override
     protected P4TestRepo createTestRepo() throws Exception {
-        P4TestRepo repo = P4TestRepo.createP4TestRepoWithTickets(tempDir, clientFolder);
-        repo.onSetup();
-        return repo;
+        return P4TestRepo.createP4TestRepoWithTickets(tempDir, clientFolder);
     }
 
     @Test

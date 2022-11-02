@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 package com.thoughtworks.go.plugin.infra;
-
-import com.thoughtworks.go.plugin.infra.plugininfo.GoPluginDescriptor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.String.format;
 
 public interface PluginExtensionsAndVersionValidator extends PluginPostLoadHook {
 }

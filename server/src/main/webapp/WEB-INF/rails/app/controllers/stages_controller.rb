@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ class StagesController < ApplicationController
     page_number = params[:page_number].nil? ? 1 : params[:page_number].to_i
     stage_summary_models = stage_service.findStageHistoryForChart(@stage.getPipelineName(), @stage.getName(), page_number, STAGE_DURATION_RANGE, current_user)
     @no_chart_to_render = false
-    if (stage_summary_models.size() > 0)
+    if stage_summary_models.size() > 0
       @pagination = stage_summary_models.getPagination()
 
       # sort/filter/unique until we get the "latest" passed and "latest" failed stage for each pipeline counter.
@@ -147,7 +147,7 @@ class StagesController < ApplicationController
 
   def load_stage_history
     pageNum = params["stage-history-page"]
-    if (pageNum)
+    if pageNum
       load_stage_history_for_page pageNum
     else
       @stage_history_page = stage_service.findStageHistoryPage(@stage.getStage(), STAGE_HISTORY_PAGE_SIZE)

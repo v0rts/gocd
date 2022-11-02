@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import com.thoughtworks.go.config.PipelineConfig;
 import com.thoughtworks.go.config.remote.ConfigOrigin;
 import com.thoughtworks.go.config.remote.FileConfigOrigin;
 import com.thoughtworks.go.config.remote.RepoConfigOrigin;
-
-import java.util.Collection;
 
 public class InternalPipelineGroupsRepresenter {
     public static void toJSON(OutputWriter outputWriter, PipelineGroupsViewModel pipelineGroupsViewModel) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import com.thoughtworks.go.plugin.access.packagematerial.PackageMaterialMetadata
 import com.thoughtworks.go.plugin.access.pluggabletask.PluggableTaskMetadataStore;
 import com.thoughtworks.go.plugin.access.scm.NewSCMMetadataStore;
 import com.thoughtworks.go.plugin.access.secrets.SecretsMetadataStore;
-import com.thoughtworks.go.plugin.domain.artifact.ArtifactPluginInfo;
 import com.thoughtworks.go.plugin.domain.common.CombinedPluginInfo;
 import com.thoughtworks.go.plugin.domain.common.PluginInfo;
 import com.thoughtworks.go.plugin.infra.PluginManager;

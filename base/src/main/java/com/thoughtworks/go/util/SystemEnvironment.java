@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,7 +182,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     private static GoSystemProperty<Boolean> ENABLE_ANALYTICS_ONLY_FOR_ADMINS = new GoBooleanSystemProperty("go.enable.analytics.only.for.admins", false);
     public static final GoSystemProperty<Boolean> FAIL_STARTUP_ON_DATA_ERROR = new GoBooleanSystemProperty("gocd.fail.startup.on.data.error", false);
-    private static final GoSystemProperty<Boolean> JOB_DETAILS_USE_IFRAME_SANDBOX = new GoBooleanSystemProperty("gocd.job.details.sandbox", true);
     private static GoSystemProperty<Boolean> GO_PLUGIN_CLASSLOADER_OLD = new GoBooleanSystemProperty("gocd.plugins.classloader.old", false);
     public static final GoSystemProperty<String> LOADING_PAGE = new GoStringSystemProperty("loading.page.resource.path", "/loading_pages/new.loading.page.html");
     public static GoSystemProperty<Long> NOTIFICATION_PLUGIN_MESSAGES_TTL = new GoLongSystemProperty("plugins.notification.message.ttl.millis", 2 * 60 * 1000L);
@@ -202,9 +201,9 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
     private final static Map<String, String> GIT_ALLOW_PROTOCOL;
 
     static {
-        Map<String, String> map = new HashMap<String, String>() {{
+        Map<String, String> map = new HashMap<>() {{
             put("GIT_ALLOW_PROTOCOL", System.getenv("GIT_ALLOW_PROTOCOL") == null ?
-                    "http:https:ssh:git:file:rsync" : System.getenv("GIT_ALLOW_PROTOCOL"));
+                "http:https:ssh:git:file:rsync" : System.getenv("GIT_ALLOW_PROTOCOL"));
         }};
         GIT_ALLOW_PROTOCOL = Collections.unmodifiableMap(map);
     }
@@ -747,10 +746,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public boolean shouldFailStartupOnDataError() {
         return get(FAIL_STARTUP_ON_DATA_ERROR);
-    }
-
-    public boolean useIframeSandbox() {
-        return JOB_DETAILS_USE_IFRAME_SANDBOX.getValue();
     }
 
     public boolean pluginClassLoaderHasOldBehaviour() {

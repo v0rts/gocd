@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <%- unless (Rails.env.test?) %>
+  <%- unless Rails.env.test? %>
     <%= javascript_include_tag *webpack_assets_service.getJSAssetPathsFor("single_page_apps/global", "single_page_apps/polyfill", "single_page_apps/show_stage_duration_graph_shim") %>
   <%- end %>
 </head>
 <body>
 
 <% if @no_chart_to_render %>
-  <%= render :partial => "admin/shared/notification_information.html", :locals => {:scope => {:notification_message => 'The graph will be available once there is at least one passed or failed stage.'}} -%>
+  <%= render :partial => "admin/shared/notification_information", :locals => {:scope => {:notification_message => 'The graph will be available once there is at least one passed or failed stage.'}} -%>
 <% else %>
   <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', function () {
@@ -23,6 +23,10 @@
               document.getElementById('reset_zoom')
           );
       });
+
+      function changeFrameTo(link) {
+          parent.postMessage(JSON.stringify({openLink: link, inFrame: true}), "*");
+      }
   </script>
   <div>
     <!-- position absolute, so it is rendered on top of the canvas -->
@@ -33,11 +37,15 @@
 
     <!-- position absolute, so they are rendered on top of the canvas -->
     <% if @pagination.hasNextPage() %>
-      <%= link_to '<< Older', stage_detail_tab_stats_iframe_path(:page_number => @pagination.getNextPage()), style: "padding-left: 10px; position: absolute; bottom: 5px" -%>
+      <a id="stats-older" href="#" onclick="changeFrameTo('<%= stage_detail_tab_stats_iframe_path(:page_number => @pagination.getNextPage()) %>')" style="padding-left: 10px; position: absolute; bottom: 5px">
+        << Older
+      </a>
     <% end %>
 
     <% if @pagination.hasPreviousPage() %>
-      <%= link_to 'Newer >>', stage_detail_tab_stats_iframe_path(:page_number => @pagination.getPreviousPage()), style: "padding-right: 10px; position: absolute; bottom: 5px; right: 12px;" -%>
+      <a id="stats-newer" href="#" onclick="changeFrameTo('<%= stage_detail_tab_stats_iframe_path(:page_number => @pagination.getPreviousPage()) %>')" style="padding-right: 10px; position: absolute; bottom: 5px; right: 12px;">
+        Newer >>
+      </a>
     <% end %>
   </div>
 <% end %>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.google.gson.Gson;
 import com.thoughtworks.go.remote.Serialization;
 import com.thoughtworks.go.remote.request.AgentRequest;
 import com.thoughtworks.go.remote.request.GetWorkRequest;
-import com.thoughtworks.go.remote.work.Work;
 
 public class GetWorkRequestRepresenter {
     private static final Gson gson = Serialization.instance();

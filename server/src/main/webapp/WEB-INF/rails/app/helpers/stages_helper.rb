@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,14 +50,6 @@ module StagesHelper
     else
       send("stage_detail_tab_#{tab}_path", options)
     end
-  end
-
-  def api_pipeline_action_path(options)
-    send("api_pipeline_#{options.delete(:action)}_path", options)
-  end
-
-  def empty_stage(stage_instance_model)
-    stage_instance_model.instance_of? com.thoughtworks.go.presentation.pipelinehistory.NullStageHistoryItem
   end
 
   def link_with_current_tab(link_name, action)

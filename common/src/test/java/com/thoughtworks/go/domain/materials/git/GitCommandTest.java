@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -235,6 +235,7 @@ public class GitCommandTest {
                 fail(outputStreamConsumer.getAllOutput());
             }
             gitFooBranchBundle = GitTestRepo.testRepoAtBranch(GIT_FOO_BRANCH_BUNDLE, BRANCH, tempDir);
+            systemProperties.set(GitCommand.GIT_SUBMODULE_ALLOW_FILE_PROTOCOL, "Y");
         }
 
         @AfterEach
@@ -834,7 +835,7 @@ public class GitCommandTest {
 
         @Test
         void shouldNotCleanIgnoredFilesIfToggleIsEnabled() throws IOException {
-            System.setProperty("toggle.agent.git.clean.keep.ignored.files", "Y");
+            systemProperties.set(GitCommand.GIT_CLEAN_KEEP_IGNORED_FILES_FLAG, "Y");
             InMemoryStreamConsumer output = inMemoryConsumer();
             File gitIgnoreFile = new File(repoLocation, ".gitignore");
             FileUtils.writeStringToFile(gitIgnoreFile, "*.foo", UTF_8);
@@ -849,7 +850,7 @@ public class GitCommandTest {
 
         @Test
         void shouldNotThrowExceptionWhenSubmoduleIsAddedWithACustomName() {
-            git_C(gitLocalRepoDir, "submodule", "add", "--name", "Custom", gitFooBranchBundle.projectRepositoryUrl());
+            git_C(gitLocalRepoDir, "-c", "protocol.file.allow=always", "submodule", "add", "--name", "Custom", gitFooBranchBundle.projectRepositoryUrl());
             git.fetchAndResetToHead(inMemoryConsumer(), false);
         }
 

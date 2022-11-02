@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,12 +89,5 @@ public class EnvironmentsRepresenter {
             linksWriter.addLink("self", Routes.ConfigView.SELF);
             linksWriter.addAbsoluteLink("doc", apiDocsUrl("#get-configuration"));
         });
-    }
-
-    static class EnvironmentConfigComparator implements Comparator<EnvironmentConfig> {
-        @Override
-        public int compare(EnvironmentConfig o1, EnvironmentConfig o2) {
-            return o1.name().compareTo(o2.name());
-        }
     }
 }

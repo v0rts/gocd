@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 .tab-container {
   display: flex;
-  width:   550px;
+  width: 550px;
 }
 
 .tab-container + div {
@@ -29,8 +29,8 @@
 }
 
 .tabs-header {
-  width:     530px;
-  margin:    20px 0 20px 0;
+  width: 530px;
+  margin: 20px 0 20px 0;
   font-size: 16px;
 
   span {

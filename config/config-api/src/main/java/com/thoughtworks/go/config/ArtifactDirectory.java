@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,16 @@ package com.thoughtworks.go.config;
 
 import com.thoughtworks.go.config.validation.ArtifactDirValidator;
 import com.thoughtworks.go.domain.ConfigErrors;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.annotation.PostConstruct;
 
 import static com.thoughtworks.go.config.ServerConfig.ARTIFACT_DIR;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Getter
 @Setter

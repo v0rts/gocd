@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ require "action_view/railtie"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
-Bundler.require(*Rails.groups)
+Bundler.require(*Rails.groups(assets: %w[development test]))
 
 module Go
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 6.1
+    config.autoloader = :zeitwerk
     require_relative '../lib/all_libs'
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -42,8 +42,8 @@ module Go
 
     # Rails4 does not load lib/* by default. Forcing it to do so.
     config.autoload_paths += Dir[
-        Rails.root.join('lib', '**/'),
-        Rails.root.join('app', 'models', '**/'),
+        Rails.root.join('lib'),
+        Rails.root.join('app', 'models'),
         Rails.root.join('app', 'presenters')
     ]
 
@@ -54,8 +54,8 @@ module Go
       end
     end
 
-    require Rails.root.join("lib", "log4j_logger.rb")
-    config.logger = Log4jLogger::Logger.new('com.thoughtworks.go.server.Rails')
+    require Rails.root.join("lib", "slf4j_logger.rb")
+    config.logger = Slf4jLogger::Logger.new('com.thoughtworks.go.server.Rails')
 
     config.generators do |g|
       g.test_framework        :rspec, :fixture_replacement => nil

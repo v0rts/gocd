@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@import "../../global/common.scss";
+@import "../../global/common";
 @import "~awesomplete/awesomplete"; // don't add the `.css` extension!! See https://github.com/sass/node-sass/issues/2362#issuecomment-388634848
 
 .awesomplete > ul > li {
   color: $black;
 }
 
-// scss-lint:disable
 .autocomplete-input-container + span {
   display: block;
 }

@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +27,10 @@ RSpec.configure do |config|
   config.add_formatter RSpec::Instafail
   config.include ApiSpecHelper
   config.include MiscSpecExtensions
-  config.include CacheTestHelpers
 
 # clear flash messages for every spec
   config.before(:each) do
     com.thoughtworks.go.server.web.FlashMessageService.useFlash(com.thoughtworks.go.server.web.FlashMessageService::Flash.new)
-    setup_base_urls
   end
 
   config.after(:each) do

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,11 @@
   margin-block-start: 0;
   margin-block-end: 0;
 
-  .additional, .lead-in { margin: 0; padding: 0; }
+  .additional,
+  .lead-in {
+    margin: 0;
+    padding: 0;
+  }
 
   .toggle {
     cursor: pointer;

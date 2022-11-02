@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.thoughtworks.go.server.service.ServiceConstants.History.validateCursor;
+import static com.thoughtworks.go.server.service.HistoryUtil.validateCursor;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -113,7 +113,7 @@ public class JobInstanceService implements JobPlanLoader, ConfigChangedListener 
         return jobInstanceDao.findJobHistoryPage(pipelineName, stageName, jobConfigName, pagination.getPageSize(), pagination.getOffset());
     }
 
-    public JobInstance findJobInstance(String pipelineName, String stageName, String jobName, Integer pipelineCounter, Integer stageCounter, Username username) {
+    public JobInstance findJobInstanceWithTransitions(String pipelineName, String stageName, String jobName, Integer pipelineCounter, Integer stageCounter, Username username) {
         if (!goConfigService.currentCruiseConfig().hasPipelineNamed(new CaseInsensitiveString(pipelineName))) {
             throw new RecordNotFoundException(EntityType.Pipeline, pipelineName);
         }
@@ -121,7 +121,8 @@ public class JobInstanceService implements JobPlanLoader, ConfigChangedListener 
             throw new NotAuthorizedException(NOT_AUTHORIZED_TO_VIEW_PIPELINE);
         }
 
-        return jobInstanceDao.findJobInstance(pipelineName, stageName, jobName, pipelineCounter, stageCounter);
+        StageIdentifier stageIdentifier = new StageIdentifier(pipelineName, pipelineCounter, null, stageName, stageCounter.toString());
+        return jobInstanceDao.mostRecentJobWithTransitions(new JobIdentifier(stageIdentifier, jobName));
     }
 
     public JobInstance buildByIdWithTransitions(long buildId) {

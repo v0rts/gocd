@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ import static com.thoughtworks.go.util.SystemEnvironment.PLUGIN_WORK_DIR;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.*;;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DefaultPluginManagerTest {
@@ -62,7 +62,7 @@ class DefaultPluginManagerTest {
     private GoPluginOSGiFramework goPluginOSGiFramework;
     @Mock
     private DefaultPluginJarChangeListener jarChangeListener;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private SystemEnvironment systemEnvironment;
     @Mock
     private PluginRequestProcessorRegistry pluginRequestProcessorRegistry;

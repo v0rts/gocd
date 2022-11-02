@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,7 +141,7 @@ public class JobStatusJsonPresentationModel {
     }
 
 
-    private long getScheduledTime() {
+    public long getScheduledTime() {
         Date date = instance.getScheduledDate();
         if (date != null) {
             return date.getTime();

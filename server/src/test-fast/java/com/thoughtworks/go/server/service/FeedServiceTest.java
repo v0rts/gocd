@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public class FeedServiceTest {
     private Username username;
     @Mock
     private PipelineHistoryService pipelineHistoryService;
-    @Mock(lenient = true)
+    @Mock(strictness = Mock.Strictness.LENIENT)
     private XmlApiService xmlApiService;
     @Mock
     private StageService stageService;
@@ -195,7 +195,7 @@ public class FeedServiceTest {
 
             assertThat(document).isNotNull();
             verify(xmlApiService).write(any(JobXmlRepresenter.class), eq(BASE_URL));
-            verify(jobInstanceService).findJobInstance(pipelineName, stageName, jobName, 100, 1, username);
+            verify(jobInstanceService).findJobInstanceWithTransitions(pipelineName, stageName, jobName, 100, 1, username);
             verifyNoMoreInteractions(xmlApiService);
             verifyNoMoreInteractions(jobInstanceService);
             verifyNoInteractions(stageService);

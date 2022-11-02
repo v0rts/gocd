@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import com.thoughtworks.go.server.dao.JobInstanceDao;
 import com.thoughtworks.go.server.service.*;
 import com.thoughtworks.go.server.service.support.toggle.FeatureToggleService;
 import com.thoughtworks.go.server.service.support.toggle.Toggles;
-import com.thoughtworks.go.util.JsonValue;
 import com.thoughtworks.go.util.SystemEnvironment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.thoughtworks.go.util.JsonUtils.from;
+import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 import static org.mockito.Mockito.*;
@@ -110,12 +109,11 @@ public class JobControllerTest {
         verify(jobInstanceDao).mostRecentJobWithTransitions(job.getIdentifier());
         verify(stageService).getBuildDuration(pipelineName, stageName, newJob);
 
-        JsonValue json = from(((List) modelAndView.getModel().get("json")).get(0));
+        Object json1 = ((List) modelAndView.getModel().get("json")).get(0);
 
-        JsonValue buildingInfo = json.getObject("building_info");
-
-        assertThat(buildingInfo.getString("id")).isEqualTo("2");
-        assertThat(buildingInfo.getString("last_build_duration")).isEqualTo("5");
+        assertThatJson(json1)
+            .node("building_info.id").isStringEqualTo("2")
+            .node("building_info.last_build_duration").isStringEqualTo("5");
     }
 
     @Nested
@@ -125,7 +123,7 @@ public class JobControllerTest {
             Pipeline pipeline = PipelineMother.passedPipelineInstance("p1", "s1", "build");
             JobIdentifier jobIdentifier = JobIdentifierMother.jobIdentifier("p1");
             StageIdentifier stageIdentifier = new StageIdentifier("p1", 1, "s1", "1");
-            JobInstance jobInstance = JobInstanceMother.jobInstance("building", "one");
+            JobInstance jobInstance = new JobInstance("building");
             jobInstance.setIdentifier(jobIdentifier);
             jobInstance.setId(12);
             jobInstance.setState(JobState.Building);
@@ -155,7 +153,6 @@ public class JobControllerTest {
             ModelAndView modelAndView = jobController.jobDetail("p1", "1", "s1", "2",
                     "job1");
             assertThat(modelAndView.getModel().isEmpty()).isFalse();
-            assertThat(modelAndView.getModel().get("useIframeSandbox")).isEqualTo(false);
             assertThat(modelAndView.getModel().get("websocketEnabled")).isEqualTo(true);
             assertThat(modelAndView.getModel().get("isEditableViaUI")).isEqualTo(false);
             assertThat(modelAndView.getModel().get("isAgentAlive")).isEqualTo(false);

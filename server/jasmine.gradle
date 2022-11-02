@@ -5,7 +5,7 @@ import org.gradle.internal.os.OperatingSystem
 import java.util.regex.Pattern
 
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ OperatingSystem currentOS = OperatingSystem.current()
 // Firefox/gecko: See https://github.com/mozilla/geckodriver/releases and review compatibility at
 //                https://firefox-source-docs.mozilla.org/testing/geckodriver/Support.html
 final Map<String, String> seleniumDrivers = [
-  chromedriver: '102.0.5005.61',
-  geckodriver: '0.31.0',
+  chromedriver: '107.0.5304.62',
+  geckodriver: '0.32.0',
 ]
 
 def execute = { String path, String... argv ->

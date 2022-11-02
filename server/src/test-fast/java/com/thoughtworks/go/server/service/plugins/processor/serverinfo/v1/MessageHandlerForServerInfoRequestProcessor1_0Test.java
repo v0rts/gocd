@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ import com.thoughtworks.go.config.ServerConfig;
 import org.junit.jupiter.api.Test;
 
 import static java.lang.String.format;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class MessageHandlerForServerInfoRequestProcessor1_0Test {
     @Test
     public void shouldSerializeServerConfigToJSON() {
         ServerConfig serverConfig = new ServerConfig();
         serverConfig.ensureServerIdExists();
-        serverConfig.setSecureSiteUrl("https://example.com:8154/go");
+        serverConfig.setSecureSiteUrl("https://example.com/go");
         serverConfig.setSiteUrl("http://example.com:8153/go");
 
         MessageHandlerForServerInfoRequestProcessor1_0 processor = new MessageHandlerForServerInfoRequestProcessor1_0();

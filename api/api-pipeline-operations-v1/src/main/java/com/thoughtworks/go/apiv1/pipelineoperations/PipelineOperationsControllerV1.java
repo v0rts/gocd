@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,10 @@ import com.thoughtworks.go.api.representers.JsonReader;
 import com.thoughtworks.go.api.spring.ApiAuthenticationHelper;
 import com.thoughtworks.go.api.util.GsonTransformer;
 import com.thoughtworks.go.apiv1.pipelineoperations.representers.PipelineScheduleOptionsRepresenter;
+import com.thoughtworks.go.apiv1.pipelineoperations.representers.PipelineStatusModelRepresenter;
 import com.thoughtworks.go.apiv1.pipelineoperations.representers.TriggerOptions;
 import com.thoughtworks.go.apiv1.pipelineoperations.representers.TriggerWithOptionsViewRepresenter;
-import com.thoughtworks.go.apiv1.pipelineoperations.representers.*;
 import com.thoughtworks.go.config.EnvironmentVariablesConfig;
-import com.thoughtworks.go.config.exceptions.UnprocessableEntityException;
 import com.thoughtworks.go.presentation.PipelineStatusModel;
 import com.thoughtworks.go.presentation.pipelinehistory.PipelineInstanceModel;
 import com.thoughtworks.go.server.domain.PipelineScheduleOptions;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ public class JarUtil {
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-        }).collect(Collectors.toList()).toArray(new URL[0]);
+        }).toArray(URL[]::new);
     }
 
     public static URLClassLoader getClassLoaderFromJar(File aJarFile, Predicate<JarEntry> extractFilter, File outputTmpDir, ClassLoader parentClassLoader, Class... allowedClasses) {

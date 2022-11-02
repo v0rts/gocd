@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@
 require 'rails_helper'
 require_relative 'layout_html_examples'
 
-describe "/layouts/admin" do
-  include Admin::AdminHelper
+describe "layouts/admin" do
   it_should_behave_like :layout
 
   before do
@@ -31,7 +30,6 @@ describe "/layouts/admin" do
     allow(view).to receive(:can_view_admin_page?).and_return(true)
     allow(view).to receive(:is_user_a_group_admin?).and_return(true)
     allow(view).to receive(:is_user_an_admin?).and_return(true)
-    allow(view).to receive(:is_user_a_template_admin?).and_return(false)
     allow(view).to receive(:is_user_authorized_to_view_templates?).and_return(false)
     view.extend(SparkUrlAware)
   end
@@ -161,7 +159,6 @@ describe "/layouts/admin" do
       allow(view).to receive(:is_user_an_admin?).and_return(false)
 
       render :inline => 'content', :layout => @layout_name
-      package_repositories_new_path
 
       Capybara.string(response.body).find("#package-repositories-tab-button.current_tab") do |tab|
         expect(tab).to have_selector("a[id='tab-link-of-package-repositories'][href='/go/admin/package_repositories/list']")

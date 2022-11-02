@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,10 @@
 description = 'GoCD Jetty9 Bootstrapper'
 
 dependencies {
-  implementation project(':addon-api:database')
   implementation project(':app-server')
   implementation project(':config:config-server')
   implementation project(':common')
   implementation project(':rack_hack')
-  implementation project.deps.commonsDbcp
-  implementation project.deps.commonsPool
   implementation project.deps.slf4j
 
   providedAtPackageTime project.deps.jetty
@@ -35,13 +32,10 @@ dependencies {
   providedAtPackageTime project.deps.jettyWebsocket
 
   testImplementation project(':common')
-  testImplementation project(':config:config-api')
-  testImplementation project(':config:config-server')
-  testImplementation project(':test:http-mocks')
   testImplementation project(':test:test-utils')
-  testImplementation project.deps.junit5
+  testImplementation project.deps.junit5Api
   testImplementation project.deps.junit5Params
-  testImplementation project.deps.mockito
+  testImplementation project.deps.mockitoCore
   testImplementation project.deps.mockitoJunit5
   testRuntimeOnly project.deps.junit5Engine
 }

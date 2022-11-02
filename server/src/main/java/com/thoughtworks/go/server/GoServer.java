@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class GoServer {
         File addonsPath = new File(systemEnvironment.get(SystemEnvironment.ADDONS_PATH));
         if (addonsPath.exists() && addonsPath.canRead()) {
             if (addonsPath.list().length > 0) {
-                LOG.info("Looks like you are using GoCD addons: '%s'. Support for GoCD addons is removed in GoCD 20.6.0." +
+                LOG.info("Looks like you are using GoCD addons: '%s'. Support for GoCD addons was removed in GoCD 20.6.0." +
                         "You no longer need a separate addon, the functionality supported by the addons is now part of GoCD core.", addonsPath.list());
             }
         }

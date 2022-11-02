@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public interface AgentLaunchDescriptor {
 
-    Map context();
+    Map<String, String> context();
 
     /**
      * future proofing - in case we need the bootstrapper (reflection only)

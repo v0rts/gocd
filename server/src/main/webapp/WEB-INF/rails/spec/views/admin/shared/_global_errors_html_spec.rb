@@ -1,5 +1,5 @@
 #
-# Copyright 2022 ThoughtWorks, Inc.
+# Copyright 2022 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ describe "global errors on popups" do
       configErrors.add("some field", "<h2>")
       assign(:errors, configErrors.getAll())
 
-      render :partial => "admin/shared/global_errors.html.erb"
+      render :partial => "admin/shared/global_errors"
 
       expect(response.body).to have_selector("li.error", :text => "<h2>") #<h2> is visible to user.
   end

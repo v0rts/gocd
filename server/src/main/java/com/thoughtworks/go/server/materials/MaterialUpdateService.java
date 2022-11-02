@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -263,7 +263,7 @@ public class MaterialUpdateService implements GoMessageListener<MaterialUpdateCo
 
     protected EntityConfigChangedListener<PipelineConfig> pipelineConfigChangedListener() {
         final MaterialUpdateService self = this;
-        return new EntityConfigChangedListener<PipelineConfig>() {
+        return new EntityConfigChangedListener<>() {
             @Override
             public void onEntityConfigChange(PipelineConfig pipelineConfig) {
                 self.onConfigChange(goConfigService.getCurrentConfig());

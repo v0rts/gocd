@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,12 @@
  */
 package com.thoughtworks.go.domain.materials.perforce;
 
-import com.thoughtworks.go.helper.P4TestRepo;
 import org.junit.jupiter.api.Test;
 
 public class P4ClientTest extends P4CommandTestBase {
-
-    @Override
-    protected P4TestRepo createTestRepo() throws Exception {
-        P4TestRepo repo = P4TestRepo.createP4TestRepo(tempDir, clientFolder);
-        repo.onSetup();
-        return repo;
-    }
 
     @Test
     void dummyTestSoIntelliJNoticesMe() {
 
     }
-
 }

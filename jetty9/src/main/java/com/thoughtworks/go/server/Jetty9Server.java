@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 ThoughtWorks, Inc.
+ * Copyright 2022 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class Jetty9Server extends AppServer {
     protected static String JETTY_XML_LOCATION_IN_JAR = "/defaultFiles/config";
     private static final String JETTY_XML = "jetty.xml";
-    private static final String JETTY_VERSION = "jetty-v9.4.8.v20171121";
+    private static final String JETTY_CONFIG_VERSION = "jetty-v9.4.48.v20220622";
     private Server server;
     private WebAppContext webAppContext;
     private static final Logger LOG = LoggerFactory.getLogger(Jetty9Server.class);
@@ -140,12 +140,6 @@ public class Jetty9Server extends AppServer {
     }
 
     @Override
-    public void addExtraJarsToClasspath(String extraClasspath) {
-        extraClasspath = new StringBuilder(extraClasspath).append(",").append(systemEnvironment.configDir().getAbsoluteFile()).toString();
-        webAppContext.setExtraClasspath(extraClasspath);
-    }
-
-    @Override
     public void setSessionConfig() {
         SessionHandler sessionHandler = webAppContext.getSessionHandler();
         SessionCookieConfig sessionCookieConfig = sessionHandler.getSessionCookieConfig();
@@ -208,7 +202,7 @@ public class Jetty9Server extends AppServer {
     }
 
     protected void replaceJettyXmlIfItBelongsToADifferentVersion(File jettyConfig) throws IOException {
-        if (FileUtils.readFileToString(jettyConfig, UTF_8).contains(JETTY_VERSION)) return;
+        if (FileUtils.readFileToString(jettyConfig, UTF_8).contains(JETTY_CONFIG_VERSION)) return;
         replaceFileWithPackagedOne(jettyConfig);
     }
 
