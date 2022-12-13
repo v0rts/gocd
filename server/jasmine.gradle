@@ -26,7 +26,7 @@ OperatingSystem currentOS = OperatingSystem.current()
 // Firefox/gecko: See https://github.com/mozilla/geckodriver/releases and review compatibility at
 //                https://firefox-source-docs.mozilla.org/testing/geckodriver/Support.html
 final Map<String, String> seleniumDrivers = [
-  chromedriver: '107.0.5304.62',
+  chromedriver: '108.0.5359.71',
   geckodriver: '0.32.0',
 ]
 
@@ -166,8 +166,8 @@ task jasmineOld(type: YarnRunTask) {
   yarnCommand = ['jasmine-old-ci']
 
   doFirst {
-    environment['PATH'] = ([ driverImpl().ext.outputDir ] + environment['PATH']).join(File.pathSeparator)
-    browserExecutable(environment['PATH'])
+    additionalPath = driverImpl().ext.outputDir
+    browserExecutable(additionalPath)
   }
 }
 
@@ -196,7 +196,7 @@ task jasmineOldServer(type: YarnRunTask) {
   yarnCommand = ['jasmine-old-server']
 
   doFirst {
-    environment['PATH'] = ([ driverImpl().ext.outputDir ] + environment['PATH']).join(File.pathSeparator)
-    browserExecutable(environment['PATH'])
+    additionalPath = driverImpl().ext.outputDir
+    browserExecutable(additionalPath)
   }
 }

@@ -13,10 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  -->
-<#include '_artifact_entry.ftl'>
-
-<script type="text/javascript">
-    try{
-        BuildDetail.collapseAll();
-    } catch(e) {}
-</script>
+${presenter.renderArtifactFiles(req.getContextPath())?no_esc}

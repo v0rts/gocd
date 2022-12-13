@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  -->
-<#-- @ftlvariable name="errorMessage" type="java.lang.String" -->
-<#assign title = 'Exception Detail - GoCD'>
-<#include "shared/_header.ftl">
-<#include "shared/_flash_message.ftl">
-    <div id="yui-main">
-        <div class="yui-b"></div>
-    </div>
+<#-- @ftlvariable name="modification_extra_attrs" type="java.lang.String" -->
+<div id="tab-content-of-materials" class="widget" ${modification_extra_attrs}>
     <script type="text/javascript">
-        $('trans_content').update("Sorry, an unexpected error occurred<#if errorMessage??> [${errorMessage?js_string?html}]</#if>. :( Please check the server logs for more information.");
-        var transMessage = new TransMessage('trans_message', document.body,
-                {type: TransMessage.TYPE_ERROR, offsetTop: 200, autoHide: false});
+        var json = ${presenter.getMaterialRevisionsJson()?no_esc};
     </script>
-
-</body>
-</html>
+    <script type="text/javascript">
+        Event.observe(window, 'load', function(){
+            $('tab-content-of-materials').innerHTML = $('tab-content-of-materials-template').value.process({revisions:json});
+        });
+    </script>
+    <#include '_material_revisions_jstemplate.ftlh'>
+</div>

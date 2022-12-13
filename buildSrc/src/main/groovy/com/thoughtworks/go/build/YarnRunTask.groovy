@@ -19,7 +19,6 @@ package com.thoughtworks.go.build
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.*
-import org.gradle.api.tasks.incremental.IncrementalTaskInputs
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.process.ExecSpec
 
@@ -32,11 +31,10 @@ class YarnRunTask extends DefaultTask {
   private List<String> yarnCommand = new ArrayList<>()
   private List<Object> sourceFiles = new ArrayList<Object>()
   private File destinationDir
-  private Map<String, Object> environment
+  private String additionalPath
 
   YarnRunTask() {
     inputs.property('os', OperatingSystem.current().toString())
-
     project.afterEvaluate({
       source(project.file("${getWorkingDir()}/package.json"))
       source(project.file("${getWorkingDir()}/yarn.lock"))
@@ -61,15 +59,11 @@ class YarnRunTask extends DefaultTask {
   }
 
   @Input
-  Map<String, Object> getEnvironment() {
-    if (environment == null) {
-      this.setEnvironment(System.getenv())
-      normalizeEnvironmentPath(environment)
-    }
-    return environment
+  @Optional
+  String getAdditionalPath() {
+    return additionalPath
   }
 
-  @SkipWhenEmpty
   @InputFiles
   @PathSensitive(PathSensitivity.NONE)
   FileTree getSourceFiles() {
@@ -94,39 +88,28 @@ class YarnRunTask extends DefaultTask {
     this.destinationDir = destinationDir
   }
 
-  void setEnvironment(Map<String, ?> environmentVariables) {
-    this.environment = new HashMap(environmentVariables)
+  void setAdditionalPath(String additionalPath) {
+    this.additionalPath = additionalPath
   }
 
   @TaskAction
-  def execute(IncrementalTaskInputs inputs) {
-    def shouldExecute = !inputs.incremental
-
-    inputs.outOfDate { change ->
-      shouldExecute = true
+  def execute() {
+    if (getDestinationDir() != null) {
+      project.delete(getDestinationDir())
     }
 
-    inputs.removed { change ->
-      shouldExecute = true
-    }
-
-    if (shouldExecute) {
-      if (getDestinationDir() != null) {
-        project.delete(getDestinationDir())
+    project.exec { ExecSpec execSpec ->
+      if (additionalPath) {
+        execSpec.environment = normalizeEnvironmentPath(execSpec.environment)
+        execSpec.environment("PATH", ([additionalPath] + execSpec.environment["PATH"].toString()).join(File.pathSeparator))
       }
+      execSpec.environment("FORCE_COLOR", "true")
+      execSpec.standardOutput = System.out
+      execSpec.errorOutput = System.err
 
-      project.exec { ExecSpec execSpec ->
-        execSpec.environment = this.getEnvironment()
-        execSpec.environment("FORCE_COLOR", "true")
-        execSpec.standardOutput = System.out
-        execSpec.errorOutput = System.err
-
-        execSpec.workingDir = this.getWorkingDir()
-        execSpec.commandLine = [OperatingSystem.current().isWindows() ? "yarn.cmd" : "yarn", "run"] + getYarnCommand()
-        println "[${execSpec.workingDir}]\$ ${execSpec.executable} ${execSpec.args.join(' ')}"
-      }
+      execSpec.workingDir = this.getWorkingDir()
+      execSpec.commandLine = [OperatingSystem.current().isWindows() ? "yarn.cmd" : "yarn", "run"] + getYarnCommand()
+      println "[${execSpec.workingDir}]\$ ${execSpec.executable} ${execSpec.args.join(' ')}"
     }
-
-    setDidWork(shouldExecute)
   }
 }

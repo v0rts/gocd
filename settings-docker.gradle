@@ -23,14 +23,11 @@ def Distro = new GroovyScriptEngine(file('buildSrc/src/main/groovy').absolutePat
   loadScriptByName("com/thoughtworks/go/build/docker/Distro.groovy")
 }
 
-enableFeaturePreview('GROOVY_COMPILATION_AVOIDANCE')
-
 Distro.values().each { distro ->
   distro.supportedVersions.each { version ->
     include ":docker:gocd-agent:${distro.projectName(version)}"
   }
 }
 
-include ":docker:gocd-server:${Distro.centos.projectName(Distro.centos.getVersion('8'))}"
 include ":docker:gocd-server:${Distro.centos.projectName(Distro.centos.getVersion('9'))}"
-include ":docker:gocd-server:${Distro.alpine.projectName(Distro.alpine.getVersion('3.16'))}"
+include ":docker:gocd-server:${Distro.alpine.projectName(Distro.alpine.getVersion('3.17'))}"

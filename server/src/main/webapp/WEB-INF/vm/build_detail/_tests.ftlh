@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  -->
-<#noparse>
-{if modification.comment != null && modification.comment != ""}
-    {var comment_map = JSON.parse(modification.comment)}
-    {if comment_map.COMMENT != null}
-        ${%comment_map.COMMENT%}<br/>
-    {/if}
-    {if comment_map.TRACKBACK_URL != null}
-        Trackback: <a href="${%comment_map.TRACKBACK_URL%}">${%comment_map.TRACKBACK_URL%}</a>
-    {else}
-        Trackback: Not Provided
-    {/if}
-{/if}
-</#noparse>
+<#-- @ftlvariable name="tests_extra_attrs" type="java.lang.String" -->
+<div id="tab-content-of-tests" class="widget" ${tests_extra_attrs}>
+    <div class="files">
+        <#if presenter.hasTests()>
+            <iframe sandbox="allow-scripts" src="${req.getContextPath()}/${presenter.indexPageURL}" width="95%" height="500" frameborder="0"></iframe>
+        <#else>
+            <#include "_test_output_config.ftlh">
+        </#if>
+    </div>
+</div>
