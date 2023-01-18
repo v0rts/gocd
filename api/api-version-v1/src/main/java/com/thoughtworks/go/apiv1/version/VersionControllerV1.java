@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,9 +45,7 @@ public class VersionControllerV1 extends ApiController implements SparkSpringCon
 
     @Override
     public void setupRoutes() {
-        path(controllerBasePath(), () -> {
-            Spark.get("", mimeType, this::show);
-        });
+        path(controllerBasePath(), () -> Spark.get("", mimeType, this::show));
     }
 
     public String show(Request req, Response res) throws IOException {

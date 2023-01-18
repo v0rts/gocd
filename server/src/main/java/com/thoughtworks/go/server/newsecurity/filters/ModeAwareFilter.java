@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class ModeAwareFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger("GO_MODE_AWARE_FILTER");
     private final SystemEnvironment systemEnvironment;
-    private MaintenanceModeService maintenanceModeService;
+    private final MaintenanceModeService maintenanceModeService;
 
     private static final OrRequestMatcher ALLOWED_MAINTENANCE_MODE_REQUEST_MATCHER = new OrRequestMatcher(
             new AntPathRequestMatcher("/remoting/**"),
@@ -67,10 +67,7 @@ public class ModeAwareFilter implements Filter {
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
 
-        if (blockBecauseInactive((HttpServletRequest) servletRequest)) {
-            LOGGER.warn("Got a non-GET request: {} while server is in inactive state (Secondary)", servletRequest);
-            ((HttpServletResponse) servletResponse).sendRedirect(systemEnvironment.getWebappContextPath() + "/errors/inactive");
-        } else if (blockBecauseMaintenanceMode((HttpServletRequest) servletRequest)) {
+        if (blockBecauseMaintenanceMode((HttpServletRequest) servletRequest)) {
             LOGGER.info("Got a non-GET request: {} while server is in maintenance state", servletRequest);
             String jsonMessage = "Server is in maintenance mode, please try later.";
             String htmlResponse = generateHTMLResponse();
@@ -90,10 +87,6 @@ public class ModeAwareFilter implements Filter {
         }
     }
 
-    private boolean blockBecauseInactive(HttpServletRequest servletRequest) {
-        return (!systemEnvironment.isServerActive() && !isAllowedRequest(servletRequest));
-    }
-
     private boolean blockBecauseMaintenanceMode(HttpServletRequest servletRequest) {
         if (isWhitelistedRequest(servletRequest) || isAllowedRequest(servletRequest)) {
             return false;
@@ -109,9 +102,6 @@ public class ModeAwareFilter implements Filter {
     private boolean isAllowedRequest(HttpServletRequest servletRequest) {
         if ((systemEnvironment.getWebappContextPath() + "/auth/security_check").equals(servletRequest.getRequestURI()))
             return true;
-        if ((systemEnvironment.getWebappContextPath() + "/api/state/active").equals(servletRequest.getRequestURI()))
-            return true;
-
 
         return isReadOnlyRequest(servletRequest);
     }

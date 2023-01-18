@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public class InitialContextProvider {
     }
 
     public Map<String, Object> getContext(Map<String, Object> modelMap, Class<? extends SparkController> controller, String viewName) {
-        HashMap<String, Object> context = new HashMap<>(modelMap);
+        Map<String, Object> context = new HashMap<>(modelMap);
         context.put("currentGoCDVersion", CurrentGoCDVersion.getInstance().getGocdDistVersion());
         context.put("railsAssetsService", railsAssetsService);
         context.put("webpackAssetsService", webpackAssetsService);

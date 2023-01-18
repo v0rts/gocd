@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,10 @@ import java.util.Map;
 import static com.thoughtworks.go.util.ExceptionUtils.bomb;
 
 public class GoConfigAttributeLoader {
+    private static final Map<Field, ConfigAttribute> isAttributes = new HashMap<>();
     private final ConfigUtil configUtil = new ConfigUtil("magic");
     private final Element e;
     private final Field field;
-    private static Map<Field, ConfigAttribute> isAttributes = new HashMap<>();
 
     public static boolean isAttribute(Field field) {
         return findAttribute(field) != null;
@@ -40,8 +40,7 @@ public class GoConfigAttributeLoader {
         if (!isAttributes.containsKey(field)) {
             isAttributes.put(field, field.getAnnotation(ConfigAttribute.class));
         }
-        ConfigAttribute attribute = isAttributes.get(field);
-        return attribute;
+        return isAttributes.get(field);
     }
 
     public static GoConfigAttributeLoader attributeParser(Element e, Field field) {
@@ -66,7 +65,7 @@ public class GoConfigAttributeLoader {
     private void validateAttributeName(ConfigAttribute attribute) {
         final AttributeAwareConfigTag annotation = field.getDeclaringClass().getAnnotation(AttributeAwareConfigTag.class);
         if (annotation != null && attribute != null && annotation.attribute().equals(attribute.value())) {
-            throw bomb(String.format("Attribute `%s` is not allowed in %s. You cannot use @ConfigAttribute  annotation with attribute name `%s` when @AttributeAwareConfigTag is configured with same name.", attribute.value(), field.getDeclaringClass().getName(), attribute.value(), attribute.value()));
+            throw bomb(String.format("Attribute `%s` is not allowed in %s. You cannot use @ConfigAttribute annotation with attribute name `%s` when @AttributeAwareConfigTag is configured with same name.", attribute.value(), field.getDeclaringClass().getName(), attribute.value()));
         }
     }
 }

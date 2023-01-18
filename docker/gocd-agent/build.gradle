@@ -6,7 +6,7 @@ import groovy.json.JsonOutput
 import org.apache.tools.ant.util.TeeOutputStream
 
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ import org.apache.tools.ant.util.TeeOutputStream
  * limitations under the License.
  */
 
-apply plugin: 'base'
+plugins {
+  id 'base'
+}
 
 subprojects {
   apply plugin: 'base'
@@ -99,10 +101,19 @@ subprojects {
       }
     }
 
-    task.verifyHelper = {
-      // test image
+    // test image
+    task.verifyHelper = { boolean isNative ->
+      def cleanContainer = {     // remove the container
+        project.exec {
+          workingDir = project.rootProject.projectDir
+          commandLine = ["docker", "rm", "--force", docker.dockerImageName]
+          standardOutput = System.out
+          errorOutput = System.err
+        }
+      }
 
       // daemonize the container
+      cleanContainer.call() // Clean-up after any previous aborted runs
       project.exec {
         workingDir = project.rootProject.projectDir
         commandLine = ["docker", "run", "-e", "GO_SERVER_URL=http://localhost:8153/go", "-d", "--name", docker.dockerImageName, docker.imageNameWithTag]
@@ -110,7 +121,11 @@ subprojects {
         errorOutput = System.err
       }
 
-      Thread.sleep(5000)
+      // Need to wait for start. Would be better to have some polling mechanism here with a timeout.
+      def sleep = isNative ? 5000 : 10000
+      logger.lifecycle("\nWaiting ${sleep}ms for ${isNative ? 'native' : 'emulated'} container to start...")
+      Thread.sleep(sleep)
+      logger.lifecycle("Should be started now...")
 
       // run a `ps aux`
       ByteArrayOutputStream psOutput = new ByteArrayOutputStream()
@@ -132,12 +147,7 @@ subprojects {
       }
 
       // remove the container
-      project.exec {
-        workingDir = project.rootProject.projectDir
-        commandLine = ["docker", "rm", "--force", docker.dockerImageName]
-        standardOutput = System.out
-        errorOutput = System.err
-      }
+      cleanContainer.call()
 
       // assert if process was running
       def expectedProcess = "lib/agent-bootstrapper.jar -serverUrl http://localhost:8153/go"

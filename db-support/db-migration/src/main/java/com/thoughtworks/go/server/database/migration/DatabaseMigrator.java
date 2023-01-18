@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,19 @@ package com.thoughtworks.go.server.database.migration;
 
 import liquibase.Contexts;
 import liquibase.Liquibase;
+import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.ui.LoggerUIService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.repeat;
 
@@ -39,7 +41,7 @@ public class DatabaseMigrator {
         try {
             log.info("Upgrading database, this might take a while depending on the size of the database.");
 
-            List<String> messages = Arrays.asList(
+            List<String> messages = List.of(
                     repeat("*", "", 72),
                     "WARNING: Shutting down your server at this point will lead to a database corruption. Please wait until the database upgrade completes.",
                     repeat("*", "", 72)
@@ -48,6 +50,8 @@ public class DatabaseMigrator {
                 System.err.println(message);
                 log.info(message);
             }
+
+            disableLiquibaseConsoleLogging();
 
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
             Liquibase liquibase = new Liquibase("db-migration-scripts/liquibase.xml", new ClassLoaderResourceAccessor(getClass().getClassLoader()), database);
@@ -66,6 +70,15 @@ public class DatabaseMigrator {
             System.err.println(message);
             e.printStackTrace(System.err);
             throw new SQLException("Unable to migrate the database", e);
+        }
+    }
+
+    private static void disableLiquibaseConsoleLogging() {
+        // See https://github.com/liquibase/liquibase/issues/2396
+        try {
+            Scope.enter(Map.of(Scope.Attr.ui.name(), new LoggerUIService()));
+        } catch (Exception e) {
+            log.error("Failed to disable liquibase console logging. Continuing anyway...", e);
         }
     }
 }

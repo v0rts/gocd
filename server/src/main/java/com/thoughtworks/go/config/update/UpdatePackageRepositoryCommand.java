@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,13 +64,11 @@ public class UpdatePackageRepositoryCommand extends PackageRepositoryCommand {
 
     private void updatePackageRepositoryConfigurationOnAssociatedPipelines(CruiseConfig modifiedConfig) {
         List<PipelineConfig> pipelinesWithPackageRepo = modifiedConfig.pipelinesAssociatedWithPackageRepository(newRepo);
-        pipelinesWithPackageRepo.forEach(pipelineConfig -> {
-            pipelineConfig.packageMaterialConfigs().forEach(packageMaterialConfig -> {
-                if (packageMaterialConfig.getPackageDefinition().getRepository().getId().equals(newRepo.getId())) {
-                    packageMaterialConfig.getPackageDefinition().setRepository(newRepo);
-                }
-            });
-        });
+        pipelinesWithPackageRepo.forEach(pipelineConfig -> pipelineConfig.packageMaterialConfigs().forEach(packageMaterialConfig -> {
+            if (packageMaterialConfig.getPackageDefinition().getRepository().getId().equals(newRepo.getId())) {
+                packageMaterialConfig.getPackageDefinition().setRepository(newRepo);
+            }
+        }));
     }
 
     private boolean isIdSame() {

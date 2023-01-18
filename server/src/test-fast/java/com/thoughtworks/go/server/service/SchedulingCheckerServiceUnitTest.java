@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -301,7 +300,7 @@ public class SchedulingCheckerServiceUnitTest {
     private void flatten(List<SchedulingChecker> value, ArrayList<SchedulingChecker> containerForAllCheckers) {
         for (SchedulingChecker checker : value) {
             if (checker instanceof CompositeChecker) {
-                List<SchedulingChecker> schedulingCheckers = Arrays.asList(((CompositeChecker) checker).getCheckers());
+                List<SchedulingChecker> schedulingCheckers = List.of(((CompositeChecker) checker).getCheckers());
                 flatten(schedulingCheckers, containerForAllCheckers);
             } else {
                 containerForAllCheckers.add(checker);

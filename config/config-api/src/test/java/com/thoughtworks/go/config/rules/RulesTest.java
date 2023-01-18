@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -48,7 +47,7 @@ class RulesTest {
             final Allow invalidDirective = new Allow(null, "pipeline_group", null);
             final Rules rules = new Rules(invalidDirective);
 
-            rules.validateTree(rulesValidationContext(singletonList("refer"), singletonList("pipeline_group")));
+            rules.validateTree(rulesValidationContext(List.of("refer"), List.of("pipeline_group")));
 
             assertThat(rules.hasErrors()).isTrue();
         }
@@ -59,7 +58,7 @@ class RulesTest {
                     new Allow("refer", "pipeline_group", "env1"),
                     new Deny("refer", "pipeline_group", "env2"));
 
-            rules.validateTree(rulesValidationContext(singletonList("refer"), singletonList("pipeline_group")));
+            rules.validateTree(rulesValidationContext(List.of("refer"), List.of("pipeline_group")));
 
             assertThat(rules.hasErrors()).isFalse();
         }

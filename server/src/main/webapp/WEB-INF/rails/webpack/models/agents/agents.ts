@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
+import {filesize} from "filesize";
 import _ from "lodash";
 import Stream from "mithril/stream";
 import {AgentJSON, AgentsJSON, BuildDetailsJSON} from "models/agents/agents_json";
-
-const filesize = require("filesize");
 
 export enum AgentConfigState {
   Enabled, Disabled, Pending
@@ -150,7 +149,7 @@ export class Agent {
   readableFreeSpace() {
     try {
       if (_.isNumber(this.freeSpace)) {
-        return filesize(this.freeSpace, {base: 2, standard: "jedec"});
+        return filesize(this.freeSpace, {base: 2, standard: "jedec"}) as string;
       } else {
         return "Unknown";
       }

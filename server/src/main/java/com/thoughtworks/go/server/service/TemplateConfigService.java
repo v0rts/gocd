@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,9 +191,7 @@ public class TemplateConfigService {
 
         return cruiseConfig.getTemplates()
                 .stream()
-                .filter(templateConfig -> {
-                    return securityService.isAuthorizedToEditTemplate(templateConfig.name(),username);
-                })
+                .filter(templateConfig -> securityService.isAuthorizedToEditTemplate(templateConfig.name(),username))
                 .collect(Collectors.toCollection(TemplatesConfig::new));
     }
 
@@ -202,9 +200,7 @@ public class TemplateConfigService {
 
         return cruiseConfig.getTemplates()
                 .stream()
-                .filter(templateConfig -> {
-                    return securityService.isAuthorizedToViewTemplate(templateConfig.name(),currentUsername);
-                })
+                .filter(templateConfig -> securityService.isAuthorizedToViewTemplate(templateConfig.name(),currentUsername))
                 .collect(Collectors.toCollection(TemplatesConfig::new));
     }
 }

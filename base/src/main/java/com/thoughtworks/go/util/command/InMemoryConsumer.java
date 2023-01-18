@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class InMemoryConsumer implements StreamConsumer {
-    private Queue<String> lines = new ConcurrentLinkedQueue<>();
+    private final Queue<String> lines = new ConcurrentLinkedQueue<>();
     private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(InMemoryConsumer.class);
 
     @Override

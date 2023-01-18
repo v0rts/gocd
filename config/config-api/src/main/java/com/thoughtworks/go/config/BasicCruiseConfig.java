@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -699,14 +699,14 @@ public class BasicCruiseConfig implements CruiseConfig {
     @Override
     public StageConfig nextStage(final CaseInsensitiveString pipelineName, final CaseInsensitiveString lastStageName) {
         StageConfig stageConfig = pipelineConfigByName(pipelineName).nextStage(lastStageName);
-        bombIfNull(stageConfig, "Build stage after '" + lastStageName + "' not found.");
+        bombIfNull(stageConfig, () -> "Build stage after '" + lastStageName + "' not found.");
         return stageConfig;
     }
 
     @Override
     public StageConfig previousStage(final CaseInsensitiveString pipelineName, final CaseInsensitiveString lastStageName) {
         StageConfig stageConfig = pipelineConfigByName(pipelineName).previousStage(lastStageName);
-        bombIfNull(stageConfig, "Build stage after '" + lastStageName + "' not found.");
+        bombIfNull(stageConfig, () -> "Build stage after '" + lastStageName + "' not found.");
         return stageConfig;
     }
 

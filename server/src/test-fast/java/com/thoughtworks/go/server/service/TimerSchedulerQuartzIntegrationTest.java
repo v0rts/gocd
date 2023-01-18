@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import java.util.List;
 
 import static com.thoughtworks.go.helper.PipelineConfigMother.pipelineConfigWithTimer;
-import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
 
 public class TimerSchedulerQuartzIntegrationTest {
@@ -61,14 +60,14 @@ public class TimerSchedulerQuartzIntegrationTest {
     public void shouldExecuteScheduledJobsWhenInvokedFromQuartz() throws InterruptedException {
         PipelineConfig uat = pipelineConfigWithTimer("uat", "* * * * * ?");
         PipelineConfig dist = pipelineConfigWithTimer("dist", "* * * * * ?");
-        List<PipelineConfig> pipelineConfigs = asList(uat, dist);
+        List<PipelineConfig> pipelineConfigs = List.of(uat, dist);
 
         GoConfigService goConfigService = mock(GoConfigService.class);
         when(goConfigService.getAllPipelineConfigs()).thenReturn(pipelineConfigs);
 
         BuildCauseProducerService buildCauseProducerService = mock(BuildCauseProducerService.class);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, buildCauseProducerService, null, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, buildCauseProducerService, null, maintenanceModeService);
         timerScheduler.initialize();
 
         pauseForScheduling();
@@ -81,7 +80,7 @@ public class TimerSchedulerQuartzIntegrationTest {
     public void shouldNotExecuteScheduledJobsWhenServerIsInMaintenanceMode() throws InterruptedException {
         PipelineConfig uat = pipelineConfigWithTimer("uat", "* * * * * ?");
         PipelineConfig dist = pipelineConfigWithTimer("dist", "* * * * * ?");
-        List<PipelineConfig> pipelineConfigs = asList(uat, dist);
+        List<PipelineConfig> pipelineConfigs = List.of(uat, dist);
 
         GoConfigService goConfigService = mock(GoConfigService.class);
         when(goConfigService.getAllPipelineConfigs()).thenReturn(pipelineConfigs);
@@ -91,7 +90,7 @@ public class TimerSchedulerQuartzIntegrationTest {
         serverMaintenanceMode.setMaintenanceMode(true);
         maintenanceModeService.update(serverMaintenanceMode);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, buildCauseProducerService, null, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, buildCauseProducerService, null, maintenanceModeService);
         timerScheduler.initialize();
 
         pauseForScheduling();
@@ -103,14 +102,14 @@ public class TimerSchedulerQuartzIntegrationTest {
     public void shouldUpdateJobsInTheQuartzSchedulerOnConfigChange() throws InterruptedException {
         PipelineConfig uat = pipelineConfigWithTimer("uat", "* * * * * ?");
         PipelineConfig dist = pipelineConfigWithTimer("dist", "* * * * * ?");
-        List<PipelineConfig> pipelineConfigs = asList(uat, dist);
+        List<PipelineConfig> pipelineConfigs = List.of(uat, dist);
 
         GoConfigService goConfigService = mock(GoConfigService.class);
         when(goConfigService.getAllPipelineConfigs()).thenReturn(pipelineConfigs);
 
         BuildCauseProducerService buildCauseProducerService = mock(BuildCauseProducerService.class);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, buildCauseProducerService, null, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, buildCauseProducerService, null, maintenanceModeService);
         timerScheduler.initialize();
 
         CruiseConfig cruiseConfig = new BasicCruiseConfig();

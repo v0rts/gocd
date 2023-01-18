@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,6 @@ import java.util.Collection;
 public class UsersRepresenter {
     public static void toJSON(OutputWriter writer, Collection<UserToRepresent> users) {
         writer.addLinks(linksWriter -> linksWriter.addLink("self", Routes.Users.BASE).addAbsoluteLink("doc", Routes.Users.DOC))
-                .addChild("_embedded", childWriter -> {
-                    childWriter.addChildList("users", userWriter -> {
-                        users.forEach(user -> {
-                            userWriter.addChild(innerChildWriter -> {
-                                UserRepresenter.represent(innerChildWriter, user);
-                            });
-                        });
-                    });
-                });
+                .addChild("_embedded", childWriter -> childWriter.addChildList("users", userWriter -> users.forEach(user -> userWriter.addChild(innerChildWriter -> UserRepresenter.represent(innerChildWriter, user)))));
     }
 }

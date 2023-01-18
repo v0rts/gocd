@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -339,9 +339,7 @@ public abstract class ScmMaterialConfig extends AbstractMaterialConfig implement
             return "";
         }
         StringBuilder builder = new StringBuilder();
-        pipelinesWithThisMaterial.forEach((key, value) -> {
-            builder.append(format("%s (%s),\n ", key, getAutoUpdateStatus(value)));
-        });
+        pipelinesWithThisMaterial.forEach((key, value) -> builder.append(format("%s (%s),\n ", key, getAutoUpdateStatus(value))));
 
         return builder.delete(builder.lastIndexOf(","), builder.length()).toString();
     }

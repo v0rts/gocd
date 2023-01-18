@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,11 @@ class ExecuteUnderRailsTask extends JavaExec {
 
     systemProperties += project.railsSystemProperties
 
-    classpath(project.tasks.getByName('pathingJar').archivePath)
+    def pathingJarLoc = project.tasks.getByName('pathingJar').archiveFile
 
+    classpath(pathingJarLoc)
     if (CURRENT_OS.isWindows()) {
-      environment['CLASSPATH'] += "${File.pathSeparatorChar}${project.tasks.getByName('pathingJar').archivePath}"
+      environment['CLASSPATH'] += "${File.pathSeparatorChar}${pathingJarLoc.get()}"
     }
     setup(project, this, disableJRubyOptimization)
   }

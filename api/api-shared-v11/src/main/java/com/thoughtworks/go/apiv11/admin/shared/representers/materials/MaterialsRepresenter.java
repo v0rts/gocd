@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,9 +78,7 @@ public class MaterialsRepresenter {
 
     public static MaterialConfigs fromJSONArray(JsonReader jsonReader, ConfigHelperOptions options) {
         MaterialConfigs materialConfigs = new MaterialConfigs();
-        jsonReader.readArrayIfPresent("materials", materials -> {
-            materials.forEach(material -> materialConfigs.add(MaterialsRepresenter.fromJSON(new JsonReader(material.getAsJsonObject()), options)));
-        });
+        jsonReader.readArrayIfPresent("materials", materials -> materials.forEach(material -> materialConfigs.add(MaterialsRepresenter.fromJSON(new JsonReader(material.getAsJsonObject()), options))));
         return materialConfigs;
     }
 

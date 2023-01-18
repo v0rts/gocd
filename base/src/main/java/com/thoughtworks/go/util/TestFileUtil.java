@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,8 @@
  */
 package com.thoughtworks.go.util;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class TestFileUtil {
     private static TempFiles tempFiles = new TempFiles();
@@ -50,16 +46,4 @@ public class TestFileUtil {
         subDir.deleteOnExit();
         return subDir;
     }
-
-    public static File writeStringToTempFileInFolder(String directoryName, String fileName, String contents)
-            throws Exception {
-        File folderToCreate =  tempFiles.createUniqueFolder(directoryName);
-        File fileToCreate = new File(folderToCreate, fileName);
-        folderToCreate.mkdirs();
-        FileUtils.writeStringToFile(fileToCreate, contents, UTF_8);
-        fileToCreate.deleteOnExit();
-        folderToCreate.deleteOnExit();
-        return fileToCreate;
-    }
-
 }

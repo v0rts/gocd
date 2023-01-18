@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class JobInstanceRepresenter {
         else {
             jsonWriter.add("original_job_id", jobInstance.getOriginalJobId());
         }
-        jsonWriter.addWithDefaultIfBlank("agent_uuid", jobInstance.getAgentUuid(), (String) null);
+        jsonWriter.addWithDefaultIfBlank("agent_uuid", jobInstance.getAgentUuid(), null);
         jsonWriter.add("pipeline_name", (String) null);
         jsonWriter.add("pipeline_counter", (String) null);
         jsonWriter.add("stage_name", (String) null);

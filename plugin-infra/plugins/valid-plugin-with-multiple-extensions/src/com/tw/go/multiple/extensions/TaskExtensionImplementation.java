@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,6 @@ public class TaskExtensionImplementation implements GoPlugin {
         System.setProperty("valid-plugin-with-multiple-extensions.task_extension.plugin_identifier.count", String.valueOf(++numberOfCallsToPluginIdentifier));
         System.setProperty("valid-plugin-with-multiple-extensions.task_extension.plugin_identifier.value", String.valueOf(System.currentTimeMillis()));
 
-        return new GoPluginIdentifier("task", Collections.singletonList("1.0"));
+        return new GoPluginIdentifier("task", List.of("1.0"));
     }
 }

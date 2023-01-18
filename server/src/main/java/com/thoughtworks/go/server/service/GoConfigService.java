@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -567,10 +567,7 @@ public class GoConfigService implements Initializer, CruiseConfigProvider {
 
     public List<CaseInsensitiveString> pipelinesWithMaterial(String fingerprint) {
         ArrayList<CaseInsensitiveString> pipelineNames = new ArrayList<>();
-        getAllPipelineConfigs().forEach(pipeline -> {
-            pipeline.materialConfigs().stream().filter(materialConfig -> materialConfig.getFingerprint().equals(fingerprint)).findFirst().ifPresent(expectedMaterialConfig -> pipelineNames.add(pipeline.name()));
-
-        });
+        getAllPipelineConfigs().forEach(pipeline -> pipeline.materialConfigs().stream().filter(materialConfig -> materialConfig.getFingerprint().equals(fingerprint)).findFirst().ifPresent(expectedMaterialConfig -> pipelineNames.add(pipeline.name())));
         return pipelineNames;
     }
 

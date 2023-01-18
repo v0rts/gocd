@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class ProcessListRepresenterTest {
     def processTwo = mockProcess("git", "20/12/19 - 12:23:15:634", 3)
 
     def json = toObjectString({
-      ProcessListRepresenter.toJSON(it, Arrays.asList(processOne, processTwo))
+      ProcessListRepresenter.toJSON(it, List.of(processOne, processTwo))
     })
 
     def expected = [

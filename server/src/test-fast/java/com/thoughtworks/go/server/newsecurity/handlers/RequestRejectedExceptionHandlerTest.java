@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import static com.thoughtworks.go.http.mocks.MockHttpServletResponseAssert.asser
 class RequestRejectedExceptionHandlerTest {
 
     @ParameterizedTest
-    @ValueSource(strings = {"/remoting/foo", "/add-on/bar/api/foo", "/api/foo", "/cctray.xml"})
+    @ValueSource(strings = {"/remoting/foo", "/api/foo", "/cctray.xml"})
     void shouldHandleUrlsAsApiRequest(String url) throws IOException {
         final MockHttpServletRequest request = HttpRequestBuilder.GET(url)
                 .withHeader("Accept", "application/json")

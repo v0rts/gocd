@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import org.mockito.ArgumentCaptor;
 import javax.jms.JMSException;
 import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 public class PluginMessageQueueHandlerTest {
@@ -46,7 +46,7 @@ public class PluginMessageQueueHandlerTest {
         messaging = mock(MessagingService.class);
 
         queueFactory = new MyQueueFactory();
-        handler = new PluginMessageQueueHandler<FooMessage>(extension, messaging, mock(PluginManager.class), queueFactory) {
+        handler = new PluginMessageQueueHandler<>(extension, messaging, mock(PluginManager.class), queueFactory) {
         };
     }
 

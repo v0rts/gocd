@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ class UsersRepresenterTest {
     def gocdRole = new RoleConfig()
     gocdRole.setName(new CaseInsensitiveString("gocdRole"))
 
-    def users = Arrays.asList(UserToRepresent.from(UsersMother.withName("Bob"), true, new RolesConfig(gocdRole)))
+    def users = List.of(UserToRepresent.from(UsersMother.withName("Bob"), true, new RolesConfig(gocdRole)))
     def json = toObject({ UsersRepresenter.toJSON(it, users) })
 
     def expectedJson = [

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,8 +70,8 @@ class ClickyPipelineConfigControllerTest implements ControllerTrait<ClickyPipeli
     def request = mock(Request)
     when(request.params("pipeline_name")).thenReturn(pipelineName)
 
-    ModelAndView modalAndView = controller.index(request, response)
-    Map<Object, Object> model = modalAndView.getModel() as Map<Object, Object>
+    ModelAndView modelAndView = controller.index(request, response)
+    Map<Object, Object> model = modelAndView.getModel() as Map<Object, Object>
 
     assertThat(model.get("meta") as Map<String, Object>)
       .containsEntry("pipelineName", pipelineName)
@@ -85,8 +85,8 @@ class ClickyPipelineConfigControllerTest implements ControllerTrait<ClickyPipeli
     when(request.params("pipeline_name")).thenReturn(pipelineName)
     when(goConfigService.findGroupNameByPipeline(new CaseInsensitiveString(pipelineName))).thenReturn(groupName)
 
-    ModelAndView modalAndView = controller.index(request, response)
-    Map<Object, Object> model = modalAndView.getModel() as Map<Object, Object>
+    ModelAndView modelAndView = controller.index(request, response)
+    Map<Object, Object> model = modelAndView.getModel() as Map<Object, Object>
 
     assertThat(model.get("meta") as Map<String, Object>).containsEntry("pipelineName", pipelineName)
     assertThat(model.get("meta") as Map<String, Object>).containsEntry("pipelineGroupName", groupName)

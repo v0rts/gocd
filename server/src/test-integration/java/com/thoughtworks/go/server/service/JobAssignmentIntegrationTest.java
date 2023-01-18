@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,11 +136,8 @@ public class JobAssignmentIntegrationTest {
     }
 
     private AgentStatusChangeListener agentStatusChangeListener() {
-        return new AgentStatusChangeListener() {
-            @Override
-            public void onAgentStatusChange(AgentInstance agentInstance) {
+        return agentInstance -> {
 
-            }
         };
     }
 

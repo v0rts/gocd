@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,11 @@ import org.mockito.Mock;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith(ClearSingleton.class)
 public class DefaultPluginInfoFinderTest {
@@ -118,7 +118,7 @@ public class DefaultPluginInfoFinderTest {
     private PluggableInstanceSettings settings(String someConfigurationSettingKeyName) {
         PluginConfiguration configuration = new PluginConfiguration(someConfigurationSettingKeyName, new Metadata(false, false));
 
-        return new PluggableInstanceSettings(singletonList(configuration));
+        return new PluggableInstanceSettings(List.of(configuration));
     }
 
     private SecretsPluginInfo secretsPluginInfo(String pluginID) {

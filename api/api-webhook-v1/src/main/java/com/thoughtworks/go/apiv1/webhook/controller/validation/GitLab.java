@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,11 @@ import java.security.MessageDigest;
 import java.util.Set;
 import java.util.function.Function;
 
-import static java.util.Collections.singleton;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class GitLab implements ValidateAuth.Provider {
-    public static final Set<String> PUSH = singleton("Push Hook");
-    public static final Set<String> PR = singleton("Merge Request Hook");
+    public static final Set<String> PUSH = Set.of("Push Hook");
+    public static final Set<String> PR = Set.of("Merge Request Hook");
 
     public void auth(String webhookSecret, WebhookRequest request, Function<String, HttpException> fail) {
         final String token = request.authToken();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,13 @@ import com.thoughtworks.go.spark.Routes;
 
 public class PackagesRepresenter {
     public static void toJSON(OutputListWriter outputListWriter, Packages packages) {
-        packages.forEach(pkg -> {
-            outputListWriter.addChild(pkgWriter -> pkgWriter.
-                    addLinks(linkWriter -> {
-                        linkWriter.addLink("self", Routes.Packages.self(pkg.getId()));
-                        linkWriter.addAbsoluteLink("doc", Routes.Packages.DOC);
-                        linkWriter.addLink("find", Routes.Packages.FIND);
-                    })
-                    .add("name", pkg.getName())
-                    .add("id", pkg.getId()));
-        });
+        packages.forEach(pkg -> outputListWriter.addChild(pkgWriter -> pkgWriter.
+                addLinks(linkWriter -> {
+                    linkWriter.addLink("self", Routes.Packages.self(pkg.getId()));
+                    linkWriter.addAbsoluteLink("doc", Routes.Packages.DOC);
+                    linkWriter.addLink("find", Routes.Packages.FIND);
+                })
+                .add("name", pkg.getName())
+                .add("id", pkg.getId())));
     }
 }

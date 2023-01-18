@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 package com.thoughtworks.go.domain;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
 
 import static com.thoughtworks.go.util.ExceptionUtils.bomb;
 
@@ -27,9 +30,7 @@ public class JobInstances extends BaseCollection<JobInstance> {
     }
 
     public JobInstances(Collection<? extends JobInstance> jobInstances) {
-        for (JobInstance instance : jobInstances) {
-            add(instance);
-        }
+        this.addAll(jobInstances);
     }
 
     public JobInstances(JobInstance... jobInstance) {

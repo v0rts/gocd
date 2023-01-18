@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import com.thoughtworks.go.config.Agent;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.UUID;
 
 import static com.thoughtworks.go.util.ExceptionUtils.bomb;
-import static java.util.Arrays.asList;
 
 public class AgentMother {
 
@@ -67,7 +67,7 @@ public class AgentMother {
 
     public static Agent localAgentWithResources(String... resources) {
         Agent agent = localAgent();
-        agent.setResourcesFromList(asList(resources));
+        agent.setResourcesFromList(List.of(resources));
 
         return agent;
     }

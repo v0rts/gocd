@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import com.thoughtworks.go.server.transaction.TransactionTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
 
@@ -82,13 +80,10 @@ public class MaterialUpdateListenerTest {
     }
 
     private void setupTransactionTemplateStub() throws Exception {
-        when(transactionTemplate.executeWithExceptionHandling(Mockito.any(TransactionCallback.class))).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                TransactionCallback callback = (TransactionCallback) invocationOnMock.getArguments()[0];
-                callback.doInTransaction(null);
-                return null;
-            }
+        when(transactionTemplate.executeWithExceptionHandling(Mockito.any(TransactionCallback.class))).thenAnswer(invocationOnMock -> {
+            TransactionCallback callback = (TransactionCallback) invocationOnMock.getArguments()[0];
+            callback.doInTransaction(null);
+            return null;
         });
     }
 

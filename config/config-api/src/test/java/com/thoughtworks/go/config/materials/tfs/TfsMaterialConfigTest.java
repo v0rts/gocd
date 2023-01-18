@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -145,7 +144,7 @@ class TfsMaterialConfigTest {
         @Test
         void shouldEnsureDestFilePathIsValid() {
             TfsMaterialConfig tfsMaterialConfig = tfs(new GoCipher(), new UrlArgument("http://10.4.4.101:8080/tfs/Sample"), "loser", "CORPORATE", "passwd", "walk_this_path");
-            tfsMaterialConfig.setConfigAttributes(Collections.singletonMap(FOLDER, "../a"));
+            tfsMaterialConfig.setConfigAttributes(Map.of(FOLDER, "../a"));
 
             tfsMaterialConfig.validate(new ConfigSaveValidationContext(null));
 

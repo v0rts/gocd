@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,14 +30,17 @@ import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.thoughtworks.go.plugin.domain.common.PluginConstants.SECRETS_EXTENSION;
 
 @Component
 public class SecretsExtension extends AbstractExtension {
-    public static final List<String> SUPPORTED_VERSIONS = Arrays.asList(SecretsExtensionV1.VERSION);
+    public static final List<String> SUPPORTED_VERSIONS = List.of(SecretsExtensionV1.VERSION);
     private Map<String, VersionedSecretsExtension> secretsExtensionMap = new HashMap<>();
 
     @Autowired

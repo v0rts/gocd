@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -193,7 +196,7 @@ public class Jetty9ServerTest {
         WebAppContext webAppContext = (WebAppContext) getLoadedHandlers().get(WebAppContext.class);
 
         assertThat(webAppContext, instanceOf(WebAppContext.class));
-        List<String> configClasses = new ArrayList<>(Arrays.asList(webAppContext.getConfigurationClasses()));
+        List<String> configClasses = new ArrayList<>(List.of(webAppContext.getConfigurationClasses()));
         assertThat(configClasses.contains(WebInfConfiguration.class.getCanonicalName()), is(true));
         assertThat(configClasses.contains(WebXmlConfiguration.class.getCanonicalName()), is(true));
         assertThat(configClasses.contains(JettyWebXmlConfiguration.class.getCanonicalName()), is(true));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.thoughtworks.go.server.dao.DatabaseAccessHelper;
 import com.thoughtworks.go.server.service.ArtifactsService;
 import com.thoughtworks.go.server.service.ConsoleService;
 import com.thoughtworks.go.server.web.ResponseCodeView;
-import com.thoughtworks.go.util.FileUtil;
 import com.thoughtworks.go.util.GoConfigFileHelper;
 import com.thoughtworks.go.util.TestFileUtil;
 import com.thoughtworks.go.util.ZipUtil;
@@ -60,7 +59,8 @@ import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -518,7 +518,7 @@ public class ArtifactsControllerIntegrationTest {
 
         assertThat(view.getViewName(), is("fileView"));
         File targetFile = (File) (view.getModel().get("targetFile"));
-        String separator = FileUtil.fileseparator();
+        String separator = File.separator;
         assertThat(targetFile.getPath(), is(String.format("data%sconsole%s%s.log",
                 separator, separator, DigestUtils.md5Hex(firstJob.buildLocator()))));
     }
@@ -686,7 +686,7 @@ public class ArtifactsControllerIntegrationTest {
     }
 
     private TypeSafeMatcher<File> exists() {
-        return new TypeSafeMatcher<File>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public boolean matchesSafely(File file) {
                 return file.exists();
@@ -700,7 +700,7 @@ public class ArtifactsControllerIntegrationTest {
     }
 
     private TypeSafeMatcher<File> directory() {
-        return new TypeSafeMatcher<File>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public boolean matchesSafely(File file) {
                 return file.isDirectory();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,6 @@ import java.util.Map;
 
 public class ConfigFileListsRepresenter {
     public static void toJSON(OutputWriter jsonWriter, Map<String, ConfigFileList> pacablePlugins) {
-        jsonWriter.addChildList("plugins", pluginsWriter -> {
-          pacablePlugins.forEach((pluginId, fileList) -> {
-              pluginsWriter.addChild(pluginWriter -> ConfigFileListRepresenter.toJSON(pluginWriter, pluginId, fileList));
-          });
-        });
+        jsonWriter.addChildList("plugins", pluginsWriter -> pacablePlugins.forEach((pluginId, fileList) -> pluginsWriter.addChild(pluginWriter -> ConfigFileListRepresenter.toJSON(pluginWriter, pluginId, fileList))));
     }
 }

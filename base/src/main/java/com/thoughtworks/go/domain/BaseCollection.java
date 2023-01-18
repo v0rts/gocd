@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 package com.thoughtworks.go.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-
-import static java.util.Arrays.asList;
 
 
 public class BaseCollection<T> extends ArrayList<T> {
@@ -30,7 +29,7 @@ public class BaseCollection<T> extends ArrayList<T> {
     }
 
     public BaseCollection(T... items) {
-        this(asList(items));
+        this(Arrays.asList(items));
     }
 
     public T first() {

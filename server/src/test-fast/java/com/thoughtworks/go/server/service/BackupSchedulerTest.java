@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
-import java.util.Collections;
+import java.util.Map;
 
 import static com.thoughtworks.go.server.service.BackupScheduler.BACKUP_SCHEDULER_TIMER_GROUP;
 import static com.thoughtworks.go.server.service.BackupScheduler.BACKUP_SCHEDULER_TIMER_NAME;
@@ -82,7 +82,7 @@ class BackupSchedulerTest {
         assertThat(trigger.getJobKey()).isEqualTo(JobKey.jobKey(BACKUP_SCHEDULER_TIMER_NAME, BACKUP_SCHEDULER_TIMER_GROUP));
 
         JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(BACKUP_SCHEDULER_TIMER_NAME, BACKUP_SCHEDULER_TIMER_GROUP));
-        assertThat(jobDetail.getJobDataMap()).isEqualTo(new JobDataMap(Collections.singletonMap(BackupScheduler.ScheduleBackupQuartzJob.BACKUP_SCHEDULER_KEY, backupScheduler)));
+        assertThat(jobDetail.getJobDataMap()).isEqualTo(new JobDataMap(Map.of(BackupScheduler.ScheduleBackupQuartzJob.BACKUP_SCHEDULER_KEY, backupScheduler)));
         assertThat(jobDetail.getJobClass()).isEqualTo(BackupScheduler.ScheduleBackupQuartzJob.class);
     }
 

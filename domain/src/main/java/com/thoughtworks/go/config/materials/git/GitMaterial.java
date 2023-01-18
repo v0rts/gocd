@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -387,7 +387,7 @@ public class GitMaterial extends ScmMaterial implements PasswordAwareMaterial {
 
     private List<SecretString> secrets() {
         SecretString secretSubstitution = line -> line.replace(urlForCommandLine(), getUriForDisplay());
-        return Collections.singletonList(secretSubstitution);
+        return List.of(secretSubstitution);
     }
 
     // Unshallow local repo to include a revision operating on via two step process:

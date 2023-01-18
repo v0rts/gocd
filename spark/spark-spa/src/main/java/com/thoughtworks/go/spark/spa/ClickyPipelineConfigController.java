@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,10 +57,10 @@ public class ClickyPipelineConfigController implements SparkController {
 
     public ModelAndView index(Request request, Response response) {
         String pipelineName = request.params("pipeline_name");
-        Map<Object, Object> object = new HashMap<>() {{
-            put("viewTitle", "Pipeline");
-            put("meta", meta(pipelineName));
-        }};
+        Map<String, Object> object = Map.of(
+            "viewTitle", "Pipeline",
+            "meta", meta(pipelineName)
+        );
         return new ModelAndView(object, null);
     }
 

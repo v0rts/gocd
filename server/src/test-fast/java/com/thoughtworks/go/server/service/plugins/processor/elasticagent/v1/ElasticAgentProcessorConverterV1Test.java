@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@ import com.thoughtworks.go.plugin.access.elastic.models.AgentMetadata;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 public class ElasticAgentProcessorConverterV1Test {
     private ElasticAgentProcessorConverterV1 elasticAgentProcessorConverterV1;
@@ -37,7 +36,7 @@ public class ElasticAgentProcessorConverterV1Test {
 
     @Test
     public void shouldJsonizeAgentMetadataListConvertAgentMetadataList() {
-        final List<AgentMetadata> agentMetadataList = Arrays.asList(
+        final List<AgentMetadata> agentMetadataList = List.of(
                 new AgentMetadata("foo-id", "Idle", "Idle", "Enabled"),
                 new AgentMetadata("bar-id", "Idle", "Building", "Enabled")
         );

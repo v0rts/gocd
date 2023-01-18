@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.thoughtworks.go.util.command;
 
-public class ProcessOutputStreamConsumer<T extends StreamConsumer, T2 extends StreamConsumer> implements ConsoleOutputStreamConsumer<T, T2> {
-    private T stdConsumer;
-    private T2 errorConsumer;
+public class ProcessOutputStreamConsumer<T extends StreamConsumer, T2 extends StreamConsumer> implements ConsoleOutputStreamConsumer{
+    private final T stdConsumer;
+    private final T2 errorConsumer;
 
     public ProcessOutputStreamConsumer(T stdConsumer, T2 errorConsumer) {
         this.errorConsumer = errorConsumer;

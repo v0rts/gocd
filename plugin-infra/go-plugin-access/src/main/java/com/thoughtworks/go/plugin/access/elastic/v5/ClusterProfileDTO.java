@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,9 +86,7 @@ public class ClusterProfileDTO {
 
     public ClusterProfile toDomainModel() {
         ArrayList<ConfigurationProperty> configurationProperties = new ArrayList<>();
-        this.properties.forEach((key, value) -> {
-            configurationProperties.add(new ConfigurationProperty(new ConfigurationKey(key), new ConfigurationValue(value)));
-        });
+        this.properties.forEach((key, value) -> configurationProperties.add(new ConfigurationProperty(new ConfigurationKey(key), new ConfigurationValue(value))));
 
         ClusterProfile clusterProfile = new ClusterProfile(this.id, this.pluginId);
         clusterProfile.addConfigurations(configurationProperties);

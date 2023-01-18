@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ public class MaterialRevisionsMatchers {
     }
 
     public static Matcher<MaterialRevisions> containsModifiedBy(final String filename, final String user) {
-        return new TypeSafeMatcher<MaterialRevisions>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public boolean matchesSafely(MaterialRevisions revisions) {
                 ModifiedBy modifiedBy = new ModifiedBy(user, filename);
@@ -107,7 +107,7 @@ public class MaterialRevisionsMatchers {
 
 
     public static Matcher<MaterialRevisions> containsModifiedFile(final String filename) {
-        return new TypeSafeMatcher<MaterialRevisions>() {
+        return new TypeSafeMatcher<>() {
             @Override
             public boolean matchesSafely(MaterialRevisions revisions) {
                 ModifiedFileVisitor modifiedBy = new ModifiedFileVisitor(filename);

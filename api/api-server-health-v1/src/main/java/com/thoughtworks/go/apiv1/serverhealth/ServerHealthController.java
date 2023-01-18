@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
 
-import java.util.Collections;
+import java.util.Map;
 
 import static spark.Spark.*;
 
 @Component
 public class ServerHealthController extends ApiController implements SparkSpringController {
-    private static String HEALTH_OK = new GsonBuilder().setPrettyPrinting().create().toJson(Collections.singletonMap("health", "OK")) + "\n";
+    private static final String HEALTH_OK = new GsonBuilder().setPrettyPrinting().create().toJson(Map.of("health", "OK")) + "\n";
 
     @Autowired
     public ServerHealthController() {

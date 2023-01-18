@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ public class AssertJava {
     }
 
     private static void checkSupported(JavaVersion currentJavaVersion) {
-        if (currentJavaVersion.compareTo(MINIMUM_SUPPORTED_VERSION) < 0) {
+        if (!currentJavaVersion.isCompatibleWith(MINIMUM_SUPPORTED_VERSION)) {
             System.err.println("Running GoCD requires Java version >= " + MINIMUM_SUPPORTED_VERSION +
-                    ". You are currently running with Java version " + currentJavaVersion + ". GoCD will now exit!");
+                ". You are currently running with Java version " + currentJavaVersion + ". GoCD will now exit!");
             System.exit(1);
         }
     }

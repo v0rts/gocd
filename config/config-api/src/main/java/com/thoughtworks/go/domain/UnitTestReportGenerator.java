@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.thoughtworks.go.domain;
 
-import com.thoughtworks.go.util.FileUtil;
 import com.thoughtworks.go.util.TestFileUtil;
 import com.thoughtworks.go.util.XpathUtils;
 import com.thoughtworks.go.work.GoPublisher;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +31,14 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.regex.Pattern;
 
-public class UnitTestReportGenerator implements TestReportGenerator {
+public class UnitTestReportGenerator {
+    private static final String TEST_RESULTS_FILE = "index.html";
+    private static final Pattern LINE_STARTING_WITH_XML_DECLARATION = Pattern.compile("^\\s*<\\?xml.*?\\?>");
+
     private final File folderToUpload;
-    private GoPublisher publisher;
+    private final GoPublisher publisher;
     private static Templates templates;
 
     private static final Logger LOG = LoggerFactory.getLogger(UnitTestReportGenerator.class);
@@ -52,9 +56,8 @@ public class UnitTestReportGenerator implements TestReportGenerator {
         this.folderToUpload = folderToUpload;
     }
 
-    @Override
     public void generate(File[] allTestFiles, String uploadDestPath) {
-        File mergedResults = new File(folderToUpload.getAbsolutePath() + FileUtil.fileseparator() + TEST_RESULTS_FILE);
+        File mergedResults = new File(folderToUpload.getAbsolutePath() + File.separator + TEST_RESULTS_FILE);
         File mergedResource = null;
         try (FileOutputStream transformedHtml = new FileOutputStream(mergedResults)) {
             mergedResource = mergeAllTestResultToSingleFile(allTestFiles);
@@ -113,9 +116,7 @@ public class UnitTestReportGenerator implements TestReportGenerator {
     private void pumpFileContent(File file, PrintStream out) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             String line = bufferedReader.readLine();
-            if (!line.contains("<?xml")) { // skip prolog
-                out.println(line);
-            }
+            out.println(RegExUtils.removeFirst(line, LINE_STARTING_WITH_XML_DECLARATION));
             while ((line = bufferedReader.readLine()) != null) {
                 out.println(line);
             }

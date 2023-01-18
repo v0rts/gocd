@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class ArtifactTypeAdapter extends TypeAdapter implements JsonDeserializer
 
     @Override
     public CRArtifact deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
-        return (CRArtifact) determineJsonElementForDistinguishingImplementers(json, context, TYPE, TypeAdapter.ARTIFACT_ORIGIN);
+        return determineJsonElementForDistinguishingImplementers(json, context, TYPE, TypeAdapter.ARTIFACT_ORIGIN);
     }
 
     @Override

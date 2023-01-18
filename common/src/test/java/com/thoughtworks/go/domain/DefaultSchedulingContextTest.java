@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@ import com.thoughtworks.go.helper.StageConfigMother;
 import com.thoughtworks.go.util.ReflectionUtil;
 import org.junit.jupiter.api.Test;
 
-import static java.util.Arrays.asList;
+import java.util.Arrays;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -169,7 +170,7 @@ public class DefaultSchedulingContextTest {
 	}
 
     private Agent agent(String uuid, String... names) {
-        return new Agent(uuid, "localhost", "127.0.0.1", names == null ? null : asList(names));
+        return new Agent(uuid, "localhost", "127.0.0.1", names == null ? null : Arrays.asList(names));
     }
 
 	public static ResourceConfigs resources(String... names) {

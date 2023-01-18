@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,11 @@ import static com.thoughtworks.go.server.service.plugins.processor.elasticagent.
 
 @Component
 public class ElasticAgentRequestProcessor implements GoPluginApiRequestProcessor {
-    private Map<String, VersionableElasticAgentProcessor> versionableProcessorMap = new HashMap<>();
+    private final Map<String, VersionableElasticAgentProcessor> versionableProcessorMap = new HashMap<>();
 
     @Autowired
     public ElasticAgentRequestProcessor(PluginRequestProcessorRegistry registry, AgentService agentService) {
-        this(registry, new HashMap<>() {{
-            put("1.0", new ElasticAgentRequestProcessorV1(agentService));
-        }});
+        this(registry, Map.of("1.0", new ElasticAgentRequestProcessorV1(agentService)));
     }
 
     ElasticAgentRequestProcessor(PluginRequestProcessorRegistry registry, Map<String, VersionableElasticAgentProcessor> versionableElasticAgentProcessors) {

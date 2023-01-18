@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
+import {filesize} from "filesize";
 import {MithrilViewComponent} from "jsx/mithril-component";
 import m from "mithril";
 import {Table} from "views/components/table";
 import {MetaJSON} from "views/pages/server_info";
 import styles from "./index.scss";
-
-import filesize from "filesize";
 
 interface Attrs {
   meta: MetaJSON;

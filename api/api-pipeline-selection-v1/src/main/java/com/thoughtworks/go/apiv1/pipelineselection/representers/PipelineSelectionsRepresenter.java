@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,7 @@ public class PipelineSelectionsRepresenter {
         public JsonElement serialize(PipelineSelectionResponse src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject serialized = new JsonObject();
             JsonArray filters = new JsonArray();
-            src.filters().filters().forEach((f) -> {
-                filters.add(context.serialize(f, DashboardFilter.class));
-            });
+            src.filters().filters().forEach((f) -> filters.add(context.serialize(f, DashboardFilter.class)));
             serialized.add("filters", filters);
             return serialized;
         }

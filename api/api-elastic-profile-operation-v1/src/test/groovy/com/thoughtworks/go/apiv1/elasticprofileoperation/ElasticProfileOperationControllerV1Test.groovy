@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ class ElasticProfileOperationControllerV1Test implements SecurityServiceTrait, C
 
       @Test
       void 'should list jobs associated with a profile id'() {
-        def elasticProfileUsages = Arrays.asList(
+        def elasticProfileUsages = List.of(
           new ElasticProfileUsage("LinuxPR", "build", "compile", "linux-pr", "config_repo"),
           new ElasticProfileUsage("LinuxPR", "build", "test", "linux-pr", "config_repo"),
 

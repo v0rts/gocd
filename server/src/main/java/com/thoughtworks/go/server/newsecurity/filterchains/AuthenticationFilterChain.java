@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,9 +38,6 @@ public class AuthenticationFilterChain extends FilterChainProxy {
         super(FilterChainBuilder.newInstance()
                 // X509 for agent remoting
                 .addFilterChain("/remoting/**", x509AuthenticationFilter)
-
-                // For addons
-                .addFilterChain("/add-on/**", assumeAnonymousUserFilter)
 
                 // For API authentication
                 .addFilterChain("/api/config-repository.git/**", invalidateAuthenticationOnSecurityConfigChangeFilter, assumeAnonymousUserFilter, reAuthenticationWithChallenge, basicAuthenticationWithChallengeFilter)

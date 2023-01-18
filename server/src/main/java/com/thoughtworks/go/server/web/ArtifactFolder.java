@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class ArtifactFolder implements JsonAware, Comparable {
     }
 
     public DirectoryEntries allEntries() {
-        bombUnless(rootFolder.isDirectory(), rootFolder + " is not a folder");
+        bombUnless(rootFolder.isDirectory(), () -> rootFolder + " is not a folder");
         return new DirectoryReader(jobIdentifier).listEntries(rootFolder, relativePath);
     }
 

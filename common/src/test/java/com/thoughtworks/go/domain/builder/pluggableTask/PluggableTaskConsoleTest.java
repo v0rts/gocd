@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +39,8 @@ public class PluggableTaskConsoleTest {
     SafeOutputStreamConsumer safeOutputStreamConsumer;
 
     private PluggableTaskConsole console;
-    private List<String> keys = Arrays.asList("Social Net 1", "Social Net 2", "Social Net 3");
-    private List<String> values = Arrays.asList("Twitter", "Facebook", "Mega Upload");
+    private List<String> keys = List.of("Social Net 1", "Social Net 2", "Social Net 3");
+    private List<String> values = List.of("Twitter", "Facebook", "Mega Upload");
 
     @BeforeEach
     public void setUp() throws Exception {

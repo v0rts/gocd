@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.thoughtworks.go.plugin.access.scm.material;
 
 import com.thoughtworks.go.plugin.access.scm.revision.SCMRevision;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class MaterialPollResult {
     }
 
     public MaterialPollResult(Map<String, String> data, SCMRevision revision) {
-        this(data, revision == null ? null : Arrays.asList(revision));
+        this(data, revision == null ? null : List.of(revision));
     }
 
     public MaterialPollResult(Map<String, String> materialData, List<SCMRevision> revisions) {

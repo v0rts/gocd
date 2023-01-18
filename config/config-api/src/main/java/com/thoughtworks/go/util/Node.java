@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@ package com.thoughtworks.go.util;
 
 import com.thoughtworks.go.config.CaseInsensitiveString;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.Arrays.asList;
 
 public class Node {
     private final List<DependencyNode> dependencies;
 
     public Node(DependencyNode... deps) {
-        this(asList(deps));
+        this(Arrays.asList(deps));
     }
 
     public Node(List<DependencyNode> deps) {

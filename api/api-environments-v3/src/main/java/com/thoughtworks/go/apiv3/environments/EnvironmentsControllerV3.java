@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,9 +94,7 @@ public class EnvironmentsControllerV3 extends ApiController implements SparkSpri
                 apiAuthenticationHelper.checkUserHasPermissions(currentUsername(), getAction(request), SupportedEntity.ENVIRONMENT, resourceToOperateOn);
             });
 
-            before(Routes.Environments.NAME, mimeType, (request, response) -> {
-                apiAuthenticationHelper.checkUserHasPermissions(currentUsername(), getAction(request), SupportedEntity.ENVIRONMENT, request.params("name"));
-            });
+            before(Routes.Environments.NAME, mimeType, (request, response) -> apiAuthenticationHelper.checkUserHasPermissions(currentUsername(), getAction(request), SupportedEntity.ENVIRONMENT, request.params("name")));
 
             get("", mimeType, this::index);
             get(Routes.Environments.NAME, mimeType, this::show);

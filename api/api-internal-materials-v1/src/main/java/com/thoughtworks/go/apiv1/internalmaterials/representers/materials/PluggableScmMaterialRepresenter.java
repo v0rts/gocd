@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,10 @@ public class PluggableScmMaterialRepresenter implements MaterialRepresenter<Plug
 
     @Override
     public Consumer<OutputWriter> toJSON(PluggableSCMMaterialConfig pluggableSCMMaterialConfig) {
-        return jsonWriter -> {
-            jsonWriter.add("ref", pluggableSCMMaterialConfig.getScmId())
-                    .add("auto_update", pluggableSCMMaterialConfig.isAutoUpdate())
-                    .add("scm_name", pluggableSCMMaterialConfig.getSCMConfig().getName())
-                    .addChild("origin", (writer) -> renderOrigin(writer, pluggableSCMMaterialConfig.getSCMConfig().getOrigin()));
-        };
+        return jsonWriter -> jsonWriter.add("ref", pluggableSCMMaterialConfig.getScmId())
+                .add("auto_update", pluggableSCMMaterialConfig.isAutoUpdate())
+                .add("scm_name", pluggableSCMMaterialConfig.getSCMConfig().getName())
+                .addChild("origin", (writer) -> renderOrigin(writer, pluggableSCMMaterialConfig.getSCMConfig().getOrigin()));
     }
 
     private void renderOrigin(OutputWriter outputWriter, ConfigOrigin origin) {

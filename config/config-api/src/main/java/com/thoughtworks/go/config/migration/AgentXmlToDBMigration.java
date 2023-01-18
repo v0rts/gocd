@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,11 +109,9 @@ public class AgentXmlToDBMigration {
     private static void logAgentInfo() {
         LOGGER.info("Migrating {} agents from config to db.", agentList.size());
         StringBuilder logBuilder = new StringBuilder();
-        agentList.forEach(agent -> {
-            logBuilder
-                    .append(agent.toString())
-                    .append('\n');
-        });
+        agentList.forEach(agent -> logBuilder
+                .append(agent.toString())
+                .append('\n'));
         LOGGER.info(logBuilder.toString());
     }
 

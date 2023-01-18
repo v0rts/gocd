@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import com.thoughtworks.go.config.security.users.AllowedUsers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +36,7 @@ class PipelinePermissionTest {
         StagePermission stage1 = new StagePermission("stage1", new AllowedUsers(Set.of("admin", "operator1", "operator2"), Collections.emptySet()));
         StagePermission stage2 = new StagePermission("stage2", new AllowedUsers(Set.of("admin", "operator1"), Collections.emptySet()));
 
-        pipelinePermission = new PipelinePermission(Arrays.asList(stage1, stage2));
+        pipelinePermission = new PipelinePermission(List.of(stage1, stage2));
     }
 
     @Test

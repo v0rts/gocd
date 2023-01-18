@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -172,15 +172,5 @@ public class BackupServiceTest {
         backupService.initialize();
 
         verify(serverBackupRepository).markInProgressBackupsAsAborted(ABORTED_BACKUPS_MESSAGE);
-    }
-
-    @Test
-    public void shouldNotMarkInProgressBackupsAsAbortedIfServerIsInStandbyMode() {
-        when(systemEnvironment.isServerInStandbyMode()).thenReturn(true);
-        BackupService backupService = new BackupService(artifactsDirHolder, mock(GoConfigService.class), null, serverBackupRepository, systemEnvironment, configRepo, databaseStrategy, null);
-
-        backupService.initialize();
-
-        verifyNoInteractions(serverBackupRepository);
     }
 }

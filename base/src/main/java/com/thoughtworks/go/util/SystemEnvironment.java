@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
 import static java.lang.Double.parseDouble;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -71,7 +74,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public static final String CRUISE_PROPERTIES = "/cruise.properties";
     private Properties properties;
-    public static final String CRUISE_EXPERIMENTAL_ENABLE_ALL = "cruise.experimental.enable-all";
 
     public static final String ARTIFACT_FULL_SIZE_LIMIT = "artifact.full.size.limit";
     public static final String DATABASE_FULL_SIZE_LIMIT = "db.full.size.limit";
@@ -134,7 +136,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public static final String JETTY9 = "com.thoughtworks.go.server.Jetty9Server";
     public static final GoSystemProperty<String> APP_SERVER = new CachedProperty<>(new GoStringSystemProperty("app.server", JETTY9));
-    public static final GoSystemProperty<String> GO_SERVER_STATE = new GoStringSystemProperty("go.server.state", "active");
     public static final GoSystemProperty<String> GO_LANDING_PAGE = new GoStringSystemProperty("go.landing.page", "/pipelines");
 
     public static final GoSystemProperty<Boolean> FETCH_ARTIFACT_AUTO_SUGGEST = new GoBooleanSystemProperty("go.fetch-artifact.auto-suggest", true);
@@ -197,15 +198,10 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public static final GoSystemProperty<Boolean> INITIALIZE_CONFIG_REPOSITORIES_ON_STARTUP = new GoBooleanSystemProperty("gocd.initialize.config.repositories.on.startup", true);
 
-    private static final Map<String, String> GIT_ALLOW_PROTOCOL;
-
-    static {
-        Map<String, String> map = new HashMap<>() {{
-            put("GIT_ALLOW_PROTOCOL", System.getenv("GIT_ALLOW_PROTOCOL") == null ?
-                "http:https:ssh:git:file:rsync" : System.getenv("GIT_ALLOW_PROTOCOL"));
-        }};
-        GIT_ALLOW_PROTOCOL = Collections.unmodifiableMap(map);
-    }
+    private static final Map<String, String> GIT_ALLOW_PROTOCOL = Map.of(
+        "GIT_ALLOW_PROTOCOL",
+        System.getenv("GIT_ALLOW_PROTOCOL") == null ? "http:https:ssh:git:file:rsync" : System.getenv("GIT_ALLOW_PROTOCOL")
+    );
 
     private volatile static Integer agentConnectionTimeout;
     private volatile static String cruiseConfigDir;
@@ -401,13 +397,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return getPropertyImpl(GoConstants.AGENT_PLUGINS_MD5, BLANK_STRING);
     }
 
-    public boolean isFeatureEnabled(String value) {
-        if (Boolean.parseBoolean(properties().getProperty(CRUISE_EXPERIMENTAL_ENABLE_ALL, "false"))) {
-            return true;
-        }
-        return Boolean.parseBoolean(properties().getProperty(value, "false"));
-    }
-
     private Properties properties() {
         if (properties == null) {
             properties = new Properties();
@@ -556,16 +545,8 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return consoleLogCharset;
     }
 
-    public String getExternalPluginAbsolutePath() {
-        return new File(get(PLUGIN_EXTERNAL_PROVIDED_PATH)).getAbsolutePath();
-    }
-
     public static Integer getGoServerAuthorizationExtensionCallsCacheTimeoutInSeconds() {
         return GO_SERVER_AUTHORIZATION_EXTENSION_CALLS_CACHE_TIMEOUT_IN_SECONDS.getValue();
-    }
-
-    public String getBundledPluginAbsolutePath() {
-        return new File(get(PLUGIN_GO_PROVIDED_PATH)).getAbsolutePath();
     }
 
     public <T> void reset(GoSystemProperty<T> systemProperty) {
@@ -583,29 +564,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return GO_LANDING_PAGE.getValue();
     }
 
-    public boolean usingJetty9() {
-        return get(APP_SERVER).equals(JETTY9);
-    }
-
-    public boolean isServerActive() {
-        return GO_SERVER_STATE.getValue().equalsIgnoreCase("active");
-    }
-
-    @Deprecated
-    //changing GO_SERVER_STATE to active requires a restart as timer-threads are not scheduled when the server is
-    // in passive mode.
-    // Changing GO_SERVER_STATE to active without server restart can have inadvertent behavior.
-    void switchToActiveState() {
-        set(GO_SERVER_STATE, "active");
-    }
-
-    @Deprecated
-    //changing GO_SERVER_STATE to passive requires a restart as timer-threads are scheduled when the server is
-    // in active mode.
-    // Changing GO_SERVER_STATE to active without server restart may result into functioning of some parts of GoCD subsystems.
-    public void switchToPassiveState() {
-        set(GO_SERVER_STATE, "passive");
-    }
 
     public String getUpdateServerPublicKeyPath() {
         return String.format("%s/%s", getConfigDir(), GO_UPDATE_SERVER_PUBLIC_KEY_FILE_NAME.getValue());
@@ -650,10 +608,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public boolean isProductionMode() {
         return GO_SERVER_MODE.getValue().equalsIgnoreCase("production");
-    }
-
-    public boolean isServerInStandbyMode() {
-        return GO_SERVER_MODE.getValue().equalsIgnoreCase("standby");
     }
 
     public boolean isReAuthenticationEnabled() {

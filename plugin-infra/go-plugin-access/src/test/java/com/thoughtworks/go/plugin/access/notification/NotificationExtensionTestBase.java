@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.thoughtworks.go.plugin.domain.common.PluginConstants.NOTIFICATION_EXTENSION;
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -126,7 +125,7 @@ public abstract class NotificationExtensionTestBase {
 
     @Test
     public void shouldTalkToPluginToGetNotificationsInterestedIn() throws Exception {
-        List<String> response = asList("pipeline-status", "stage-status");
+        List<String> response = List.of("pipeline-status", "stage-status");
         when(jsonMessageHandler().responseMessageForNotificationsInterestedIn(RESPONSE_BODY)).thenReturn(response);
 
         List<String> deserializedResponse = notificationExtension.getNotificationsOfInterestFor(PLUGIN_ID);

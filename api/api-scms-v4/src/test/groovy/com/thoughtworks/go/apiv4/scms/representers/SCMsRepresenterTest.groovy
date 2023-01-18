@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class SCMsRepresenterTest {
       ConfigurationPropertyMother.create("key2", true, "secret"),
     ))
 
-    String actualJson = toObjectString({ SCMsRepresenter.toJSON(it, Arrays.asList(scm)) })
+    String actualJson = toObjectString({ SCMsRepresenter.toJSON(it, List.of(scm)) })
 
     assertThatJson(actualJson).isEqualTo([
       "_links"   : [

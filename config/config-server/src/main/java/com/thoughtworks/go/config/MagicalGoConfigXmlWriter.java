@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,7 +108,7 @@ public class MagicalGoConfigXmlWriter {
     }
 
     public String toXmlPartial(Object domainObject) {
-        bombIf(!isAnnotationPresent(domainObject.getClass(), ConfigTag.class), "Object " + domainObject + " does not have a ConfigTag");
+        bombIf(!isAnnotationPresent(domainObject.getClass(), ConfigTag.class), () -> "Object " + domainObject + " does not have a ConfigTag");
         Element element = elementFor(domainObject.getClass());
         write(domainObject, element, configCache, registry);
         if (isAnnotationPresent(domainObject.getClass(), ConfigCollection.class) && domainObject instanceof Collection) {

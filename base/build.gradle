@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@ dependencies {
   providedAtPackageTime project.deps.bouncyCastle
   providedAtPackageTime project.deps.bouncyCastlePkix
 
-  api(project.deps.apacheAnt)  {
-    transitive = false
-  }
   api project.deps.commonsIO
   api project.deps.commonsLang3
   api project.deps.commonsCodec
@@ -36,6 +33,7 @@ dependencies {
 
   testImplementation project.deps.junit5Api
   testRuntimeOnly project.deps.junit5Engine
+  testImplementation project.deps.systemStubs
   testImplementation project.deps.hamcrest
   testImplementation project.deps.mockitoCore
   testImplementation project.deps.assertJ
@@ -62,10 +60,10 @@ task generateResources {
   outputs.dir(generatedResourcesOutput)
 
   def props = [
-    'goVersion': rootProject.goVersion,
-    'distVersion': rootProject.distVersion,
-    'fullVersion': rootProject.fullVersion,
-    'gitRevision': rootProject.gitRevision,
+    'goVersion'    : rootProject.goVersion,
+    'distVersion'  : rootProject.distVersion,
+    'fullVersion'  : rootProject.fullVersion,
+    'gitRevision'  : rootProject.gitRevision,
     'copyrightYear': rootProject.copyrightYear,
   ]
 

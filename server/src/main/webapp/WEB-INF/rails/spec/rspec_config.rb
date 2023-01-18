@@ -1,5 +1,5 @@
 #
-# Copyright 2022 Thoughtworks, Inc.
+# Copyright 2023 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ RSpec.configure do |config|
   config.add_formatter :documentation
   config.add_formatter RspecJunitFormatter, File.join(ENV['REPORTS_DIR'] || Rails.root.join('tmp/reports'), 'spec_full_report.xml')
   config.add_formatter RSpec::Instafail
-  config.include ApiSpecHelper
+  config.include AuthenticationSpecHelper
   config.include MiscSpecExtensions
 
 # clear flash messages for every spec

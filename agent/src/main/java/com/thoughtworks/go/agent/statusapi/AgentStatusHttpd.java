@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +39,7 @@ public class AgentStatusHttpd extends NanoHTTPD {
     private final HttpHandler isConnectedToServer;
     private final SystemEnvironment environment;
     private final int port;
-    private final Set<Method> allowedMethods = new HashSet<>(Arrays.asList(Method.GET, Method.PUT));
+    private final Set<Method> allowedMethods = Set.of(Method.GET, Method.PUT);
 
     @Autowired
     public AgentStatusHttpd(SystemEnvironment environment,

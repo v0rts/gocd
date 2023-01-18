@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2022 Thoughtworks, Inc.
+  ~ Copyright 2023 Thoughtworks, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -28,7 +28,9 @@
 
   <import resource="propertyConfigurer.xml"/>
 
-  <task:scheduled-tasks scheduler="modeAwareThreadPoolTaskScheduler">
+  <task:scheduler id="goThreadPoolTaskScheduler" pool-size="${go.executor.pool.size:10}"/>
+
+  <task:scheduled-tasks scheduler="goThreadPoolTaskScheduler">
     <task:scheduled ref="configRepository" method="garbageCollect" cron="${go.config.repo.gc.cron}"/>
     <task:scheduled ref="configRepositoryGCWarningService" method="checkRepoAndAddWarningIfRequired"
                     initial-delay="${go.config.repo.gc.check.delay}"

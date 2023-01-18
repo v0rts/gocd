@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@ package com.thoughtworks.go.util.command;
 public class CommandLineException extends RuntimeException {
     private final ConsoleResult result;
 
+    public CommandLineException(Throwable cause) {
+        super(cause);
+        this.result = ConsoleResult.unknownResult();
+    }
+
     public CommandLineException(String message) {
         super(message);
         this.result = ConsoleResult.unknownResult();
@@ -32,7 +37,6 @@ public class CommandLineException extends RuntimeException {
         super("Error performing command: " + command.describe() + "\n" + result.describe());
         this.result = result;
     }
-
 
     public ConsoleResult getResult() {
         return result;

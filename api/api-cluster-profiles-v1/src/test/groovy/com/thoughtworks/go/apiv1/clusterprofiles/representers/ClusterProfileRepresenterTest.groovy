@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ class ClusterProfileRepresenterTest {
     ]
 
     def elasticAgentMetadataStore = ElasticAgentMetadataStore.instance()
-    PluggableInstanceSettings pluggableInstanceSettings = new PluggableInstanceSettings(Arrays.asList(
+    PluggableInstanceSettings pluggableInstanceSettings = new PluggableInstanceSettings(List.of(
       new PluginConfiguration("Password", new Metadata(true, true))))
     elasticAgentMetadataStore.setPluginInfo(new ElasticAgentPluginInfo(pluginDescriptor(), pluggableInstanceSettings, pluggableInstanceSettings, null, null, null))
     def jsonReader = GsonTransformer.instance.jsonReaderFrom(clusterProfile)

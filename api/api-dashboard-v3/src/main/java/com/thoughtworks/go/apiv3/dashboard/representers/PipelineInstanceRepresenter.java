@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,7 @@ public class PipelineInstanceRepresenter {
             .add("counter", model.getCounter())
             .add("triggered_by", model.getApprovedByForDisplay())
             .add("scheduled_at", model.getScheduledDate())
-            .addChild("_embedded", childWriter -> {
-                childWriter.addChildList("stages", getStages(model));
-            });
+            .addChild("_embedded", childWriter -> childWriter.addChildList("stages", getStages(model)));
     }
 
     private static Consumer<OutputLinkWriter> addLinks(PipelineInstanceModel model) {
@@ -42,12 +40,6 @@ public class PipelineInstanceRepresenter {
     }
 
     private static Consumer<OutputListWriter> getStages(PipelineInstanceModel model) {
-        return writer -> {
-            model.getStageHistory().forEach(stage -> {
-                writer.addChild(childWriter -> {
-                    StageRepresenter.toJSON(childWriter, stage, model.getName(), String.valueOf(model.getCounter()));
-                });
-            });
-        };
+        return writer -> model.getStageHistory().forEach(stage -> writer.addChild(childWriter -> StageRepresenter.toJSON(childWriter, stage, model.getName(), String.valueOf(model.getCounter()))));
     }
 }

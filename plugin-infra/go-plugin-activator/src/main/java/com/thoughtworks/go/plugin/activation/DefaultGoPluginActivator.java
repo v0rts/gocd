@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -418,7 +418,7 @@ public class DefaultGoPluginActivator implements GoPluginActivator {
             errors.add("Unable to find extension type from plugin identifier in class " + serviceImplementation.getClass().getCanonicalName() + ".\nError: \"" + e.getMessage() + "\".\nA valid plugin identifier looks like this:\n" +
                     "  @Override\n" +
                     "  public GoPluginIdentifier pluginIdentifier() {\n" +
-                    "      return new GoPluginIdentifier(\"extension-type\", Collections.singletonList(\"1.0\"));\n" +
+                    "      return new GoPluginIdentifier(\"extension-type\", List.of(\"1.0\"));\n" +
                     "  }\n");
         }
         return null;

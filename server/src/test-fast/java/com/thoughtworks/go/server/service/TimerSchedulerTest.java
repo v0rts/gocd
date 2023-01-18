@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import com.thoughtworks.go.serverhealth.HealthStateScope;
 import com.thoughtworks.go.serverhealth.HealthStateType;
 import com.thoughtworks.go.serverhealth.ServerHealthService;
 import com.thoughtworks.go.serverhealth.ServerHealthState;
-import com.thoughtworks.go.util.SystemEnvironment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,11 +39,9 @@ import java.util.List;
 import static com.thoughtworks.go.helper.PipelineConfigMother.pipelineConfig;
 import static com.thoughtworks.go.helper.PipelineConfigMother.pipelineConfigWithTimer;
 import static com.thoughtworks.go.server.service.TimerScheduler.PIPELINE_TRIGGGER_TIMER_GROUP;
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobKey.jobKey;
 import static org.quartz.TriggerKey.triggerKey;
@@ -56,8 +53,6 @@ public class TimerSchedulerTest {
     @Mock
     private GoConfigService goConfigService;
     @Mock
-    private SystemEnvironment systemEnvironment;
-    @Mock
     private MaintenanceModeService maintenanceModeService;
 
     @AfterEach
@@ -67,12 +62,12 @@ public class TimerSchedulerTest {
 
     @Test
     public void shouldRegisterJobsWithSchedulerForEachPipelineWithTimerOnInit() throws Exception {
-        List<PipelineConfig> pipelineConfigs = asList(
+        List<PipelineConfig> pipelineConfigs = List.of(
                 pipelineConfigWithTimer("uat", "0 15 10 ? * MON-FRI"),
                 pipelineConfig("dist"));
         when(goConfigService.getAllPipelineConfigs()).thenReturn(pipelineConfigs);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService);
         timerScheduler.initialize();
 
         JobDetail expectedJob = JobBuilder.newJob()
@@ -88,11 +83,11 @@ public class TimerSchedulerTest {
 
     @Test
     public void shouldUpdateServerHealthStatusWhenCronSpecCantBeParsed() throws Exception {
-        when(goConfigService.getAllPipelineConfigs()).thenReturn(asList(pipelineConfigWithTimer("uat", "bad cron spec!!!")));
+        when(goConfigService.getAllPipelineConfigs()).thenReturn(List.of(pipelineConfigWithTimer("uat", "bad cron spec!!!")));
 
         ServerHealthService serverHealthService = mock(ServerHealthService.class);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, serverHealthService, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, serverHealthService, maintenanceModeService);
         timerScheduler.initialize();
 
         verify(serverHealthService).update(
@@ -102,12 +97,12 @@ public class TimerSchedulerTest {
 
     @Test
     public void shouldScheduleOtherPipelinesEvenIfOneHasAnInvalidCronSpec() throws Exception {
-        List<PipelineConfig> pipelineConfigs = asList(
+        List<PipelineConfig> pipelineConfigs = List.of(
                 pipelineConfigWithTimer("uat", "---- bad cron spec!"),
                 pipelineConfigWithTimer("dist", "0 15 10 ? * MON-FRI"));
         when(goConfigService.getAllPipelineConfigs()).thenReturn(pipelineConfigs);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, mock(ServerHealthService.class), maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, mock(ServerHealthService.class), maintenanceModeService);
         timerScheduler.initialize();
 
         JobDetail expectedJob = JobBuilder.newJob()
@@ -129,11 +124,11 @@ public class TimerSchedulerTest {
         when(scheduler.scheduleJob(any(JobDetail.class), any(Trigger.class))).thenThrow(
                 new SchedulerException("scheduling failed!"));
 
-        when(goConfigService.getAllPipelineConfigs()).thenReturn(asList(pipelineConfigWithTimer("uat", "* * * * * ?")));
+        when(goConfigService.getAllPipelineConfigs()).thenReturn(List.of(pipelineConfigWithTimer("uat", "* * * * * ?")));
 
         ServerHealthService serverHealthService = mock(ServerHealthService.class);
 
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, serverHealthService, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, serverHealthService, maintenanceModeService);
         timerScheduler.initialize();
 
         verify(serverHealthService).update(
@@ -144,7 +139,7 @@ public class TimerSchedulerTest {
 
     @Test
     public void shouldRegisterAsACruiseConfigChangeListener() throws Exception {
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService);
 
         timerScheduler.initialize();
 
@@ -155,7 +150,7 @@ public class TimerSchedulerTest {
     public void shouldRescheduleTimerTriggerPipelineWhenItsConfigChanges() throws SchedulerException {
         String pipelineName = "timer-based-pipeline";
         when(scheduler.getJobDetail(jobKey(pipelineName, PIPELINE_TRIGGGER_TIMER_GROUP))).thenReturn(mock(JobDetail.class));
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService, systemEnvironment);
+        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService);
         ArgumentCaptor<ConfigChangedListener> captor = ArgumentCaptor.forClass(ConfigChangedListener.class);
         doNothing().when(goConfigService).register(captor.capture());
         timerScheduler.initialize();
@@ -179,17 +174,5 @@ public class TimerSchedulerTest {
         verify(scheduler).unscheduleJob(triggerKey(pipelineName, PIPELINE_TRIGGGER_TIMER_GROUP));
         verify(scheduler).deleteJob(jobKey(pipelineName, PIPELINE_TRIGGGER_TIMER_GROUP));
         verify(scheduler).scheduleJob(jobDetailArgumentCaptor.getValue(), triggerArgumentCaptor.getValue());
-    }
-
-    @Test
-    public void shouldNotScheduleJobsForAServerInStandbyMode() {
-        TimerScheduler timerScheduler = new TimerScheduler(scheduler, goConfigService, null, null, maintenanceModeService, systemEnvironment);
-
-        when(systemEnvironment.isServerInStandbyMode()).thenReturn(true);
-
-        timerScheduler.initialize();
-
-        verifyNoInteractions(scheduler);
-        verifyNoInteractions(goConfigService);
     }
 }

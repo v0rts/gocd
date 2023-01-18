@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,9 +47,7 @@ public class ExecTaskRepresenter {
         jsonReader.readStringIfPresent("command", execTask::setCommand);
         jsonReader.readArrayIfPresent("arguments", arguments -> {
             ArrayList<String> argList = new ArrayList<>();
-            arguments.forEach(argument -> {
-                argList.add(argument.getAsString());
-            });
+            arguments.forEach(argument -> argList.add(argument.getAsString()));
             execTask.setArgsList(argList.toArray(new String[arguments.size()]));
         });
         jsonReader.readStringIfPresent("args", execTask::setArgs);

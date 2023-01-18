@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,31 +25,13 @@ public class DashboardRepresenter {
             .addLinks(linksWriter -> linksWriter.addLink("self", Routes.Dashboard.SELF)
                 .addAbsoluteLink("doc", Routes.Dashboard.DOC))
             .add("_personalization", dashboardFor.getPersonalizationEtag())
-            .addChild("_embedded", childWriter -> {
-                childWriter
+            .addChild("_embedded", childWriter -> childWriter
 
-                    .addChildList("pipeline_groups", listWriter -> {
-                        dashboardFor.getPipelineGroups().forEach(group -> {
-                            listWriter.addChild(childItemWriter -> {
-                                DashboardGroupRepresenter.toJSON(childItemWriter, group, dashboardFor.getUsername());
-                            });
-                        });
-                    })
+                .addChildList("pipeline_groups", listWriter -> dashboardFor.getPipelineGroups().forEach(group -> listWriter.addChild(childItemWriter -> DashboardGroupRepresenter.toJSON(childItemWriter, group, dashboardFor.getUsername()))))
 
-                    .addChildList("environments", listWriter -> {
-                        dashboardFor.getEnvironments().forEach(group -> {
-                            listWriter.addChild(childItemWriter -> {
-                                DashboardGroupRepresenter.toJSON(childItemWriter, group, dashboardFor.getUsername());
-                            });
-                        });
-                    })
+                .addChildList("environments", listWriter -> dashboardFor.getEnvironments().forEach(group -> listWriter.addChild(childItemWriter -> DashboardGroupRepresenter.toJSON(childItemWriter, group, dashboardFor.getUsername()))))
 
-                    .addChildList("pipelines", listWriter -> {
-                        dashboardFor.getPipelines()
-                            .forEach(pipeline -> {
-                                listWriter.addChild(childItemWriter -> PipelineRepresenter.toJSON(childItemWriter, pipeline, dashboardFor.getUsername()));
-                            });
-                    });
-            });
+                .addChildList("pipelines", listWriter -> dashboardFor.getPipelines()
+                        .forEach(pipeline -> listWriter.addChild(childItemWriter -> PipelineRepresenter.toJSON(childItemWriter, pipeline, dashboardFor.getUsername())))));
     }
 }

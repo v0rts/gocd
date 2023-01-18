@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -285,7 +285,6 @@ dependencies {
     implementation project.deps.commonsFileUpload
   }
   implementation project.deps.aspectj
-  implementation project.deps.aspectjWeaver
   implementation project.deps.urlrewrite
 
   implementation project.deps.freemarker
@@ -327,8 +326,6 @@ dependencies {
   testImplementation project.deps.xmlUnit
 
   testImplementation project(':test:http-mocks')
-
-  testImplementation project.deps.httpClientMock
 
   testImplementation project.deps.junit5Api
   testImplementation project.deps.junit5Params
@@ -648,22 +645,6 @@ tasks.withType(Test) {
   }
 
   onOutput { TestDescriptor descriptor, TestOutputEvent event ->
-    if (event.message.startsWith("Compiler warnings:")) {
-      return
-    }
-
-    if (event.message.startsWith("  WARNING:  'org.apache.xerces.jaxp.SAXParserImpl:")) {
-      return
-    }
-
-    if (event.message.startsWith("Warning:  org.apache.xerces.parsers.SAXParser:")) {
-      return
-    }
-
-    if (event.message.startsWith("Warning:  org.apache.xerces.jaxp.SAXParserImpl\$JAXPSAXParser")) {
-      return
-    }
-
     if (event.destination == TestOutputEvent.Destination.StdOut) {
       logger.quiet(TextUtil.toPlatformLineSeparators(TextUtil.indent(event.getMessage(), "  OUT: ")))
     } else if (event.destination == TestOutputEvent.Destination.StdErr) {
@@ -750,13 +731,13 @@ task war(type: Jar) {
      *   [1, 2] + [5] - [5] + [5] == [1, 2, 5] // so far, so good
      *   [1, 2] + [5] + [5] - [5] == [1, 2]    // surprise! subtracting [5] removes all instances of 5
      */
-      project.configurations.packagingOnly + (
-      project.configurations.allApis +
-      project.configurations.spark +
-      project.configurations.compileClasspath -
-      project.configurations.doNotPackage
+    project.configurations.packagingOnly + (
+      project.configurations.allApis
+        + project.configurations.spark
+        + project.configurations.compileClasspath
+        - project.configurations.doNotPackage
     )
-  ).collect {f -> f.toString()}.toSet()
+  ).collect { f -> f.toString() }.toSet()
 
   // exclude app-server because it causes class cast exceptions (loaded by different classloaders)
   classpath.removeAll([project(':app-server').jar.archiveFile.get().toString(), jar.archiveFile.get().toString()])
@@ -780,7 +761,6 @@ task war(type: Jar) {
   from(project.project(':config:config-server').sourceSets.main.resources.srcDirs) {
     into('/') include('cruise-config.xsd')
   }
-  from("messages/message.properties") { into('/') }
 
   from({ compileAssets }) { into '/WEB-INF/rails/public/assets' }
 
@@ -802,13 +782,12 @@ task verifyWar(type: VerifyJarTask) {
         "activemq-broker-${project.versions.activeMQ}.jar",
         "activemq-client-${project.versions.activeMQ}.jar",
         "activemq-openwire-legacy-${project.versions.activeMQ}.jar",
-        "angus-activation-1.0.0.jar",
-        "angus-core-1.0.0.jar",
+        "angus-activation-${project.versions.mailSmtp}.jar",
+        "angus-core-${project.versions.mailSmtp}.jar",
         "animal-sniffer-annotations-1.9.jar",
         "ant-${project.versions.apacheAnt}.jar",
         "antlr-2.7.6.jar",
         "aopalliance-1.0.jar",
-        "aspectjrt-${project.versions.aspectj}.jar",
         "aspectjweaver-${project.versions.aspectj}.jar",
         "base-${project.version}.jar",
         "checker-qual-3.12.0.jar",
@@ -863,7 +842,7 @@ task verifyWar(type: VerifyJarTask) {
         "jackson-annotations-${project.versions.jacksonBom}.jar",
         "jackson-core-${project.versions.jacksonBom}.jar",
         "jackson-databind-${project.versions.jacksonBom}.jar",
-        "jakarta.activation-api-2.1.0.jar",
+        "jakarta.activation-api-2.1.1.jar",
         "jakarta.annotation-api-${project.versions.jakartaAnnotation}.jar",
         "jakarta.mail-api-${project.versions.mail}.jar",
         "jakarta.servlet-api-${project.versions.servletApi}.jar",
@@ -883,6 +862,7 @@ task verifyWar(type: VerifyJarTask) {
         "jsr305-3.0.2.jar",
         "jta-1.1.jar",
         "liquibase-core-${project.versions.liquibase}.jar",
+        "liquibase-slf4j-${project.versions.liquibaseSlf4j}.jar",
         "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
         "mybatis-${project.versions.mybatis}.jar",
         "mybatis-spring-${project.versions.mybatisSpring}.jar",
@@ -1030,7 +1010,6 @@ task licenseReportAggregate {
                                  'gocd-yaml-config-plugin.jar',
                                  'gocd-filebased-authentication-plugin.jar',
                                  'gocd-ldap-authentication-plugin.jar',
-                                 'gocd-yum-repository-poller-plugin.jar',
                                  'gocd-file-based-secrets-plugin.jar']
 
   def getAllJarDependencies = {

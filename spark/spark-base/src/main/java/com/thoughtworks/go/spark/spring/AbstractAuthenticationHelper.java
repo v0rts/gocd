@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -177,7 +177,7 @@ public abstract class AbstractAuthenticationHelper {
             return;
         }
 
-        JsonElement group = new JsonParser().parse(request.body()).getAsJsonObject().get("group");
+        JsonElement group = JsonParser.parseString(request.body()).getAsJsonObject().get("group");
         if (group == null) {
             throw new UnprocessableEntityException("Pipeline group must be specified for creating a pipeline.");
         } else {

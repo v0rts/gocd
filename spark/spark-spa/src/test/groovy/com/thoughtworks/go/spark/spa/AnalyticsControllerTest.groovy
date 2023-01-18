@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,7 +107,7 @@ class AnalyticsControllerTest implements ControllerTrait<AnalyticsController>, S
       @Test
       void "should return analytics data"() {
         AnalyticsData expected = new AnalyticsData(GSON.toJson([1, 2, 3]), "/path/to/template")
-        when(analyticsExtension.getAnalytics("pluginId", "pipeline", "metric", Collections.singletonMap("pipeline_name", getPipelineName()))).thenReturn(expected)
+        when(analyticsExtension.getAnalytics("pluginId", "pipeline", "metric", Map.of("pipeline_name", getPipelineName()))).thenReturn(expected)
         get(controller.controllerPath("pluginId", "pipeline", "metric") + "?pipeline_name=" + getPipelineName())
 
         assertThatResponse().isOk().hasJsonBody(expected.toMap())

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 
 public class ScheduleCheckMessageMatcher {
     public static ScheduleCheckMessage matchScheduleCheckMessage(final String expectedPipelineName) {
-        return argThat(new ArgumentMatcher<ScheduleCheckMessage>() {
+        return argThat(new ArgumentMatcher<>() {
 
             @Override
             public boolean matches(ScheduleCheckMessage o) {

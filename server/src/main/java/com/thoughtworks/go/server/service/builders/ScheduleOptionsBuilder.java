@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import com.thoughtworks.go.serverhealth.HealthStateScope;
 import com.thoughtworks.go.serverhealth.HealthStateType;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -37,7 +36,7 @@ public class ScheduleOptionsBuilder {
 
     public ScheduleOptionsBuilder(GoConfigService goConfigService) {
         this.goConfigService = goConfigService;
-        builders = Arrays.asList(new MDUOptionBuilder(), new MaterialsBuilder(goConfigService), new EnvironmentVariableBuilder(goConfigService), new SecureEnvironmentVariableBuilder(goConfigService));
+        builders = List.of(new MDUOptionBuilder(), new MaterialsBuilder(goConfigService), new EnvironmentVariableBuilder(goConfigService), new SecureEnvironmentVariableBuilder(goConfigService));
     }
 
     public ScheduleOptions build(HttpOperationResult result, String pipelineName, PipelineScheduleOptions pipelineScheduleOptions) {

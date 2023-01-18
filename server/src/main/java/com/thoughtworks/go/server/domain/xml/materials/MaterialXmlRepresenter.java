@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,10 +49,8 @@ public abstract class MaterialXmlRepresenter implements XmlRepresentable {
         materialBuilder.attr("materialUri", ctx.materialUri(pipelineName, pipelineCounter, material.getPipelineUniqueFingerprint()));
         material.getAttributesForXml().forEach((key, value) -> materialBuilder.attr(key, value.toString()));
 
-        materialBuilder.node("modifications", modificationBuilder -> {
-            materialRevision.getModifications()
-                .forEach(modification -> populateModification(modificationBuilder, modification, ctx));
-        });
+        materialBuilder.node("modifications", modificationBuilder -> materialRevision.getModifications()
+            .forEach(modification -> populateModification(modificationBuilder, modification, ctx)));
     }
 
     protected abstract void populateModification(ElementBuilder builder, Modification modification, XmlWriterContext ctx);

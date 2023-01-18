@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigReferenceElements {
-    private Map<String, Map<String, Object>> collectionRegistry;
+    private final Map<String, Map<String, Object>> collectionRegistry;
 
     public ConfigReferenceElements() {
         collectionRegistry = new HashMap<>();

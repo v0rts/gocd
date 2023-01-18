@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,21 +26,13 @@ import com.thoughtworks.go.config.remote.RepoConfigOrigin;
 public class InternalPipelineGroupsRepresenter {
     public static void toJSON(OutputWriter outputWriter, PipelineGroupsViewModel pipelineGroupsViewModel) {
         outputWriter.
-                addChildList("groups", groupsWriter -> {
-                    pipelineGroupsViewModel.getPipelineGroups().forEach(group -> {
-                        groupsWriter.addChild(groupWriter -> {
-                            groupWriter.add("name", group.getGroup())
-                                    .addChildList("pipelines",
-                                            outputListWriter -> group.forEach(pipelineConfig -> {
-                                                outputListWriter.addChild(pipelineWriter -> {
-                                                    pipelineWriter.add("name", pipelineConfig.name());
-                                                    writeOrigin(pipelineWriter, pipelineConfig.getOrigin());
-                                                    renderEnvironment(pipelineWriter, pipelineConfig, pipelineGroupsViewModel);
-                                                });
-                                            }));
-                        });
-                    });
-                });
+                addChildList("groups", groupsWriter -> pipelineGroupsViewModel.getPipelineGroups().forEach(group -> groupsWriter.addChild(groupWriter -> groupWriter.add("name", group.getGroup())
+                                .addChildList("pipelines",
+                                        outputListWriter -> group.forEach(pipelineConfig -> outputListWriter.addChild(pipelineWriter -> {
+                                                pipelineWriter.add("name", pipelineConfig.name());
+                                                writeOrigin(pipelineWriter, pipelineConfig.getOrigin());
+                                                renderEnvironment(pipelineWriter, pipelineConfig, pipelineGroupsViewModel);
+                                            }))))));
     }
 
     private static void renderEnvironment(OutputWriter pipelineWriter, PipelineConfig pipelineConfig, PipelineGroupsViewModel environments) {

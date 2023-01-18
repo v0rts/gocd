@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,9 +92,7 @@ public class ConfigConverter {
 
     private void validatePartialConfigEnvironments(PartialConfig partialConfig) {
         HashSet<String> uniqueAgentUuids = new HashSet<>(agentService.getAllRegisteredAgentUUIDs());
-        partialConfig.getEnvironments().forEach(environmentConfig -> {
-            environmentConfig.validateContainsAgentUUIDsFrom(uniqueAgentUuids);
-        });
+        partialConfig.getEnvironments().forEach(environmentConfig -> environmentConfig.validateContainsAgentUUIDsFrom(uniqueAgentUuids));
     }
 
     public Map<String, List<CRPipeline>> groupPipelinesByGroupName(Collection<CRPipeline> pipelines) {

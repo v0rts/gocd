@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static com.thoughtworks.go.serverhealth.HealthStateScope.forJob;
 import static com.thoughtworks.go.serverhealth.HealthStateType.general;
@@ -216,7 +216,7 @@ class ConsoleActivityMonitorTest {
         JobIdentifier secondJob = new JobIdentifier("pipeline-bar", 12, "bar-12", "stage-baz", "15", "quux");
 
         JobInstanceService jobInstanceService = mock(JobInstanceService.class);
-        when(jobInstanceService.allRunningJobs()).thenReturn(Arrays.asList(scheduledInstance(firstJob), buildingInstance(secondJob)));
+        when(jobInstanceService.allRunningJobs()).thenReturn(List.of(scheduledInstance(firstJob), buildingInstance(secondJob)));
         consoleActivityMonitor = new ConsoleActivityMonitor(timeProvider, systemEnvironment, jobInstanceService, serverHealthService, goConfigService, consoleService);
         consoleActivityMonitor.populateActivityMap();
         stubInitializerCallsForActivityMonitor(jobInstanceService);

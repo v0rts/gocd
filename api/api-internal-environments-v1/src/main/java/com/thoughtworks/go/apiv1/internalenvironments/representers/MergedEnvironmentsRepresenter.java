@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,7 @@ import java.util.List;
 
 public class MergedEnvironmentsRepresenter {
     public static void toJSON(OutputWriter outputWriter, List<EnvironmentConfig> allMergedEnvironments) {
-        outputWriter.addChild("_embedded", embeddedWriter -> {
-            embeddedWriter.addChildList("environments", outputListWriter -> {
-                allMergedEnvironments.forEach(environmentConfig -> {
-                    outputListWriter.addChild(childWriter -> MergedEnvironmentRepresenter.toJSON(childWriter, environmentConfig));
-                });
-            });
-        });
+        outputWriter.addChild("_embedded", embeddedWriter -> embeddedWriter.addChildList("environments", outputListWriter -> allMergedEnvironments.forEach(environmentConfig -> outputListWriter.addChild(childWriter -> MergedEnvironmentRepresenter.toJSON(childWriter, environmentConfig)))));
 
     }
 }

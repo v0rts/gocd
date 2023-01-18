@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,6 +75,7 @@ class SupportedEntityTest {
         List<String> entities = unmodifiableListOf(PIPELINE_GROUP, ENVIRONMENT);
 
         assertThat(entities).hasSize(2).contains(PIPELINE_GROUP.getType(), ENVIRONMENT.getType());
+        //noinspection DataFlowIssue
         assertThatCode(() -> entities.add("foo"))
                 .isInstanceOf(UnsupportedOperationException.class);
     }

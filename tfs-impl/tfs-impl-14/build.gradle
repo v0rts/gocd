@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,10 +81,10 @@ task fatJar(type: Jar) {
 task verifyJar(type: VerifyJarTask) {
   jarTask = fatJar
   expectedJars = [
-      "lib": [
-          "tfs-impl-14-${project.version}-classes.jar",
-          "com.microsoft.tfs.sdk-${project.versions.tfsSdk}.jar",
-      ]
+    "lib": [
+      "tfs-impl-14-${project.version}-classes.jar",
+      "com.microsoft.tfs.sdk-${project.versions.tfsSdk}.jar",
+    ]
   ]
 }
 

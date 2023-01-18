@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -264,7 +265,7 @@ class AuthenticationControllerTest {
                 authenticateAsAnonymous();
                 originalSession = request.getSession(false);
 
-                final AccessToken credentials = new AccessToken(Collections.singletonMap("Foo", "Bar"));
+                final AccessToken credentials = new AccessToken(Map.of("Foo", "Bar"));
                 final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
                 final AuthenticationToken<AccessToken> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, credentials, null, 0, null);
 
@@ -290,7 +291,7 @@ class AuthenticationControllerTest {
                 authenticateAsAnonymous();
 
                 final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
-                final AccessToken credentials = new AccessToken(Collections.singletonMap("Foo", "Bar"));
+                final AccessToken credentials = new AccessToken(Map.of("Foo", "Bar"));
                 final AuthenticationToken<AccessToken> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, credentials, null, 0, null);
 
                 when(webBasedPluginAuthenticationProvider.fetchAccessToken(PLUGIN_ID, Collections.emptyMap(), Collections.emptyMap()))

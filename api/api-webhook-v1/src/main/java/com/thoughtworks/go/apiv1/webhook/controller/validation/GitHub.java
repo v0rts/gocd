@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +25,12 @@ import java.security.MessageDigest;
 import java.util.Set;
 import java.util.function.Function;
 
-import static java.util.Collections.singleton;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class GitHub implements ValidateAuth.Provider {
-    public static final Set<String> PUSH = singleton("push");
-    public static final Set<String> PR = singleton("pull_request");
-    public static final Set<String> PING = singleton("ping");
+    public static final Set<String> PUSH = Set.of("push");
+    public static final Set<String> PR = Set.of("pull_request");
+    public static final Set<String> PING = Set.of("ping");
 
     public static String calculateSignature(String secret, String content) {
         return "sha1=" + new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret).hmacHex(content);

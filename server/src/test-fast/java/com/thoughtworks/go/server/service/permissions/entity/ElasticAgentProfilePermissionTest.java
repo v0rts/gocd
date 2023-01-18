@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,8 +102,8 @@ public class ElasticAgentProfilePermissionTest {
         Map<String, Object> permissions = permission.permissions(username);
 
         Map<String, Object> elasticAgentProfile = new LinkedHashMap<>();
-        elasticAgentProfile.put("view", Arrays.asList("build-agent", "deploy-agent"));
-        elasticAgentProfile.put("administer", Arrays.asList("build-agent"));
+        elasticAgentProfile.put("view", List.of("build-agent", "deploy-agent"));
+        elasticAgentProfile.put("administer", List.of("build-agent"));
 
         assertThat(permissions).isEqualTo(elasticAgentProfile);
     }

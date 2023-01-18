@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,10 +47,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.thoughtworks.go.spark.Routes.ConfigRepos.OPERATIONS_BASE;
 import static com.thoughtworks.go.spark.Routes.ConfigRepos.PREFLIGHT_PATH;
@@ -119,7 +116,7 @@ public class ConfigRepoOperationsControllerV1 extends ApiController implements S
             }
 
             if (contents.isEmpty()) {
-                result.update(Collections.singletonList("No file content provided; check to make sure you POST the form data as `files[]=`"), false);
+                result.update(List.of("No file content provided; check to make sure you POST the form data as `files[]=`"), false);
             } else {
                 PartialConfig partialConfig = plugin.parseContent(contents, context);
                 partialConfig.setOrigins(adHocConfigOrigin(repo));

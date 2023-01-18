@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ public class GitMaterialRepresenter extends ScmMaterialRepresenter<GitMaterialCo
     @Override
     public Consumer<OutputWriter> toJSON(GitMaterialConfig gitMaterialConfig) {
         return super.toJSON(gitMaterialConfig).andThen(
-                jsonWriter -> {
-                    jsonWriter.addWithDefaultIfBlank("branch", gitMaterialConfig.getBranch(), "master");
-                });
+                jsonWriter -> jsonWriter.addWithDefaultIfBlank("branch", gitMaterialConfig.getBranch(), "master"));
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2022 Thoughtworks, Inc.
+  ~ Copyright 2023 Thoughtworks, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -81,6 +81,7 @@
 
   <!-- Change to INFO to enable request logging -->
   <logger name="org.eclipse.jetty.server.RequestLog" level="WARN"/>
+  <logger name="liquibase.changelog.visitor.UpdateVisitor" level="DEBUG"/>
 
   <!-- make sure this is the last line in the config -->
   <include optional="true" file="${cruise.config.dir:-config}/logback-include.xml"/>

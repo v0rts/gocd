@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -142,7 +145,7 @@ public class SCMMaterialSource extends EntityConfigChangedListener<ConfigRepoCon
     }
 
     private abstract class InternalConfigChangeListener extends EntityConfigChangedListener<Object> {
-        private final List<Class<?>> securityConfigClasses = Arrays.asList(
+        private final List<Class<?>> securityConfigClasses = List.of(
                 PipelineConfig.class,
                 PackageDefinition.class,
                 PackageRepository.class,

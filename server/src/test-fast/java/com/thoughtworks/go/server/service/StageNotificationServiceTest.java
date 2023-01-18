@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static com.thoughtworks.go.server.service.StageNotificationService.MATERIAL_SECTION_HEADER;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -112,8 +112,8 @@ public class StageNotificationServiceTest {
     private String prepareOneMatchedUser() {
         String jezMail = "jez@cruise.com";
         User jez = new User("jez", new String[]{"lgao"}, jezMail, true);
-        jez.setNotificationFilters(Arrays.asList(new NotificationFilter("go", "dev", StageEvent.All, true)));
-        when(userService.findValidSubscribers(new StageConfigIdentifier("go", "dev"))).thenReturn(new Users(Arrays.asList(jez)));
+        jez.setNotificationFilters(List.of(new NotificationFilter("go", "dev", StageEvent.All, true)));
+        when(userService.findValidSubscribers(new StageConfigIdentifier("go", "dev"))).thenReturn(new Users(List.of(jez)));
         return jezMail;
     }
 

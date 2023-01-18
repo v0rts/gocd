@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,11 @@ import com.thoughtworks.go.plugin.access.configrepo.ConfigRepoMigrator;
 import com.thoughtworks.go.plugin.configrepo.codec.GsonCodec;
 import com.thoughtworks.go.plugin.configrepo.contract.CRParseResult;
 import org.junit.jupiter.api.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static com.thoughtworks.go.util.TestUtils.contains;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class JsonMessageHandler1_0Test {
@@ -100,11 +98,6 @@ public class JsonMessageHandler1_0Test {
     }
 
     private void makeMigratorReturnSameJSON() {
-        when(configRepoMigrator.migrate(anyString(), anyInt())).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                return invocationOnMock.getArguments()[0];
-            }
-        });
+        when(configRepoMigrator.migrate(anyString(), anyInt())).thenAnswer(invocationOnMock -> invocationOnMock.getArguments()[0]);
     }
 }

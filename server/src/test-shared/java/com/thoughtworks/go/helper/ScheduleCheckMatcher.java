@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,22 @@
  */
 package com.thoughtworks.go.helper;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.thoughtworks.go.server.messaging.StubScheduleCheckCompletedListener;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.util.List;
+
 public class ScheduleCheckMatcher {
     public static Matcher<String[]> scheduleCheckCompleted(final StubScheduleCheckCompletedListener listener) {
-        return new TypeSafeMatcher<String[]>() {
+        return new TypeSafeMatcher<>() {
             private List<String> expected;
             private List<String> actual;
 
             @Override
             public boolean matchesSafely(String[] expected) {
-                this.expected = Arrays.asList(expected);
+                this.expected = List.of(expected);
                 this.actual = listener.pipelines;
                 return actual.containsAll(this.expected);
             }

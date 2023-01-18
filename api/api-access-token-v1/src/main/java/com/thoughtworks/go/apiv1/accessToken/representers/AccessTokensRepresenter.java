@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,7 @@ public class AccessTokensRepresenter {
                 .addLink("self", urlBuilder.base())
                 .addAbsoluteLink("doc", urlBuilder.doc()))
                 .addChild("_embedded", embeddedWriter ->
-                        embeddedWriter.addChildList("access_tokens", AccessTokenWriter -> {
-                            allTokens.forEach(token -> AccessTokenWriter.addChild(artifactStoreWriter -> AccessTokenRepresenter.toJSON(artifactStoreWriter, urlBuilder, token)));
-                        })
+                        embeddedWriter.addChildList("access_tokens", AccessTokenWriter -> allTokens.forEach(token -> AccessTokenWriter.addChild(artifactStoreWriter -> AccessTokenRepresenter.toJSON(artifactStoreWriter, urlBuilder, token))))
                 );
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,8 +128,9 @@ public class GoConfigMigration {
     private List<URL> upgradeScripts(int currentVersion, int targetVersion) {
         ArrayList<URL> xsls = new ArrayList<>();
         for (int i = currentVersion + 1; i <= targetVersion; i++) {
-            URL xsl = getResource("/upgrades/" + i + ".xsl");
-            bombIfNull(xsl, "Config File upgrade script named " + i + ".xsl is missing. Unable to perform upgrade.");
+            String scriptFile = i + ".xsl";
+            URL xsl = getResource("/upgrades/" + scriptFile);
+            bombIfNull(xsl, () -> "Config File upgrade script named " + scriptFile + " is missing. Unable to perform upgrade.");
             xsls.add(xsl);
         }
         return xsls;

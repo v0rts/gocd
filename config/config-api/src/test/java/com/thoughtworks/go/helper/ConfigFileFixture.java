@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.thoughtworks.go.helper;
 import com.thoughtworks.go.config.*;
 import com.thoughtworks.go.domain.label.PipelineLabel;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static com.thoughtworks.go.util.GoConstants.CONFIG_SCHEMA_VERSION;
 
@@ -1799,7 +1799,7 @@ public final class ConfigFileFixture {
     public static CruiseConfig configWith(PipelineConfig... pipelineConfigs) {
         BasicPipelineConfigs configs = new BasicPipelineConfigs();
         configs.setGroup("defaultGroup");
-        configs.addAll(Arrays.asList(pipelineConfigs));
+        configs.addAll(List.of(pipelineConfigs));
         return new BasicCruiseConfig(configs);
     }
 

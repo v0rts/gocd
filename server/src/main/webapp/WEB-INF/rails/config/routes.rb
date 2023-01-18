@@ -1,5 +1,5 @@
 #
-# Copyright 2022 Thoughtworks, Inc.
+# Copyright 2023 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -68,7 +68,5 @@ Rails.application.routes.draw do
   # bring back routes, these are referenced from rails pages...
   get "agents/:uuid" => 'agent_details#show', as: :agent_detail, constraints: {uuid: ALLOW_DOTS}
   get "agents/:uuid/job_run_history" => 'agent_details#job_run_history', as: :job_run_history_on_agent, constraints: {uuid: ALLOW_DOTS}
-
-  get "errors/inactive" => 'go_errors#inactive'
 
 end

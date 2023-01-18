@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,8 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,15 +100,11 @@ public class AssetsContextHandlerTest {
     }
 
     private Matcher<? super String> isSameFileAs(final String expected) {
-        return new BaseMatcher<String>() {
+        return new BaseMatcher<>() {
             @Override
             public boolean matches(Object o) {
                 String actualFile = (String) o;
-
-                if ("Windows".equals(new SystemEnvironment().getOperatingSystemFamilyName())) {
-                    return expected.equalsIgnoreCase(actualFile);
-                }
-                return expected.equals(actualFile);
+                return OS.WINDOWS.equals(OS.current()) ? expected.equalsIgnoreCase(actualFile) : expected.equals(actualFile);
             }
 
             @Override

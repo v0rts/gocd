@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,10 @@ package com.thoughtworks.go.server.security;
 import com.thoughtworks.go.util.SystemEnvironment;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 
 public class HeaderConstraint {
-    private static final List<String> HEADERS = Arrays.asList("Confirm", "X-GoCD-Confirm");
+    private static final List<String> HEADERS = List.of("Confirm", "X-GoCD-Confirm");
     private SystemEnvironment systemEnvironment;
 
     public HeaderConstraint(SystemEnvironment systemEnvironment) {

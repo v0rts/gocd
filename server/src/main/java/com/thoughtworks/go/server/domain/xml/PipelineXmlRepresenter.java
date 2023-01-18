@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,19 +54,13 @@ public class PipelineXmlRepresenter implements XmlRepresentable {
             builder.link(ctx.pipelineXmlLink(pipelineBefore.getPipelineName(), pipelineBefore.getId()), "insertedAfter");
         }
 
-        builder.node("materials", materialBuilder -> {
-            instance.getLatestRevisions().forEach(revision -> {
-                this.populateMaterials(materialBuilder, revision, ctx);
-            });
-        });
+        builder.node("materials", materialBuilder -> instance.getLatestRevisions().forEach(revision -> this.populateMaterials(materialBuilder, revision, ctx)));
 
-        builder.node("stages", stagesBuilder -> {
-            instance.getStageHistory().stream()
-                .filter(stage -> !(stage instanceof NullStageHistoryItem))
-                .forEach(stage -> stagesBuilder.node("stage", stageBuilder -> stageBuilder
-                    .attr("href", ctx.stageXmlLink(stage.getIdentifier())))
-                );
-        });
+        builder.node("stages", stagesBuilder -> instance.getStageHistory().stream()
+            .filter(stage -> !(stage instanceof NullStageHistoryItem))
+            .forEach(stage -> stagesBuilder.node("stage", stageBuilder -> stageBuilder
+                .attr("href", ctx.stageXmlLink(stage.getIdentifier())))
+            ));
 
         builder.cdataNode("approvedBy", instance.getApprovedBy());
         return builder.build();

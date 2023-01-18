@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.thoughtworks.go.server.service.result.LocalizedOperationResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +72,7 @@ public class DeleteArtifactStoreConfigCommand extends ArtifactStoreConfigCommand
             for (JobConfig job : jobs) {
                 final List<PluggableArtifactConfig> artifactConfigs = job.artifactTypeConfigs().findByStoreId(profile.getId());
                 if (!artifactConfigs.isEmpty()) {
-                    usedByPipelines.add(Collections.singletonMap(new JobConfigIdentifier(pipelineConfig.name(), stage.name(), job.name()), artifactConfigs));
+                    usedByPipelines.add(Map.of(new JobConfigIdentifier(pipelineConfig.name(), stage.name(), job.name()), artifactConfigs));
                 }
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,15 @@ import com.thoughtworks.go.server.domain.Username;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.Set;
 
-import static com.thoughtworks.go.util.DataStructureUtils.s;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GoDashboardEnvironmentTest {
     @Test
     public void shouldKnowWhetherAUserCanAdministerIt() {
-        GoDashboardEnvironment env = new GoDashboardEnvironment("env1", new AllowedUsers(s("admin1"), Collections.emptySet()), true);
+        GoDashboardEnvironment env = new GoDashboardEnvironment("env1", new AllowedUsers(Set.of("admin1"), Collections.emptySet()), true);
 
         assertTrue(env.canAdminister(new Username("admin1")));
         assertFalse(env.canAdminister(new Username("viewer1")));

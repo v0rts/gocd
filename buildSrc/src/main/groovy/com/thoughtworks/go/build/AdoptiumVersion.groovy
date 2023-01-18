@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,13 +53,13 @@ class AdoptiumVersion implements Serializable {
     update == null ? '' : 'U'
   }
 
-  def toDownloadURLFor(OperatingSystem os, Architecture arch = Architecture.x64) {
+  def toDownloadURLFor(OperatingSystem os, Architecture arch) {
     "https://github.com/adoptium/temurin${feature}-binaries/releases/download/" +
       "jdk-${urlSafeDisplayVersion()}/" +
       "OpenJDK${feature}${featureSuffix()}-jre_${arch.canonicalName}_${os.adoptiumAlias}_hotspot_${fileSafeDisplayVersion()}.${os.extension}"
   }
 
-  def toSha256SumURLFor(OperatingSystem os, Architecture arch = Architecture.x64) {
+  def toSha256SumURLFor(OperatingSystem os, Architecture arch) {
     "${toDownloadURLFor(os, arch)}.sha256.txt"
   }
 

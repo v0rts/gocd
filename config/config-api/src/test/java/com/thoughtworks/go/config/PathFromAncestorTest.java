@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,24 @@
  */
 package com.thoughtworks.go.config;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.is;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class PathFromAncestorTest {
     @Test
     public void shouldReturnOnlyPath_excludingActualAncestorNode() {
         PathFromAncestor path = new PathFromAncestor(new CaseInsensitiveString("grand-parent/parent/child"));
-        assertThat(path.pathToAncestor(), is(Arrays.asList(new CaseInsensitiveString("child"), new CaseInsensitiveString("parent"))));
+        assertThat(path.pathToAncestor(), is(List.of(new CaseInsensitiveString("child"), new CaseInsensitiveString("parent"))));
     }
 
     @Test
     public void shouldReturnPath_includingActualAncestorNode() {
         PathFromAncestor path = new PathFromAncestor(new CaseInsensitiveString("grand-parent/parent/child"));
-        assertThat(path.pathIncludingAncestor(), is(Arrays.asList(new CaseInsensitiveString("child"), new CaseInsensitiveString("parent"), new CaseInsensitiveString("grand-parent"))));
+        assertThat(path.pathIncludingAncestor(), is(List.of(new CaseInsensitiveString("child"), new CaseInsensitiveString("parent"), new CaseInsensitiveString("grand-parent"))));
     }
 
     @Test

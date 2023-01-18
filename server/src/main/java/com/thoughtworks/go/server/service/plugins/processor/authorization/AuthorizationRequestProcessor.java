@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.thoughtworks.go.server.service.plugins.processor.authorization.AuthorizationRequestProcessor.Request.INVALIDATE_CACHE_REQUEST;
-import static java.util.Arrays.asList;
 
 @Component
 public class AuthorizationRequestProcessor implements GoPluginApiRequestProcessor {
-    private static final List<String> goSupportedVersions = asList("1.0");
+    private static final List<String> goSupportedVersions = List.of("1.0");
 
     private final PluginRoleService pluginRoleService;
 

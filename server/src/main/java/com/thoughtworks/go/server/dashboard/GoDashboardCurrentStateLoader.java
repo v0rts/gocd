@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 package com.thoughtworks.go.server.dashboard;
 
 import com.google.common.collect.Sets;
-import com.thoughtworks.go.config.*;
+import com.thoughtworks.go.config.CaseInsensitiveString;
+import com.thoughtworks.go.config.CruiseConfig;
+import com.thoughtworks.go.config.PipelineConfig;
+import com.thoughtworks.go.config.PipelineConfigs;
 import com.thoughtworks.go.config.security.GoConfigPipelinePermissionsAuthority;
 import com.thoughtworks.go.config.security.Permissions;
 import com.thoughtworks.go.config.security.permissions.NoOnePermission;
@@ -128,7 +131,7 @@ public class GoDashboardCurrentStateLoader {
     }
 
     public GoDashboardPipeline pipelineFor(PipelineConfig pipelineConfig, PipelineConfigs groupConfig) {
-        List<String> pipelineNames = CaseInsensitiveString.toStringList(Collections.singletonList(pipelineConfig.getName()));
+        List<String> pipelineNames = CaseInsensitiveString.toStringList(List.of(pipelineConfig.getName()));
         PipelineInstanceModels pipelineHistoryForDashboard = loadHistoryForPipelines(pipelineNames);
         syncHistoryForDashboard(pipelineHistoryForDashboard, pipelineConfig.name());
         Permissions permissions = permissionsAuthority.permissionsForPipeline(pipelineConfig.name());

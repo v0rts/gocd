@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -68,7 +68,7 @@ class PluginProfilesServiceTest {
         service.validatePluginProperties(command, pluginProfile);
 
         assertThat(pluginProfile.hasErrors()).isTrue();
-        assertThat(pluginProfile.errors().get("pluginId")).isEqualTo(Arrays.asList(errorMessage));
+        assertThat(pluginProfile.errors().get("pluginId")).isEqualTo(List.of(errorMessage));
     }
 
     @Test
@@ -82,6 +82,6 @@ class PluginProfilesServiceTest {
         service.validatePluginProperties(command, pluginProfile);
 
         assertThat(pluginProfile.hasErrors()).isTrue();
-        assertThat(pluginProfile.errors().get("pluginId")).isEqualTo(Arrays.asList(errorMessage));
+        assertThat(pluginProfile.errors().get("pluginId")).isEqualTo(List.of(errorMessage));
     }
 }

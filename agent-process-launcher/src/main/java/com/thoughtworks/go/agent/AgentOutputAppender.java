@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import com.thoughtworks.go.logging.LogHelper;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +50,7 @@ class AgentOutputAppender {
 
     private final List<OutputStreamAppender<ILoggingEvent>> appenders = new ArrayList<>();
 
-    AgentOutputAppender(String file) throws IOException {
+    AgentOutputAppender(String file) {
         appenders.add(rollingAppender(file));
     }
 

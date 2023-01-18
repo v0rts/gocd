@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,9 @@ public class ScmMaterialXmlRepresenter extends MaterialXmlRepresenter {
                 .cdataNode("revision", modification.getRevision())
                 .cdataNode("message", modification.getComment());
 
-            modification.getModifiedFiles().forEach(file -> {
-                cb.node("file", fb -> fb.
-                    attr("name", file.getFileName())
-                    .attr("action", file.getAction().toString()));
-            });
+            modification.getModifiedFiles().forEach(file -> cb.node("file", fb -> fb.
+                attr("name", file.getFileName())
+                .attr("action", file.getAction().toString())));
         });
     }
 }

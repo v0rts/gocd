@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +52,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.apache.commons.codec.binary.Hex.encodeHexString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -77,9 +75,9 @@ public class BackupService implements BackupStatusProvider {
     private final ArtifactsDirHolder artifactsDirHolder;
 
     private final GoConfigService goConfigService;
-    private ServerBackupRepository serverBackupRepository;
+    private final ServerBackupRepository serverBackupRepository;
     private final TimeProvider timeProvider;
-    private ServerBackupQueue backupQueue;
+    private final ServerBackupQueue backupQueue;
     private final SystemEnvironment systemEnvironment;
     private final ConfigRepository configRepository;
     private final Database databaseStrategy;
@@ -111,11 +109,7 @@ public class BackupService implements BackupStatusProvider {
     }
 
     public void initialize() {
-        if (systemEnvironment.isServerInStandbyMode()) {
-            LOGGER.info("GoCD server in 'standby' mode, not changing 'in-progress' backups to 'aborted'.");
-        } else {
-            serverBackupRepository.markInProgressBackupsAsAborted(ABORTED_BACKUPS_MESSAGE);
-        }
+        serverBackupRepository.markInProgressBackupsAsAborted(ABORTED_BACKUPS_MESSAGE);
     }
 
     public ServerBackup scheduleBackup(Username username) {
@@ -137,27 +131,27 @@ public class BackupService implements BackupStatusProvider {
 
     public Optional<ServerBackup> startBackupWithId(long id) {
         Optional<ServerBackup> backup = serverBackupRepository.getBackup(id);
-        if (!backup.isPresent()) {
+        if (backup.isEmpty()) {
             LOGGER.error("Cannot find backup with id: {}. Skipping backup generation", id);
             return Optional.empty();
         }
-        ServerBackup serverBackup = performBackup(backup.get(), singletonList(new BackupStatusUpdater(backup.get(), serverBackupRepository)), BackupInitiator.USER);
+        ServerBackup serverBackup = performBackup(backup.get(), List.of(new BackupStatusUpdater(backup.get(), serverBackupRepository)), BackupInitiator.USER);
         return Optional.of(serverBackup);
     }
 
     ServerBackup backupViaTimer() {
         ServerBackup serverBackup = createServerBackup(Username.CRUISE_TIMER);
-        return performBackup(serverBackup, singletonList(new BackupStatusUpdater(serverBackup, serverBackupRepository)), BackupInitiator.TIMER);
+        return performBackup(serverBackup, List.of(new BackupStatusUpdater(serverBackup, serverBackupRepository)), BackupInitiator.TIMER);
     }
 
     public ServerBackup startBackup(Username username) {
         ServerBackup serverBackup = createServerBackup(username);
-        return performBackup(serverBackup, singletonList(new BackupStatusUpdater(serverBackup, serverBackupRepository)), BackupInitiator.USER);
+        return performBackup(serverBackup, List.of(new BackupStatusUpdater(serverBackup, serverBackupRepository)), BackupInitiator.USER);
     }
 
     ServerBackup startBackup(Username username, BackupUpdateListener backupUpdateListener) {
         ServerBackup serverBackup = createServerBackup(username);
-        return performBackup(serverBackup, asList(new BackupStatusUpdater(serverBackup, serverBackupRepository), backupUpdateListener), BackupInitiator.USER);
+        return performBackup(serverBackup, List.of(new BackupStatusUpdater(serverBackup, serverBackupRepository), backupUpdateListener), BackupInitiator.USER);
     }
 
     private ServerBackup performBackup(ServerBackup backup, List<BackupUpdateListener> backupUpdateListeners, BackupInitiator initiatedBy) {
@@ -383,10 +377,10 @@ public class BackupService implements BackupStatusProvider {
 }
 
 
-class DirectoryStructureWalker extends DirectoryWalker {
+class DirectoryStructureWalker extends DirectoryWalker<Void> {
     private final String configDirectory;
     private final ZipOutputStream zipStream;
-    private final ArrayList<String> excludeFiles;
+    private final List<String> excludeFiles;
 
     public DirectoryStructureWalker(String configDirectory, ZipOutputStream zipStream, File... excludeFiles) {
         this.excludeFiles = new ArrayList<>();
@@ -399,7 +393,7 @@ class DirectoryStructureWalker extends DirectoryWalker {
     }
 
     @Override
-    protected boolean handleDirectory(File directory, int depth, Collection results) throws IOException {
+    protected boolean handleDirectory(File directory, int depth, Collection<Void> results) throws IOException {
         if (!directory.getAbsolutePath().equals(configDirectory)) {
             ZipEntry e = new ZipEntry(fromRoot(directory) + "/");
             zipStream.putNextEntry(e);
@@ -408,7 +402,7 @@ class DirectoryStructureWalker extends DirectoryWalker {
     }
 
     @Override
-    protected void handleFile(File file, int depth, Collection results) throws IOException {
+    protected void handleFile(File file, int depth, Collection<Void> results) throws IOException {
         if (excludeFiles.contains(file.getAbsolutePath())) {
             return;
         }

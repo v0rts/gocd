@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static java.util.Collections.singletonMap;
 
 @Component
 public class ConfigInfoProvider implements ServerInfoProvider {
@@ -83,7 +81,7 @@ public class ConfigInfoProvider implements ServerInfoProvider {
         for (AuthorizationPluginInfo pluginInfo : authorizationMetadataStore.allPluginInfos()) {
             final String pluginName = pluginInfo.getDescriptor().about().name();
             final boolean hashAuthConfig = !goConfigService.security().securityAuthConfigs().findByPluginId(pluginInfo.getDescriptor().id()).isEmpty();
-            pluginsConfigured.add(singletonMap(pluginName, hashAuthConfig));
+            pluginsConfigured.add(Map.of(pluginName, hashAuthConfig));
         }
 
         return security;

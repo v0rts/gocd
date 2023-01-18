@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import org.apache.http.ssl.SSLContextBuilder;
 
 import javax.net.ssl.HostnameVerifier;
 import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 
 public class GoAgentServerHttpClientBuilder extends GoAgentServerClientBuilder<CloseableHttpClient> {
@@ -41,7 +43,7 @@ public class GoAgentServerHttpClientBuilder extends GoAgentServerClientBuilder<C
     }
 
     @Override
-    public CloseableHttpClient build() throws Exception {
+    public CloseableHttpClient build() throws GeneralSecurityException, IOException {
         HttpClientBuilder builder = HttpClients.custom();
         builder.useSystemProperties();
         builder

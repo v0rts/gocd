@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 import spark.QueryParamsMap;
 import spark.Request;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.thoughtworks.go.apiv1.webhook.request.WebhookRequest.KEY_SCM_NAME;
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -59,7 +59,7 @@ class WebhookRequestTest {
 
     @Test
     void returnsScmNamesWhenProvided() {
-        assertEquals(singletonList("scm1"), webhook(new Request() {
+        assertEquals(List.of("scm1"), webhook(new Request() {
             @Override
             public QueryParamsMap queryMap() {
                 return new QueryParamsMap(KEY_SCM_NAME, "scm1") {

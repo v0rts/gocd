@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,9 +47,7 @@ public enum ApiVersion {
     private static Map<String, ApiVersion> HEADER_TO_VERSION_MAP = new LinkedHashMap<>();
 
     static {
-        Arrays.stream(ApiVersion.values()).forEach(apiVersion -> {
-            HEADER_TO_VERSION_MAP.put(apiVersion.mimeType(), apiVersion);
-        });
+        Arrays.stream(ApiVersion.values()).forEach(apiVersion -> HEADER_TO_VERSION_MAP.put(apiVersion.mimeType(), apiVersion));
     }
 
     private final String mimeType;

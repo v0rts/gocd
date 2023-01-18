@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,7 @@ public class Stages extends BaseCollection<Stage> implements StageContainer {
     }
 
     public Stages(Collection<Stage> stages) {
-        for (Stage stage : stages) {
-            add(stage);
-        }
+        this.addAll(stages);
     }
 
     public Stages(Stage... stage) {

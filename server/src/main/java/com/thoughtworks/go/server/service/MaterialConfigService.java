@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,21 +111,19 @@ public class MaterialConfigService {
         goConfigService.groups()
                 .stream()
                 .filter((grp) -> securityService.hasViewPermissionForGroup(username, grp.getGroup()))
-                .forEach((grp) -> {
-                    grp.forEach((pipelineConfig) -> {
-                        boolean hasOperatePermission = securityService.hasOperatePermissionForGroup(new CaseInsensitiveString(username), grp.getGroup());
-                        pipelineConfig.materialConfigs()
-                                .forEach((materialConfig) -> {
-                                    if (!materialFingerprints.containsKey(materialConfig.getFingerprint())) {
-                                        materialFingerprints.put(materialConfig.getFingerprint(), hasOperatePermission);
-                                        materialConfigs.put(materialConfig, hasOperatePermission);
-                                    } else {
-                                        Boolean existingValue = materialFingerprints.get(materialConfig.getFingerprint());
-                                        materialConfigs.replace(materialConfig, existingValue || hasOperatePermission);
-                                    }
-                                });
-                    });
-                });
+                .forEach((grp) -> grp.forEach((pipelineConfig) -> {
+                    boolean hasOperatePermission = securityService.hasOperatePermissionForGroup(new CaseInsensitiveString(username), grp.getGroup());
+                    pipelineConfig.materialConfigs()
+                            .forEach((materialConfig) -> {
+                                if (!materialFingerprints.containsKey(materialConfig.getFingerprint())) {
+                                    materialFingerprints.put(materialConfig.getFingerprint(), hasOperatePermission);
+                                    materialConfigs.put(materialConfig, hasOperatePermission);
+                                } else {
+                                    Boolean existingValue = materialFingerprints.get(materialConfig.getFingerprint());
+                                    materialConfigs.replace(materialConfig, existingValue || hasOperatePermission);
+                                }
+                            });
+                }));
         return materialConfigs;
     }
 

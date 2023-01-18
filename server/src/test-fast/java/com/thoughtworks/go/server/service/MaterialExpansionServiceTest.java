@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
+import java.util.Map;
 
 import static com.thoughtworks.go.helper.MaterialConfigsMother.svnMaterialConfig;
 import static com.thoughtworks.go.helper.MaterialsMother.svnMaterial;
@@ -145,7 +145,7 @@ public class MaterialExpansionServiceTest {
         PipelineConfig pipelineConfig = new PipelineConfig();
 
         SvnMaterialConfig svn = svnMaterialConfig(svnRepo.projectRepositoryUrl(), null);
-        svn.setConfigAttributes(Collections.singletonMap(SvnMaterialConfig.CHECK_EXTERNALS, String.valueOf(false)));
+        svn.setConfigAttributes(Map.of(SvnMaterialConfig.CHECK_EXTERNALS, String.valueOf(false)));
         pipelineConfig.addMaterialConfig(svn);
 
         String cacheKeyForSvn = materialExpansionService.cacheKeyForSubversionMaterialCommand(svn.getFingerprint());

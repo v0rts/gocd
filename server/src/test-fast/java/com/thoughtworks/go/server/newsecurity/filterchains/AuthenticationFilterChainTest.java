@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,8 +161,8 @@ public class AuthenticationFilterChainTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"/add-on/blah", "/api/webhooks/bitbucket/notify", "/api/webhooks/github/notify", "/api/webhooks/foo/notify"})
-        void shouldAllowAnonymousAccessForWebhookAndAddonApis(String url) throws IOException, ServletException {
+        @ValueSource(strings = {"/api/webhooks/bitbucket/notify", "/api/webhooks/github/notify", "/api/webhooks/foo/notify"})
+        void shouldAllowAnonymousAccessForWebhookApis(String url) throws IOException, ServletException {
             request = HttpRequestBuilder.GET(url)
                     .build();
 

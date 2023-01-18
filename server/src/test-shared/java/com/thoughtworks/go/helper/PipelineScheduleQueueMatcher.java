@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class PipelineScheduleQueueMatcher {
     public static Matcher<Integer> numberOfScheduledPipelinesIsAtLeast(final PipelineScheduleQueue pipelineScheduleQueue) {
-        return new TypeSafeMatcher<Integer>() {
+        return new TypeSafeMatcher<>() {
             private int actualCount;
             public int expectedCount;
 

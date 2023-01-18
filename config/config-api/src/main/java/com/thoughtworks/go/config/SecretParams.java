@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -28,7 +29,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collector;
 
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.groupingBy;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.replaceOnce;
@@ -42,7 +42,7 @@ public class SecretParams extends ArrayList<SecretParam> implements Serializable
 
     public SecretParams(SecretParam... secretParams) {
         if (secretParams.length > 0) {
-            this.addAll(asList(secretParams));
+            this.addAll(Arrays.asList(secretParams));
         }
     }
 

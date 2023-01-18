@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,14 +37,12 @@ public class RouteInformationProvider {
 
     public void cacheRouteInformation() {
         routes.clear();
-        routeList().forEach(routeEntry -> {
-            routes.add(new RouteEntry(
-                getField(routeEntry, "httpMethod"),
-                getField(routeEntry, "path"),
-                getField(routeEntry, "acceptedType"),
-                getField(routeEntry, "target")
-            ));
-        });
+        routeList().forEach(routeEntry -> routes.add(new RouteEntry(
+            getField(routeEntry, "httpMethod"),
+            getField(routeEntry, "path"),
+            getField(routeEntry, "acceptedType"),
+            getField(routeEntry, "target")
+        )));
     }
 
     public List<RouteEntry> getRoutes() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -122,7 +121,7 @@ public class GoConfigAdministrationController {
                                       @RequestParam("md5") String md5,
                                       HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (!headerConstraint.isSatisfied(request)) {
-            return JsonAction.jsonBadRequest(Collections.singletonMap("message", "Missing required header `Confirm`")).respond(response);
+            return JsonAction.jsonBadRequest(Map.of("message", "Missing required header `Confirm`")).respond(response);
         }
 
         if (!isCurrentUserAdmin()) {

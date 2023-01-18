@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-description = 'APIs to allow GoCD to communicate with GoCD Plugins'
+plugins {
+  id 'groovy'
+}
 
-apply plugin: 'groovy'
+description = 'APIs to allow GoCD to communicate with GoCD Plugins'
 
 dependencies {
   api project(':plugin-infra:go-plugin-activator')

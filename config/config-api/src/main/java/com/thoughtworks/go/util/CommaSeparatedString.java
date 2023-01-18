@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,11 @@ package com.thoughtworks.go.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -90,7 +92,7 @@ public class CommaSeparatedString {
     }
 
     public static List<String> commaSeparatedStrToList(String commaSeparatedStr){
-        return isBlank(commaSeparatedStr) ? emptyList() : asList(commaSeparatedStrToArr(commaSeparatedStr));
+        return isBlank(commaSeparatedStr) ? emptyList() : Arrays.asList(commaSeparatedStrToArr(commaSeparatedStr));
     }
 
     private static String[] commaSeparatedStrToArr(String commaSeparatedStr) {

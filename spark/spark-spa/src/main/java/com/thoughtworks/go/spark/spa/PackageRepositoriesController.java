@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.thoughtworks.go.spark.Routes.PackageRepository.SPA_BASE;
@@ -52,9 +51,9 @@ public class PackageRepositoriesController implements SparkController {
     }
 
     public ModelAndView index(Request request, Response response) {
-        Map<Object, Object> object = new HashMap<>() {{
-            put("viewTitle", "Package Repositories");
-        }};
+        Map<String, Object> object = Map.of(
+            "viewTitle", "Package Repositories"
+        );
         return new ModelAndView(object, null);
     }
 }

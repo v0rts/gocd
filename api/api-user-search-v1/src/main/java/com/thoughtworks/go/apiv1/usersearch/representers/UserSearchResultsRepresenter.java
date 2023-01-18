@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,6 @@ public class UserSearchResultsRepresenter {
                         .addAbsoluteLink("doc", Routes.UserSearch.DOC)
                         .addLink("self", Routes.UserSearch.self(searchTerm))
                         .addLink("find", Routes.UserSearch.find()))
-                .addChild("_embedded", embeddedWriter -> {
-                    embeddedWriter.addChildList("users", usersWriter -> {
-                        userSearchModels.forEach(userSearchModel -> usersWriter.addChild(outputWriter -> UserSearchRepresenter.toJSON(outputWriter, userSearchModel)));
-                    });
-                });
+                .addChild("_embedded", embeddedWriter -> embeddedWriter.addChildList("users", usersWriter -> userSearchModels.forEach(userSearchModel -> usersWriter.addChild(outputWriter -> UserSearchRepresenter.toJSON(outputWriter, userSearchModel)))));
     }
 }

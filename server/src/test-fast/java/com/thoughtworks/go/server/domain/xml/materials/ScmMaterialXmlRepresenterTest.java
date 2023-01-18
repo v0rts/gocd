@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import com.thoughtworks.go.util.SystemEnvironment;
 import org.dom4j.dom.DOMElement;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class ScmMaterialXmlRepresenterTest {
 
     private List<Modification> modifications() {
         Date date = DateUtils.parseISO8601("2019-12-31T15:31:49+05:30");
-        return Arrays.asList(
+        return List.of(
                 modification(date, "Bob", "Adding build.xml", "3", "build.xml", ModifiedAction.added),
                 modification(date, "Sam", "Fixing the not checked in files", "2", "tools/bin/go.jruby", ModifiedAction.added),
                 modification(date, "Sam", "Adding .gitignore", "1", ".gitignore", ModifiedAction.modified)

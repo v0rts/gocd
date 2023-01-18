@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -141,7 +141,7 @@ class WorkRepresenterTest {
     }
 
     private List<ArtifactPlan> artifactPlans() {
-        return ArtifactPlan.toArtifactPlans(new ArtifactTypeConfigs(Arrays.asList(
+        return ArtifactPlan.toArtifactPlans(new ArtifactTypeConfigs(List.of(
                 new BuildArtifactConfig("source", "destination"),
                 new TestArtifactConfig("test-source", "test-destination"),
                 new PluggableArtifactConfig("id", "storeId", create("Foo", true, "Bar"))

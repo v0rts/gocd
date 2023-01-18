@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.thoughtworks.go.plugin.domain.common.PluginConstants.PLUGGABLE_TASK_EXTENSION;
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -52,7 +51,7 @@ public class JsonBasedPluggableTaskTest {
     public void setup() {
         pluginManager = mock(PluginManager.class);
         pluginId = "plugin-id";
-        final List<String> goSupportedVersions = asList("1.0");
+        final List<String> goSupportedVersions = List.of("1.0");
         final HashMap<String, JsonBasedTaskExtensionHandler> handlerMap = new HashMap<>();
         handlerMap.put("1.0", new JsonBasedTaskExtensionHandler_V1());
 

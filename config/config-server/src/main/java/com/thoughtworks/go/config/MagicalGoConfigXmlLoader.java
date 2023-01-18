@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.thoughtworks.go.config.parser.GoConfigClassLoader.classParser;
@@ -47,14 +45,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.toInputStream;
 
 public class MagicalGoConfigXmlLoader {
-    public static final List<GoConfigPreprocessor> PREPROCESSORS = Arrays.asList(
+    public static final List<GoConfigPreprocessor> PREPROCESSORS = List.of(
             new ConfigRepoPartialPreprocessor(),
             new TemplateExpansionPreprocessor(),
             new ConfigParamPreprocessor());
-    public static final List<GoConfigXMLValidator> XML_VALIDATORS = Collections.singletonList(new UniqueOnCancelValidator());
+    public static final List<GoConfigXMLValidator> XML_VALIDATORS = List.of(new UniqueOnCancelValidator());
     private static final Logger LOGGER = LoggerFactory.getLogger(MagicalGoConfigXmlLoader.class);
     private static final SystemEnvironment systemEnvironment = new SystemEnvironment();
-    public static final List<GoConfigValidator> VALIDATORS = Arrays.asList(
+    public static final List<GoConfigValidator> VALIDATORS = List.of(
             new ArtifactDirValidator(),
             new ServerIdImmutabilityValidator(),
             new TokenGenerationKeyImmutabilityValidator(systemEnvironment)

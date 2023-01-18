@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,9 +37,7 @@ public class ScmMaterialRepresenter {
     public static void fromJSON(JsonReader jsonReader, ScmMaterialConfig scmMaterialConfig) {
         jsonReader.readStringIfPresent("destination", scmMaterialConfig::setFolder);
         jsonReader.optBoolean("invert_filter").ifPresent(scmMaterialConfig::setInvertFilter);
-        jsonReader.optJsonObject("filter").ifPresent(filterReader -> {
-            scmMaterialConfig.setFilter(FilterRepresenter.fromJSON(filterReader));
-        });
+        jsonReader.optJsonObject("filter").ifPresent(filterReader -> scmMaterialConfig.setFilter(FilterRepresenter.fromJSON(filterReader)));
         jsonReader.readCaseInsensitiveStringIfPresent("name", scmMaterialConfig::setName);
         jsonReader.optBoolean("auto_update").ifPresent(scmMaterialConfig::setAutoUpdate);
     }

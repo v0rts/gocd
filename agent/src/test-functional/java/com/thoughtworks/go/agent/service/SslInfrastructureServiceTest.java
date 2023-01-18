@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.thoughtworks.go.agent.service;
 import com.thoughtworks.go.agent.AgentAutoRegistrationPropertiesImpl;
 import com.thoughtworks.go.agent.common.ssl.GoAgentServerHttpClient;
 import com.thoughtworks.go.config.AgentRegistry;
-import com.thoughtworks.go.config.GuidService;
-import com.thoughtworks.go.config.TokenService;
 import com.thoughtworks.go.util.URLService;
 import org.apache.http.NameValuePair;
 import org.apache.http.ProtocolVersion;
@@ -29,7 +27,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicStatusLine;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,18 +38,14 @@ import org.springframework.http.HttpStatus;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.function.Predicate;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SslInfrastructureServiceTest {
     private SslInfrastructureService sslInfrastructureService;
-    private GuidService guidService = new GuidService();
-    private TokenService tokenService = new TokenService();
-
     @Mock
     private AgentRegistry agentRegistry;
     @Mock
@@ -63,22 +56,13 @@ public class SslInfrastructureServiceTest {
     private URLService urlService;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() {
         sslInfrastructureService = new SslInfrastructureService(urlService, httpClient, agentRegistry);
-        guidService = new GuidService();
-        guidService.store("uuid");
-    }
-
-    @AfterEach
-    void teardown() {
-        guidService.delete();
-        tokenService.delete();
     }
 
     @Test
     void shouldGetTokenFromServerIfOneNotExist() throws Exception {
         final ArgumentCaptor<HttpRequestBase> httpRequestBaseArgumentCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
-        tokenService.delete();
         when(agentRegistry.uuid()).thenReturn("some-uuid");
         when(httpResponse.getStatusLine()).thenReturn(new BasicStatusLine(new ProtocolVersion("https", 1, 2), 200, null));
         when(httpResponse.getEntity()).thenReturn(new StringEntity("token-from-server"));
@@ -90,12 +74,12 @@ public class SslInfrastructureServiceTest {
 
         final HttpRequestBase httpRequestBase = httpRequestBaseArgumentCaptor.getValue();
         final List<NameValuePair> nameValuePairs = URLEncodedUtils.parse(httpRequestBase.getURI(), StandardCharsets.UTF_8);
-        assertThat(findParam(nameValuePairs, "uuid").getValue(), is("some-uuid"));
+        assertThat(findParam(nameValuePairs, "uuid").getValue()).isEqualTo("some-uuid");
     }
 
     @Test
     void shouldPassUUIDAndTokenDuringAgentRegistration() throws Exception {
-        final ArgumentCaptor<HttpEntityEnclosingRequestBase> httpRequestBaseArgumentCaptor = ArgumentCaptor.forClass(HttpEntityEnclosingRequestBase.class);
+        final ArgumentCaptor<HttpRequestBase> httpRequestBaseArgumentCaptor = ArgumentCaptor.forClass(HttpRequestBase.class);
 
         when(agentRegistry.uuid()).thenReturn("some-uuid");
         when(agentRegistry.token()).thenReturn("some-token");
@@ -107,12 +91,14 @@ public class SslInfrastructureServiceTest {
 
         sslInfrastructureService.registerIfNecessary(new AgentAutoRegistrationPropertiesImpl(new File("foo", "bar")));
 
-        final HttpEntityEnclosingRequestBase httpRequestBase = httpRequestBaseArgumentCaptor.getValue();
-        final List<NameValuePair> nameValuePairs = URLEncodedUtils.parse(httpRequestBase.getEntity());
-
-        assertThat(findParam(nameValuePairs, "uuid").getValue(), is("some-uuid"));
-        assertThat(findParam(nameValuePairs, "token").getValue(), is("some-token"));
-
+        final HttpRequestBase httpRequestBase = httpRequestBaseArgumentCaptor.getValue();
+        assertThat(httpRequestBase).asInstanceOf(type(HttpEntityEnclosingRequestBase.class))
+            .extracting(HttpEntityEnclosingRequestBase::getEntity)
+            .satisfies(entity -> {
+                final List<NameValuePair> nameValuePairs = URLEncodedUtils.parse(entity);
+                assertThat(findParam(nameValuePairs, "uuid").getValue()).isEqualTo("some-uuid");
+                assertThat(findParam(nameValuePairs, "token").getValue()).isEqualTo("some-token");
+            });
     }
 
     @Test
@@ -133,12 +119,7 @@ public class SslInfrastructureServiceTest {
     }
 
     private NameValuePair findParam(List<NameValuePair> nameValuePairs, final String paramName) {
-        return nameValuePairs.stream().filter(new Predicate<NameValuePair>() {
-            @Override
-            public boolean test(NameValuePair nameValuePair) {
-                return nameValuePair.getName().equals(paramName);
-            }
-        }).findFirst().orElse(null);
+        return nameValuePairs.stream().filter(nameValuePair -> nameValuePair.getName().equals(paramName)).findFirst().orElse(null);
     }
 
 }

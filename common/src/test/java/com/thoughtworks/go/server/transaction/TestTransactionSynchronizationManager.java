@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.thoughtworks.go.server.transaction;
 
+import org.springframework.transaction.support.TransactionSynchronization;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.transaction.support.TransactionSynchronization;
 
 public class TestTransactionSynchronizationManager extends TransactionSynchronizationManager {
     private List<TransactionSynchronization> synchronizations;
@@ -27,11 +27,13 @@ public class TestTransactionSynchronizationManager extends TransactionSynchroniz
         this.synchronizations = new ArrayList<>();
     }
 
-    @Override public synchronized void registerSynchronization(TransactionSynchronization synchronization) {
+    @Override
+    public synchronized void registerSynchronization(TransactionSynchronization synchronization) {
         synchronizations.add(synchronization);
     }
 
-    @Override public boolean isTransactionBodyExecuting() {
+    @Override
+    public boolean isTransactionBodyExecuting() {
         return false;//assuming no one cares about this
     }
 

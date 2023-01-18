@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,13 +57,11 @@ public class UpdateSCMConfigCommand extends SCMConfigCommand {
 
     private void updateSCMConfigurationOnAssociatedPipelines(CruiseConfig modifiedConfig) {
         List<PipelineConfig> pipelinesWithSCM = modifiedConfig.pipelinesAssociatedWithPluggableSCM(globalScmConfig);
-        pipelinesWithSCM.forEach(pipelineConfig -> {
-            pipelineConfig.pluggableSCMMaterialConfigs().forEach(pluggableSCMMaterialConfig -> {
-                if (pluggableSCMMaterialConfig.getScmId().equals(globalScmConfig.getId())) {
-                    pluggableSCMMaterialConfig.setSCMConfig(globalScmConfig);
-                }
-            });
-        });
+        pipelinesWithSCM.forEach(pipelineConfig -> pipelineConfig.pluggableSCMMaterialConfigs().forEach(pluggableSCMMaterialConfig -> {
+            if (pluggableSCMMaterialConfig.getScmId().equals(globalScmConfig.getId())) {
+                pluggableSCMMaterialConfig.setSCMConfig(globalScmConfig);
+            }
+        }));
     }
 
     private boolean isRequestFresh(CruiseConfig cruiseConfig) {

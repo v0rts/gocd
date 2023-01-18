@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ public class ServerUnavailabilityResponse {
     private final static Logger LOGGER = LoggerFactory.getLogger(ServerUnavailabilityResponse.class);
     private static final OrRequestMatcher API_REQUEST_MATCHER = new OrRequestMatcher(
             new AntPathRequestMatcher("/remoting/**"),
-            new AntPathRequestMatcher("/add-on/*/api/**"),
             new AntPathRequestMatcher("/api/**"),
             new AntPathRequestMatcher("/cctray.xml")
     );

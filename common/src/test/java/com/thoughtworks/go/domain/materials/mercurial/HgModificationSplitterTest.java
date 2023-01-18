@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 package com.thoughtworks.go.domain.materials.mercurial;
 
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-
 import com.thoughtworks.go.domain.materials.Modification;
 import com.thoughtworks.go.util.command.ConsoleResult;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import org.joda.time.DateTime;
 
 public class HgModificationSplitterTest {
 
     @Test public void shouldBeAbleToParseModifications() throws Exception {
-        ConsoleResult result = new ConsoleResult(0, Arrays.asList(("<changeset>\n"
+        ConsoleResult result = new ConsoleResult(0, List.of(("<changeset>\n"
                 + "<node>ca3ebb67f527c0ad7ed26b789056823d8b9af23f</node>\n"
                 + "<author>cruise</author>\n"
                 + "<date>Tue, 09 Dec 2008 18:56:14 +0800</date>\n"

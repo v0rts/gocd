@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-import com.thoughtworks.go.build.Architecture
-import com.thoughtworks.go.build.DownloadFile
-import com.thoughtworks.go.build.InstallerMetadataTask
-import com.thoughtworks.go.build.InstallerType
+import com.thoughtworks.go.build.*
 import groovy.json.JsonOutput
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.tools.ant.filters.ConcatFilter
 
 enum PackageType {
 
-  deb {
+  deb{
     List<String> configureFpm(Project project, File buildRoot, InstallerType installerType) {
       List<String> fpmArgs = []
       fpmArgs += ['-t', 'deb']
@@ -56,7 +53,7 @@ enum PackageType {
       return fpmArgs
     }
   },
-  rpm {
+  rpm{
     List<String> configureFpm(Project project, File buildRoot, InstallerType installerType) {
       List<String> fpmArgs = []
 
@@ -105,13 +102,13 @@ private File destFile(String url) {
 }
 
 task downloadLinuxJreChecksum(type: DownloadFile) {
-  src project.packaging.adoptiumJavaVersion.toSha256SumURLFor(com.thoughtworks.go.build.OperatingSystem.linux)
+  src project.packaging.adoptiumJavaVersion.toSha256SumURLFor(OperatingSystem.linux, Architecture.x64)
   dest destFile(src.toString())
 }
 
 task downloadLinuxJre(type: DownloadFile) {
   dependsOn downloadLinuxJreChecksum
-  src project.packaging.adoptiumJavaVersion.toDownloadURLFor(com.thoughtworks.go.build.OperatingSystem.linux)
+  src project.packaging.adoptiumJavaVersion.toDownloadURLFor(OperatingSystem.linux, Architecture.x64)
   dest destFile(src.toString())
   checksum = { downloadLinuxJreChecksum.outputs.files.singleFile.getText("utf-8").trim().split(" ").first() }
 }

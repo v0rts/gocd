@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,10 @@ import com.thoughtworks.go.config.Role;
 import com.thoughtworks.go.config.RolesConfig;
 import com.thoughtworks.go.config.SecurityAuthConfig;
 
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class SecurityConfigChangeListener extends EntityConfigChangedListener<Object> {
-    private final List<Class<?>> securityConfigClasses = Arrays.asList(
+    private final List<Class<?>> securityConfigClasses = List.of(
             SecurityAuthConfig.class,
             Role.class,
             AdminsConfig.class,

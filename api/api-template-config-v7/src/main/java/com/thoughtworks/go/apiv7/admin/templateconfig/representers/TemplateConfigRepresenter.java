@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,10 +60,6 @@ public class TemplateConfigRepresenter {
 
     private static void setStages(JsonReader jsonReader, PipelineTemplateConfig pipelineTemplateConfig) {
         pipelineTemplateConfig.getStages().clear();
-        jsonReader.readArrayIfPresent("stages", stages -> {
-            stages.forEach(stage -> {
-                pipelineTemplateConfig.addStageWithoutValidityAssertion(StageRepresenter.fromJSON(new JsonReader(stage.getAsJsonObject())));
-            });
-        });
+        jsonReader.readArrayIfPresent("stages", stages -> stages.forEach(stage -> pipelineTemplateConfig.addStageWithoutValidityAssertion(StageRepresenter.fromJSON(new JsonReader(stage.getAsJsonObject())))));
     }
 }

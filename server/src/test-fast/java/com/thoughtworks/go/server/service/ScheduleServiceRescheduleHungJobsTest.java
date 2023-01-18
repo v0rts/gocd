@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import com.thoughtworks.go.util.SystemEnvironment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -61,25 +61,25 @@ public class ScheduleServiceRescheduleHungJobsTest {
     public void shouldRescheduleHungBuildForDeadAgent() {
         final JobInstance jobInstance = JobInstanceMother.assigned("dev");
         when(agentService.findRegisteredAgents()).thenReturn(activities());
-        when(jobInstanceService.findHungJobs(Arrays.asList("uuid1", "uuid2"))).thenReturn(new JobInstances(jobInstance));
+        when(jobInstanceService.findHungJobs(List.of("uuid1", "uuid2"))).thenReturn(new JobInstances(jobInstance));
         scheduleService.rescheduleHungJobs();
         verify(agentService).findRegisteredAgents();
-        verify(jobInstanceService).findHungJobs(Arrays.asList("uuid1", "uuid2"));
+        verify(jobInstanceService).findHungJobs(List.of("uuid1", "uuid2"));
     }
 
     @Test
     public void shouldNotRescheduleHungBuildsWhenNone() {
         when(agentService.findRegisteredAgents()).thenReturn(activities());
-        when(jobInstanceService.findHungJobs(Arrays.asList("uuid1", "uuid2"))).thenReturn(new JobInstances());
+        when(jobInstanceService.findHungJobs(List.of("uuid1", "uuid2"))).thenReturn(new JobInstances());
         scheduleService.rescheduleHungJobs();
         verify(agentService).findRegisteredAgents();
-        verify(jobInstanceService).findHungJobs(Arrays.asList("uuid1", "uuid2"));
+        verify(jobInstanceService).findHungJobs(List.of("uuid1", "uuid2"));
     }
 
     @Test
     public void shouldNotifyConsoleActivityMonitorToCancelUnresponsiveJobs() {
         when(agentService.findRegisteredAgents()).thenReturn(activities());
-        when(jobInstanceService.findHungJobs(Arrays.asList("uuid1", "uuid2"))).thenReturn(new JobInstances());
+        when(jobInstanceService.findHungJobs(List.of("uuid1", "uuid2"))).thenReturn(new JobInstances());
         scheduleService.rescheduleHungJobs();
     }
 

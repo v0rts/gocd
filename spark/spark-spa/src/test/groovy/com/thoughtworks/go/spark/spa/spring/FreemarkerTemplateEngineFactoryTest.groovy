@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ class FreemarkerTemplateEngineFactoryTest {
   void 'it should escape html entities by default'() {
     def userInput = "<script>alert('i can has hax')</script>"
     def output = engine.create(RolesController.class, { return "layouts/test-layout.ftlh" })
-      .render(new ModelAndView(Collections.singletonMap("userInput", userInput), "templates/escape-html-entities.ftlh"))
+      .render(new ModelAndView(Map.of("userInput", userInput), "templates/escape-html-entities.ftlh"))
 
     assertThat(output)
       .contains("begin parent layout")

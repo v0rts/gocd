@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import com.thoughtworks.go.server.domain.support.toggle.FeatureToggles;
 
 public class FeatureTogglesRepresenter {
     public static void toJSON(OutputListWriter outputWriter, FeatureToggles featureToggles) {
-        featureToggles.all().forEach(toggle -> {
-            outputWriter.addChild(writer -> FeatureToggleRepresenter.toJSON(writer, toggle));
-        });
+        featureToggles.all().forEach(toggle -> outputWriter.addChild(writer -> FeatureToggleRepresenter.toJSON(writer, toggle)));
     }
 }

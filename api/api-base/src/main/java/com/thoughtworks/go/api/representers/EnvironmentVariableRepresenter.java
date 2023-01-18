@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,7 @@ import static com.thoughtworks.go.api.util.HaltApiMessages.errorWhileEncryptingM
 
 public class EnvironmentVariableRepresenter {
     public static void toJSON(OutputListWriter jsonWriter, List<EnvironmentVariableConfig> environmentVariableConfigs) {
-        environmentVariableConfigs.forEach(environmentVariableConfig -> {
-            jsonWriter.addChild(envVarWriter -> toJSON(envVarWriter, environmentVariableConfig));
-        });
+        environmentVariableConfigs.forEach(environmentVariableConfig -> jsonWriter.addChild(envVarWriter -> toJSON(envVarWriter, environmentVariableConfig)));
 
     }
 
@@ -53,20 +51,12 @@ public class EnvironmentVariableRepresenter {
     }
 
     public static void toJSONArray(OutputWriter outputWriter, String key, Collection<EnvironmentVariableConfig> environmentVariableConfig) {
-        outputWriter.addChildList(key, outputListWriter -> {
-            environmentVariableConfig.forEach(envVar -> {
-                outputListWriter.addChild(childWriter -> toJSON(childWriter, envVar));
-            });
-        });
+        outputWriter.addChildList(key, outputListWriter -> environmentVariableConfig.forEach(envVar -> outputListWriter.addChild(childWriter -> toJSON(childWriter, envVar))));
     }
 
     public static EnvironmentVariablesConfig fromJSONArray(JsonReader jsonReader) {
         EnvironmentVariablesConfig variables = new EnvironmentVariablesConfig();
-        jsonReader.readArrayIfPresent("environment_variables", environmentVariables -> {
-            environmentVariables.forEach(variable -> {
-                variables.add(EnvironmentVariableRepresenter.fromJSON(new JsonReader(variable.getAsJsonObject())));
-            });
-        });
+        jsonReader.readArrayIfPresent("environment_variables", environmentVariables -> environmentVariables.forEach(variable -> variables.add(EnvironmentVariableRepresenter.fromJSON(new JsonReader(variable.getAsJsonObject())))));
         return variables;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.thoughtworks.go.server.service.result.HttpLocalizedOperationResult;
 public class VerifyConnectionRepresenter {
     public static void toJSON(OutputWriter outputWriter, HttpLocalizedOperationResult result, PackageDefinition packageDefinition) {
         outputWriter.add("message", result.message())
-                .addChild("package", writer -> {
-                    PackageDefinitionRepresenter.toJSON(writer, packageDefinition);
-                });
+                .addChild("package", writer -> PackageDefinitionRepresenter.toJSON(writer, packageDefinition));
     }
 }

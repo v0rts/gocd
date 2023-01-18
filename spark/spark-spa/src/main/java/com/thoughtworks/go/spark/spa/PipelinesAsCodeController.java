@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import static com.thoughtworks.go.spark.Routes.PipelineConfig.SPA_AS_CODE;
 import static com.thoughtworks.go.spark.Routes.PipelineConfig.SPA_BASE;
@@ -51,9 +51,9 @@ public class PipelinesAsCodeController implements SparkController {
     }
 
     public ModelAndView asCode(Request req, Response res) {
-        HashMap<Object, Object> object = new HashMap<>() {{
-            put("viewTitle", "New Pipeline as Code");
-        }};
+        Map<String, Object> object = Map.of(
+            "viewTitle", "New Pipeline as Code"
+        );
 
         return new ModelAndView(object, null);
     }

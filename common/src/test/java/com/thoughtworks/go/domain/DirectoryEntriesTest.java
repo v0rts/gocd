@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.StringReader;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @understands
@@ -83,9 +83,9 @@ public class DirectoryEntriesTest {
         Element document = getRenderedDocument(renderer);
 
         assertThat(document.getChildren().size(), is(2));
-        Element cruiseOutputElement = (Element) document.getChildren().get(0);
+        Element cruiseOutputElement = document.getChildren().get(0);
         assertThat(cruiseOutputElement.getChild("div").getChild("span").getChild("a").getTextNormalize(), is("cruise-output"));
-        Element artifactElement = (Element) document.getChildren().get(1);
+        Element artifactElement = document.getChildren().get(1);
         assertThat(artifactElement.getChild("div").getChild("span").getChild("a").getTextNormalize(), is("some-artifact"));
     }
 

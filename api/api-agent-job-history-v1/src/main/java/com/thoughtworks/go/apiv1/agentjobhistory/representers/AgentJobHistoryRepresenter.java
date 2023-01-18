@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,31 +25,18 @@ import com.thoughtworks.go.spark.Routes;
 public class AgentJobHistoryRepresenter {
     public static void toJSON(OutputWriter outputWriter, String uuid, JobInstancesModel jobInstances) {
         outputWriter
-                .addLinks(outputLinkWriter -> {
-                    outputLinkWriter
-                            .addAbsoluteLink("doc", Routes.AgentJobHistory.DOC)
-                            .addLink("self", Routes.AgentJobHistory.forAgent(uuid))
-                            .addLink("find", Routes.AgentsAPI.find())
-                    ;
-                })
+                .addLinks(outputLinkWriter -> outputLinkWriter
+                        .addAbsoluteLink("doc", Routes.AgentJobHistory.DOC)
+                        .addLink("self", Routes.AgentJobHistory.forAgent(uuid))
+                        .addLink("find", Routes.AgentsAPI.find()))
                 .add("uuid", uuid)
-                .addChildList("jobs", jobsOutputWriter -> {
-                    jobInstances.forEach(jobInstance -> {
-                        jobsOutputWriter.addChild(jobOutputWriter -> toJSON(jobInstance, jobOutputWriter));
-                    });
-                })
+                .addChildList("jobs", jobsOutputWriter -> jobInstances.forEach(jobInstance -> jobsOutputWriter.addChild(jobOutputWriter -> toJSON(jobInstance, jobOutputWriter))))
                 .addChild("pagination", PaginationRepresenter.toJSON(jobInstances.getPagination()));
     }
 
     private static void toJSON(JobInstance jobInstance, OutputWriter jobOutputWriter) {
         jobOutputWriter
-                .addChildList("job_state_transitions", outputListWriter -> {
-                    jobInstance.getTransitions().forEach(jobStateTransition -> {
-                        outputListWriter.addChild(jobStateTransitionWriter -> {
-                            toJSON(jobStateTransition, jobStateTransitionWriter);
-                        });
-                    });
-                })
+                .addChildList("job_state_transitions", outputListWriter -> jobInstance.getTransitions().forEach(jobStateTransition -> outputListWriter.addChild(jobStateTransitionWriter -> toJSON(jobStateTransition, jobStateTransitionWriter))))
                 .add("job_name", jobInstance.getName())
                 .add("stage_name", jobInstance.getStageName())
                 .add("stage_counter", jobInstance.getStageCounter())

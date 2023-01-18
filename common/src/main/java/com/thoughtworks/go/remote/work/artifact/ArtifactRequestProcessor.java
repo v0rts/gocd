@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.thoughtworks.go.remote.work.artifact.ConsoleLogMessage.LogLevel;
 import com.thoughtworks.go.util.command.*;
 import com.thoughtworks.go.work.GoPublisher;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,14 +39,14 @@ public class ArtifactRequestProcessor implements GoPluginApiRequestProcessor {
     private enum ProcessType {
         FETCH, PUBLISH
     }
-    private static final Map<LogLevel, String> FETCH_ARTIFACT_LOG_LEVEL_TAG = new HashMap<>() {{
-        put(LogLevel.INFO, TaggedStreamConsumer.OUT);
-        put(LogLevel.ERROR, TaggedStreamConsumer.ERR);
-    }};
-    private static final Map<LogLevel, String> PUBLISH_ARTIFACT_LOG_LEVEL_TAG = new HashMap<>() {{
-        put(LogLevel.INFO, TaggedStreamConsumer.PUBLISH);
-        put(LogLevel.ERROR, TaggedStreamConsumer.PUBLISH_ERR);
-    }};
+    private static final Map<LogLevel, String> FETCH_ARTIFACT_LOG_LEVEL_TAG = Map.of(
+        LogLevel.INFO, TaggedStreamConsumer.OUT,
+        LogLevel.ERROR, TaggedStreamConsumer.ERR
+    );
+    private static final Map<LogLevel, String> PUBLISH_ARTIFACT_LOG_LEVEL_TAG = Map.of(
+        LogLevel.INFO, TaggedStreamConsumer.PUBLISH,
+        LogLevel.ERROR, TaggedStreamConsumer.PUBLISH_ERR
+    );
 
     private ArtifactRequestProcessor(GoPublisher publisher, ProcessType processType, EnvironmentVariableContext environmentVariableContext) {
         CompositeConsumer errorStreamConsumer = new CompositeConsumer(CompositeConsumer.ERR,  publisher);

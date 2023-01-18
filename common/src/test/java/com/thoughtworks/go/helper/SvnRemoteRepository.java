@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.thoughtworks.go.helper;
 
-import com.thoughtworks.go.util.FileUtil;
 import com.thoughtworks.go.util.ProcessWrapper;
 import com.thoughtworks.go.util.ReflectionUtil;
 import com.thoughtworks.go.util.command.CommandLine;
@@ -69,7 +68,7 @@ public class SvnRemoteRepository {
     public void addUser(String username, String password) throws Exception {
         enableAuthentication();
         File passwdFile = new File(repo.projectRepositoryRoot(), "conf/passwd");
-        String passwd = String.join(FileUtil.lineSeparator(), Files.readAllLines(passwdFile.toPath()));
+        String passwd = String.join(System.lineSeparator(), Files.readAllLines(passwdFile.toPath()));
         if (!(passwd.contains("\n[users]\n"))) {
             passwd = passwd + "\n[users]\n";
         }

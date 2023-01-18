@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,20 +80,14 @@ public class ServerBinaryDownloaderTest {
     public void shouldGetExtraPropertiesFromHeader() {
         assertExtraProperties("", new HashMap<>());
 
-        assertExtraProperties("Key1=Value1 key2=value2", new HashMap<>() {{
-            put("Key1", "Value1");
-            put("key2", "value2");
-        }});
+        assertExtraProperties("Key1=Value1 key2=value2",
+            Map.of("Key1", "Value1", "key2", "value2"));
 
-        assertExtraProperties("Key1=Value1 key2=value2 key2=value3", new HashMap<>() {{
-            put("Key1", "Value1");
-            put("key2", "value2");
-        }});
+        assertExtraProperties("Key1=Value1 key2=value2 key2=value3",
+            Map.of("Key1", "Value1", "key2", "value2"));
 
-        assertExtraProperties("Key1%20WithSpace=Value1%20WithSpace key2=value2", new HashMap<>() {{
-            put("Key1 WithSpace", "Value1 WithSpace");
-            put("key2", "value2");
-        }});
+        assertExtraProperties("Key1%20WithSpace=Value1%20WithSpace key2=value2",
+            Map.of("Key1 WithSpace", "Value1 WithSpace", "key2", "value2"));
     }
 
     @Test

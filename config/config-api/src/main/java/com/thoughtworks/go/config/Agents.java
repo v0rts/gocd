@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@ import com.thoughtworks.go.domain.NullAgent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 public class Agents extends ArrayList<Agent> {
     public Agents() {
@@ -35,7 +34,7 @@ public class Agents extends ArrayList<Agent> {
     }
 
     public Agents(Agent... agents) {
-        this.addAll(asList(agents));
+        this.addAll(Arrays.asList(agents));
     }
 
     public Agent getAgentByUUID(String uuid) {

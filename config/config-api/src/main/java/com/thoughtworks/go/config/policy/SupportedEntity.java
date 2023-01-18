@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 public enum SupportedEntity {
@@ -57,8 +56,8 @@ public enum SupportedEntity {
     }
 
     public static List<String> unmodifiableListOf(SupportedEntity... supportedEntities) {
-        return unmodifiableList(Arrays.stream(supportedEntities)
-                .map(SupportedEntity::getType)
-                .collect(Collectors.toList()));
+        return Arrays.stream(supportedEntities)
+            .map(SupportedEntity::getType)
+            .collect(Collectors.toUnmodifiableList());
     }
 }

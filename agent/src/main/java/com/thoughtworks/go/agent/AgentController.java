@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import static com.thoughtworks.go.util.SystemUtil.currentWorkingDirectory;
@@ -46,11 +45,11 @@ public abstract class AgentController {
     private AgentRuntimeInfo agentRuntimeInfo;
     private AgentAutoRegistrationProperties agentAutoRegistrationProperties;
     private AgentIdentifier identifier;
-    private SslInfrastructureService sslInfrastructureService;
-    private SystemEnvironment systemEnvironment;
-    private AgentRegistry agentRegistry;
-    private SubprocessLogger subprocessLogger;
-    private AgentUpgradeService agentUpgradeService;
+    private final SslInfrastructureService sslInfrastructureService;
+    private final SystemEnvironment systemEnvironment;
+    private final AgentRegistry agentRegistry;
+    private final SubprocessLogger subprocessLogger;
+    private final AgentUpgradeService agentUpgradeService;
     private final AgentHealthHolder agentHealthHolder;
     private final String hostName;
     private final String ipAddress;
@@ -98,7 +97,7 @@ public abstract class AgentController {
         LOG.error("There has been a problem with one of GoCD's SSL certificates. This can be caused by a man-in-the-middle attack, or by pointing the agent to a new server, or by deleting and re-installing Go Server. Go will ask for a new certificate. If this fails to solve the problem, try deleting config/trust.jks in Go Agent's home directory.", e);
     }
 
-    protected abstract void work() throws Exception;
+    protected abstract void work();
 
     protected AgentRegistry getAgentRegistry() {
         return agentRegistry;
@@ -128,9 +127,9 @@ public abstract class AgentController {
     }
 
     // Executed when Spring initializes this bean
-    void init() throws IOException {
+    void init() {
         initPipelinesFolder();
-        initSslInfratructure();
+        initSslInfrastructure();
         initAgentIdentifier();
         initRuntimeInfo();
         initSubProcessLogger();
@@ -140,7 +139,7 @@ public abstract class AgentController {
         subprocessLogger.registerAsExitHook("Following processes were alive at shutdown: ");
     }
 
-    private void initSslInfratructure() throws IOException {
+    private void initSslInfrastructure() {
         sslInfrastructureService.createSslInfrastructure();
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,6 @@ public class PackageRepositoriesRepresenter {
             outputLinkWriter.addLink("self", Routes.PackageRepository.BASE);
             outputLinkWriter.addAbsoluteLink("doc", apiDocsUrl("#package-repositories"));
         });
-        outputWriter.addEmbedded(embeddedWriter -> {
-            embeddedWriter.addChildList("package_repositories", listWriter -> {
-                packageRepositories.forEach(packageDefinition -> listWriter.addChild(childWriter -> PackageRepositoryRepresenter.toJSON(childWriter, packageDefinition)));
-            });
-        });
+        outputWriter.addEmbedded(embeddedWriter -> embeddedWriter.addChildList("package_repositories", listWriter -> packageRepositories.forEach(packageDefinition -> listWriter.addChild(childWriter -> PackageRepositoryRepresenter.toJSON(childWriter, packageDefinition)))));
     }
 }

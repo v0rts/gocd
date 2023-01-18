@@ -1,5 +1,5 @@
 /****
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,6 @@ public class DescriptorValidatorPlugin implements GoPlugin {
 
     @Override
     public GoPluginIdentifier pluginIdentifier() {
-        return new GoPluginIdentifier("notification", Collections.singletonList("2.0"));
+        return new GoPluginIdentifier("notification", List.of("2.0"));
     }
 }

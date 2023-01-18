@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,7 @@ import java.util.Optional;
 public class TaskRepresenter {
 
     public static void toJSONArray(OutputListWriter tasksWriter, Tasks tasks) {
-        tasks.forEach(task -> {
-            tasksWriter.addChild(taskWriter -> toJSON(taskWriter, task));
-        });
+        tasks.forEach(task -> tasksWriter.addChild(taskWriter -> toJSON(taskWriter, task)));
     }
 
     public static void toJSON(OutputWriter jsonWriter, Task task) {
@@ -76,11 +74,7 @@ public class TaskRepresenter {
 
     public static Tasks fromJSONArray(JsonReader jsonReader) {
         Tasks allTasks = new Tasks();
-        jsonReader.readArrayIfPresent("tasks", tasks -> {
-            tasks.forEach(task -> {
-                allTasks.add(fromJSON(new JsonReader(task.getAsJsonObject())));
-            });
-        });
+        jsonReader.readArrayIfPresent("tasks", tasks -> tasks.forEach(task -> allTasks.add(fromJSON(new JsonReader(task.getAsJsonObject())))));
 
         return allTasks;
     }

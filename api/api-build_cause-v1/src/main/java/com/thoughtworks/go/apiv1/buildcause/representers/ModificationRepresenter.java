@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@ public class ModificationRepresenter {
 
     public static void toJSON(OutputWriter jsonOutputWriter, Modification model, Material material) {
         jsonOutputWriter
-            .addLinks(linksWriter -> {
-                linksWriter.addLink("vsm", Routes.MaterialConfig.vsm(material.getFingerprint(), model.getRevision()));
-            })
+            .addLinks(linksWriter -> linksWriter.addLink("vsm", Routes.MaterialConfig.vsm(material.getFingerprint(), model.getRevision())))
             .addIfNotNull("user_name", model.getUserName())
             .addIfNotNull("email_address", model.getEmailAddress())
             .addIfNotNull("revision", model.getRevision())

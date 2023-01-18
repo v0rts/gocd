@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ class NotificationFiltersRepresenterTest {
     filterOne.setId(1)
     def filterTwo = new NotificationFilter("up43", "stage_up43", StageEvent.Fails, false)
     filterTwo.setId(2)
-    def filters = Arrays.asList(filterOne, filterTwo)
+    def filters = List.of(filterOne, filterTwo)
 
     def json = toObjectString({
       NotificationFiltersRepresenter.toJSON(it, filters)

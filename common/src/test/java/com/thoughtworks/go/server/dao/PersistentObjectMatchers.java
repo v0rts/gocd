@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 package com.thoughtworks.go.server.dao;
 
 import com.thoughtworks.go.domain.PersistentObject;
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.Description;
 
 public class PersistentObjectMatchers {
     public static Matcher<PersistentObject> hasSameId(final PersistentObject expected) {
-        return new TypeSafeMatcher<PersistentObject>() {
+        return new TypeSafeMatcher<>() {
             public String message;
 
             @Override

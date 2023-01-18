@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -156,7 +156,7 @@ class GitMaterialConfigTest {
     @Test
     void shouldHandleEmptyBranchWhileSettingConfigAttributes() {
         GitMaterialConfig gitMaterialConfig = git("http://url", "foo");
-        gitMaterialConfig.setConfigAttributes(Collections.singletonMap(GitMaterialConfig.BRANCH, "     "));
+        gitMaterialConfig.setConfigAttributes(Map.of(GitMaterialConfig.BRANCH, "     "));
         assertEquals("master", gitMaterialConfig.getBranch());
     }
 

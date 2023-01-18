@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,9 +182,7 @@ public class TemplateConfigControllerV7 extends ApiController implements SparkSp
             return notModified(res);
         } else {
             setEtagHeader(res, etagFromServer);
-            return writerForTopLevelObject(req, res, writer -> {
-                ParametersRepresenter.toJSON(writer, templateConfig.name().toString(), paramConfigs);
-            });
+            return writerForTopLevelObject(req, res, writer -> ParametersRepresenter.toJSON(writer, templateConfig.name().toString(), paramConfigs));
         }
     }
 

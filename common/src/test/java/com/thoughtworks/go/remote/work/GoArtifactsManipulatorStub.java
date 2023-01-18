@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import com.thoughtworks.go.util.ZipUtil;
 import com.thoughtworks.go.work.DefaultGoPublisher;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +65,7 @@ public class GoArtifactsManipulatorStub extends GoArtifactsManipulator {
 
     public ConsoleOutputTransmitter createConsoleOutputTransmitter(JobIdentifier jobIdentifier,
                                                                    AgentIdentifier agentIdentifier, Charset consoleLogCharset) {
-        return new ConsoleOutputTransmitter(new ConsoleAppender() {
-            @Override
-            public void append(String content) throws IOException {
-                    consoleOuts.add(content);
-            }
-        });
+        return new ConsoleOutputTransmitter(consoleOuts::add);
     }
 
     public List<UploadEntry> uploadEntries() {

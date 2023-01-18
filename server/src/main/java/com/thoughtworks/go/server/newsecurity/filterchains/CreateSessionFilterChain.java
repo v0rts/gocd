@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ public class CreateSessionFilterChain extends FilterChainProxy {
                 .addFilterChain("/admin/agent/token", agentSessionReduceIdleTimeoutFilter, alwaysCreateSessionFilter)
                 .addFilterChain("/admin/agent-plugins.zip", agentSessionReduceIdleTimeoutFilter, alwaysCreateSessionFilter)
                 .addFilterChain("/cctray.xml", apiSessionReduceIdleTimeoutFilter, alwaysCreateSessionFilter)
-                .addFilterChain("/add-on/*/api/**", apiSessionReduceIdleTimeoutFilter, alwaysCreateSessionFilter)
                 .addFilterChain("/api/**", apiSessionReduceIdleTimeoutFilter, alwaysCreateSessionFilter)
                 .addFilterChain("/**", alwaysCreateSessionFilter)
                 .build()

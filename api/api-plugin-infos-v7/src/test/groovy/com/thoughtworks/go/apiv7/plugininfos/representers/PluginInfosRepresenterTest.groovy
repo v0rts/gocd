@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ class PluginInfosRepresenterTest {
     def SCMCombinedPluginInfo = new CombinedPluginInfo(SCMPluginInfo)
     def authorizationCombinedPluginInfo = new CombinedPluginInfo(authorizationPluginInfo)
 
-    Collection<CombinedPluginInfo> pluginInfos = Arrays.asList(SCMCombinedPluginInfo, authorizationCombinedPluginInfo)
+    Collection<CombinedPluginInfo> pluginInfos = List.of(SCMCombinedPluginInfo, authorizationCombinedPluginInfo)
 
     def actualJson = toObjectString({ PluginInfosRepresenter.toJSON(it, pluginInfos) })
 

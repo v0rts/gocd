@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ trait ControllerTrait<T extends SparkController> {
   MockHttpSession session = new MockHttpSession()
   HttpRequestBuilder httpRequestBuilder = new HttpRequestBuilder().withSession(session)
   Part part = mock(Part)
-  Collection<Part> parts = Collections.singletonList(part)
+  Collection<Part> parts = List.of(part)
 
   void get(String path) {
     sendRequest('get', path, [:], null)

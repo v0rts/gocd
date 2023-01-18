@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,9 @@ import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Collections.singletonList;
 
 @Component
 public class WebBasedPluginAuthenticationProvider extends AbstractPluginAuthenticationProvider<AccessToken> {
@@ -77,7 +76,7 @@ public class WebBasedPluginAuthenticationProvider extends AbstractPluginAuthenti
                                                                AccessToken credentials,
                                                                SecurityAuthConfig authConfig,
                                                                List<PluginRoleConfig> pluginRoleConfigs) {
-        return authorizationExtension.authenticateUser(pluginId, credentials.getCredentials(), singletonList(authConfig), pluginRoleConfigs);
+        return authorizationExtension.authenticateUser(pluginId, credentials.getCredentials(), Collections.singletonList(authConfig), pluginRoleConfigs);
     }
 
     @Override

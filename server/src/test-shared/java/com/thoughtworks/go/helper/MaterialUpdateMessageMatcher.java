@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 
 public class MaterialUpdateMessageMatcher {
     public static MaterialUpdateMessage matchMaterialUpdateMessage(final Material expectedMaterial) {
-        return argThat(new ArgumentMatcher<MaterialUpdateMessage>() {
+        return argThat(new ArgumentMatcher<>() {
             @Override
             public boolean matches(MaterialUpdateMessage o) {
                 return expectedMaterial.equals(o.getMaterial());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,9 +117,6 @@ public class AuthorizeFilterChain extends FilterChainProxy {
 
                 // any other APIs require `ROLE_USER`
                 .addAuthorityFilterChain("/api/**", apiAccessDeniedHandler, ROLE_USER)
-
-                // addons will be expected to do their own authentication/authorization
-                .addFilterChain("/add-on/**", allowAllAccessFilter)
 
                 .addAuthorityFilterChain("/**", genericAccessDeniedHandler, ROLE_USER)
                 .build());

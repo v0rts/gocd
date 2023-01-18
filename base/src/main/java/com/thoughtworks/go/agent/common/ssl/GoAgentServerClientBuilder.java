@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public abstract class GoAgentServerClientBuilder<T> {
         return trustStore;
     }
 
-    KeyStore agentKeystore() throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
+    KeyStore agentKeystore() throws IOException, GeneralSecurityException {
         if (this.sslPrivateKey != null && this.sslPrivateKey.exists() && this.sslCertificate != null && this.sslCertificate.exists()) {
             return keyStoreFromPem();
         } else {
@@ -90,7 +90,7 @@ public abstract class GoAgentServerClientBuilder<T> {
         }
     }
 
-    private KeyStore keyStoreFromPem() throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+    private KeyStore keyStoreFromPem() throws IOException, GeneralSecurityException {
         KeyStore keyStore = KeyStore.getInstance("JKS");
         keyStore.load(null);
         if (sslCertificate != null && sslPrivateKey != null) {
@@ -104,7 +104,7 @@ public abstract class GoAgentServerClientBuilder<T> {
         PrivateKey privateKey;
         try (PEMParser reader = new PEMParser(new FileReader(this.sslPrivateKey, StandardCharsets.UTF_8))) {
             Object pemObject = reader.readObject();
-            JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(new BouncyCastleProvider());
+            JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME);
 
             if (pemObject instanceof PEMEncryptedKeyPair) {
                 PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(passphrase());

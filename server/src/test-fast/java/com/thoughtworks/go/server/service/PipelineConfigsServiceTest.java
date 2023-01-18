@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
@@ -296,7 +295,7 @@ public class PipelineConfigsServiceTest {
         List<PipelineConfigs> gotPipelineGroups = service.getGroupsForUser(user);
 
         verify(goConfigService, never()).getAllPipelinesForEditInGroup("group1");
-        assertThat(gotPipelineGroups, is(Arrays.asList(group1)));
+        assertThat(gotPipelineGroups, is(List.of(group1)));
     }
 
     @Test

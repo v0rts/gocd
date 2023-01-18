@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.thoughtworks.go.helper.ModificationsMother.modifySomeFiles;
@@ -182,7 +181,7 @@ public class ArtifactPlanRepositoryIntegrationTest {
         List<ArtifactPlan> artifactPlanList = artifactPlanRepository.findByBuildId(jobInstance.getId());
         assertThat(artifactPlanList.size(), is(1));
 
-        artifactPlanRepository.deleteAll(Arrays.asList(artifactPlan));
+        artifactPlanRepository.deleteAll(List.of(artifactPlan));
         artifactPlanList = artifactPlanRepository.findByBuildId(jobInstance.getId());
         assertThat(artifactPlanList.size(), is(0));
     }

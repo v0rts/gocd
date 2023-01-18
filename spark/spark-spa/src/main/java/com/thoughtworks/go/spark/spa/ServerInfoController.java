@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,10 +65,10 @@ public class ServerInfoController implements SparkController {
         meta.put("usable_space_in_artifacts_repository", artifactsDirHolder.getArtifactsDir().getUsableSpace());
         meta.put("pipeline_count", pipelineConfigService.totalPipelinesCount());
 
-        Map<Object, Object> object = new HashMap<>() {{
-            put("viewTitle", "Server Details");
-            put("meta", meta);
-        }};
+        Map<String, Object> object = Map.of(
+            "viewTitle", "Server Details",
+            "meta", meta
+        );
 
         return new ModelAndView(object, null);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.zip.ZipFile;
@@ -224,7 +223,7 @@ class PluginsZipTest {
                 getPluginDescriptor("external-plugin-2", externalPluginJarLocation, false)
         );
 
-        when(pluginManager.plugins()).thenReturn(Arrays.asList(
+        when(pluginManager.plugins()).thenReturn(List.of(
                 bundledTaskPlugin.descriptors().get(0),
                 bundledTaskPlugin.descriptors().get(1),
 

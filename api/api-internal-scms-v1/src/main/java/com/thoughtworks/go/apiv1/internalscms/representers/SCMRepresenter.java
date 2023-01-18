@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.thoughtworks.go.domain.config.Configuration;
 import com.thoughtworks.go.domain.config.PluginConfiguration;
 import com.thoughtworks.go.domain.scm.SCM;
 
-import java.util.Collections;
+import java.util.Map;
 
 
 public class SCMRepresenter {
@@ -37,7 +37,7 @@ public class SCMRepresenter {
         .addChildList("configuration", configWriter -> ConfigurationPropertyRepresenter.toJSON(configWriter, scm.getConfiguration()));
 
         if (scm.errors() != null && (!scm.errors().isEmpty())) {
-            jsonWriter.addChild("errors", errorWriter -> new ErrorGetter(Collections.singletonMap("autoUpdate", "auto_update"))
+            jsonWriter.addChild("errors", errorWriter -> new ErrorGetter(Map.of("autoUpdate", "auto_update"))
                 .toJSON(errorWriter, scm));
         }
     }

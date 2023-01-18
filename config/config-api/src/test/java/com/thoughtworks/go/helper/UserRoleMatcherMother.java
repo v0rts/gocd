@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,9 @@
  */
 package com.thoughtworks.go.helper;
 
-import com.thoughtworks.go.config.CaseInsensitiveString;
 import com.thoughtworks.go.config.UserRoleMatcher;
 
 public class UserRoleMatcherMother {
-    public static final UserRoleMatcher ALWAYS_FALSE_MATCHER = new UserRoleMatcher() {
-        @Override
-        public boolean match(CaseInsensitiveString userName, CaseInsensitiveString roleName) {
-            return false;
-        }
-    };
-    public static final UserRoleMatcher ALWAYS_TRUE_MATCHER = new UserRoleMatcher() {
-        @Override
-        public boolean match(CaseInsensitiveString userName, CaseInsensitiveString roleName) {
-            return true;
-        }
-    };
+    public static final UserRoleMatcher ALWAYS_FALSE_MATCHER = (userName, roleName) -> false;
+    public static final UserRoleMatcher ALWAYS_TRUE_MATCHER = (userName, roleName) -> true;
 }

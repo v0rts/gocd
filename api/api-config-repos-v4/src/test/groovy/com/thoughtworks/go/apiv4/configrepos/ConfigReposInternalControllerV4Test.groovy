@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -203,8 +203,8 @@ class ConfigReposInternalControllerV4Test implements SecurityServiceTrait, Contr
             ConfigReposConfig repos = new ConfigReposConfig(repo("test-id"), repo("another-id"))
 
             when(service.getConfigRepos()).thenReturn(repos)
-            when(environmentConfigService.getEnvironmentNames()).thenReturn(Arrays.asList("env1", "env2"))
-            when(pipelineConfigsService.getGroupsForUser(anyString())).thenReturn(Arrays.asList(new BasicPipelineConfigs("grp1", new Authorization(), PipelineConfigMother.pipelineConfig("pipeline"))))
+            when(environmentConfigService.getEnvironmentNames()).thenReturn(List.of("env1", "env2"))
+            when(pipelineConfigsService.getGroupsForUser(anyString())).thenReturn(List.of(new BasicPipelineConfigs("grp1", new Authorization(), PipelineConfigMother.pipelineConfig("pipeline"))))
 
             getWithApiHeader(controller.controllerBasePath())
 

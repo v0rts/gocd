@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RetryableTest {
     @Test
     public void retryThrowsExceptionWhen() {
-        final List<Integer> attempts = new ArrayList<Integer>();
+        final List<Integer> attempts = new ArrayList<>();
         boolean raised = false;
 
         try {
@@ -47,7 +47,7 @@ public class RetryableTest {
 
     @Test
     public void retryStopsWhenSuccessful() {
-        final List<Integer> attempts = new ArrayList<Integer>();
+        final List<Integer> attempts = new ArrayList<>();
         boolean raised = false;
 
         try {

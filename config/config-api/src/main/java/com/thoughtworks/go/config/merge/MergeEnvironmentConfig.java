@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import java.util.*;
 
 import static com.thoughtworks.go.util.ExceptionUtils.bomb;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 /**
  * Composite of many EnvironmentConfig instances. Hides elementary environment configurations.
@@ -36,7 +35,7 @@ public class MergeEnvironmentConfig extends BaseCollection<EnvironmentConfig> im
     private final ConfigErrors configErrors = new ConfigErrors();
 
     public MergeEnvironmentConfig(EnvironmentConfig... configs) {
-        this(asList(configs));
+        this(Arrays.asList(configs));
     }
 
     public MergeEnvironmentConfig(List<EnvironmentConfig> configs) {

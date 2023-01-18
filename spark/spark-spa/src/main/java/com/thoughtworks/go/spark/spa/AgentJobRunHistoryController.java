@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,10 +51,10 @@ public class AgentJobRunHistoryController implements SparkController {
     }
 
     public ModelAndView index(Request request, Response response) {
-        Map<Object, Object> object = new HashMap<>() {{
-            put("viewTitle", "Agent Job History");
-            put("meta", meta(request));
-        }};
+        Map<String, Object> object = Map.of(
+            "viewTitle", "Agent Job History",
+            "meta", meta(request)
+        );
 
         return new ModelAndView(object, null);
     }

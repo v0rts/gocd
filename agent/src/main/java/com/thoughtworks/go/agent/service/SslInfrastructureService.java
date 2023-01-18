@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public class SslInfrastructureService {
     private final AgentRegistry agentRegistry;
 
     @Autowired
-    public SslInfrastructureService(URLService urlService, GoAgentServerHttpClient httpClient, AgentRegistry agentRegistry) throws Exception {
+    public SslInfrastructureService(URLService urlService, GoAgentServerHttpClient httpClient, AgentRegistry agentRegistry) {
         this(new RemoteRegistrationRequester(urlService.getAgentRegistrationURL(), agentRegistry, httpClient),
                 httpClient,
                 new TokenRequester(urlService.getTokenURL(), agentRegistry, httpClient),

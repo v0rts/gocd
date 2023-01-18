@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thoughtworks, Inc.
+ * Copyright 2023 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Collection;
 
 public class ProcessListRepresenter {
     public static void toJSON(OutputWriter writer, Collection<ProcessWrapper> processList) {
-        writer.addChildList("process-list", listWriter -> {
-            processList.forEach(process -> listWriter.addChild(childWriter -> ProcessRepresenter.toJSON(childWriter, process)));
-        });
+        writer.addChildList("process-list", listWriter -> processList.forEach(process -> listWriter.addChild(childWriter -> ProcessRepresenter.toJSON(childWriter, process))));
     }
 }
