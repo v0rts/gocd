@@ -29,7 +29,7 @@ import java.util.stream.Collectors
 
 plugins {
   id 'base'
-  id 'org.owasp.dependencycheck' version '7.4.4'
+  id 'org.owasp.dependencycheck' version '8.0.1'
   id 'com.github.hierynomus.license-base' version '0.16.1'
   id 'com.github.jk1.dependency-license-report' version '2.1'
 }
@@ -160,9 +160,9 @@ project.ext.packaging = [
   adoptiumJavaVersion: new AdoptiumVersion(
     feature: 17,
     interim: 0,    // set to `null` for the first release of a new featureVersion
-    update : 5,    // set to `null` for the first release of a new featureVersion
+    update : 6,    // set to `null` for the first release of a new featureVersion
     patch  : null, // set to `null` for most releases. Patch releases are "exceptional".
-    build  : 8
+    build  : 10
   )
 ]
 

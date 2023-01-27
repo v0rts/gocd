@@ -72,6 +72,8 @@ dependencies {
   implementation project.deps.jakartaAnnotation
   implementation project.deps.commonsConfiguration
   implementation project.deps.nanohttpd
+  implementation project.deps.oshi
+  compileOnly project.deps.jetBrainsAnnotations
 
   testImplementation project(path: ':common', configuration: 'testOutput')
   testImplementation project(path: ':config:config-api', configuration: 'testOutput')
@@ -126,7 +128,7 @@ task verifyJar(type: VerifyJarTask) {
     "lib": [
       "agent-${project.version}-classes.jar",
       "agent-common-${project.version}.jar",
-      "angus-activation-1.0.0.jar",
+      "angus-activation-${project.versions.angusMailSmtp}.jar",
       "animal-sniffer-annotations-1.9.jar",
       "ant-${project.versions.apacheAnt}.jar",
       "base-${project.version}.jar",
@@ -166,7 +168,7 @@ task verifyJar(type: VerifyJarTask) {
       "jackson-annotations-${project.versions.jacksonBom}.jar",
       "jackson-core-${project.versions.jacksonBom}.jar",
       "jackson-databind-${project.versions.jacksonBom}.jar",
-      "jakarta.activation-api-2.1.0.jar",
+      "jakarta.activation-api-2.1.1.jar",
       "jakarta.annotation-api-${project.versions.jakartaAnnotation}.jar",
       "jakarta.servlet-api-${project.versions.servletApi}.jar",
       "jakarta.xml.bind-api-4.0.0.jar",
@@ -176,6 +178,8 @@ task verifyJar(type: VerifyJarTask) {
       "jcl-over-slf4j-${project.versions.slf4j}.jar",
       "jcommander-${project.versions.jcommander}.jar",
       "jdom2-${project.versions.jdom}.jar",
+      "jna-jpms-5.12.1.jar",
+      "jna-platform-jpms-5.12.1.jar",
       "joda-time-${project.versions.jodaTime}.jar",
       "jolt-core-${project.versions.jolt}.jar",
       "json-utils-${project.versions.jolt}.jar",
@@ -186,6 +190,7 @@ task verifyJar(type: VerifyJarTask) {
       "nanohttpd-${project.versions.nanohttpd}.jar",
       "objenesis-${project.versions.objenesis}.jar",
       "org.apache.felix.framework-${project.versions.felix}.jar",
+      "oshi-core-java11-${project.versions.oshi}.jar",
       "plugin-metadata-store-${project.version}.jar",
       "quartz-${project.versions.quartz}.jar",
       "semantic-version-${project.versions.semanticVersion}.jar",

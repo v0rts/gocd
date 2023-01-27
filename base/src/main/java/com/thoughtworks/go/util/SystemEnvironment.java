@@ -17,6 +17,7 @@ package com.thoughtworks.go.util;
 
 import ch.qos.logback.classic.Level;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.TestOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +100,9 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
     public static final String TFS_SOCKET_TIMEOUT_PROPERTY = "tfs.socket.block.timeout";
 
     static final String UNRESPONSIVE_JOB_WARNING_THRESHOLD = "cruise.unresponsive.job.warning";
+
+    public static final int DEFAULT_MAIL_SENDER_TIMEOUT_MILLIS = 60 * 1000;
+    private static final GoSystemProperty<Integer> MAIL_SENDER_TIMEOUT_MILLIS = new GoIntSystemProperty("cruise.mail.sender.timeout", DEFAULT_MAIL_SENDER_TIMEOUT_MILLIS);
 
     public static final GoSystemProperty<Integer> RESOLVE_FANIN_MAX_BACK_TRACK_LIMIT = new CachedProperty<>(new GoIntSystemProperty("resolve.fanin.max.backtrack.limit", 100));
     public static final GoSystemProperty<Integer> MATERIAL_UPDATE_INACTIVE_TIMEOUT = new CachedProperty<>(new GoIntSystemProperty("material.update.inactive.timeout", 15));
@@ -255,6 +259,10 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return getPropertyImpl(CRUISE_LISTEN_HOST);
     }
 
+    public int getMailSenderTimeoutMillis() {
+        return get(MAIL_SENDER_TIMEOUT_MILLIS);
+    }
+
     public long getArtifactRepositoryFullLimit() {
         return Objects.requireNonNullElseGet(artifactFullSizeLimit,
             () -> artifactFullSizeLimit = Long.parseLong(trimMegaFromSize(getPropertyImpl(ARTIFACT_FULL_SIZE_LIMIT, "100M"))));
@@ -274,7 +282,7 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return get(CONSOLE_OUT_TO_STDOUT);
     }
 
-    //Used in Tests
+    @TestOnly
     public void setDiskSpaceCacheRefresherInterval(long interval) {
         diskSpaceCacheRefresherInterval = interval;
     }
@@ -329,16 +337,8 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return System.getProperty(property);
     }
 
-    public String getOperatingSystemFamilyName() {
-        return OperatingSystem.getFamilyName();
-    }
-
-    public String getOperatingSystemCompleteName() {
-        return OperatingSystem.getCompleteName();
-    }
-
-    public String getOperatingSystemName() {
-        return getPropertyImpl("os.name");
+    public String getOperatingSystemFamilyJvmName() {
+        return System.getProperty("os.name").startsWith("Windows") ? "Windows" : System.getProperty("os.name");
     }
 
     public int getActivemqQueuePrefetch() {
