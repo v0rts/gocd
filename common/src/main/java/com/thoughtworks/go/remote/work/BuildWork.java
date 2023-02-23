@@ -85,6 +85,7 @@ public class BuildWork implements Work {
 
     @Override
     public void doWork(EnvironmentVariableContext environmentVariableContext, AgentWorkContext agentWorkContext) {
+        LOGGER.info("Executing received BuildWork job...");
         initialize(agentWorkContext);
         try {
             JobResult result = build(environmentVariableContext, agentWorkContext.getAgentIdentifier(), agentWorkContext.getScmExtension());
@@ -128,7 +129,7 @@ public class BuildWork implements Work {
 
         prepareJob(agentIdentifier, scmExtension);
 
-        setupEnvrionmentContext(environmentVariableContext);
+        setupEnvironmentContext(environmentVariableContext);
 
         dumpEnvironmentVariables(environmentVariableContext);
 
@@ -181,8 +182,8 @@ public class BuildWork implements Work {
         return new ProcessOutputStreamConsumer<>(goPublisher, goPublisher);
     }
 
-    private void setupEnvrionmentContext(EnvironmentVariableContext context) {
-        context.setProperty("GO_SERVER_URL", new SystemEnvironment().getPropertyImpl("serviceUrl"), false);
+    private void setupEnvironmentContext(EnvironmentVariableContext context) {
+        context.setProperty("GO_SERVER_URL", new SystemEnvironment().getServiceUrl(), false);
         context.addAll(assignment.initialEnvironmentVariableContext());
         materialRevisions.populateAgentSideEnvironmentVariables(context, workingDirectory);
     }

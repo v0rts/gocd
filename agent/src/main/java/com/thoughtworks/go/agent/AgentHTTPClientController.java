@@ -51,13 +51,12 @@ public class AgentHTTPClientController extends AgentController {
     private final SslInfrastructureService sslInfrastructureService;
     private final ArtifactExtension artifactExtension;
     private final PluginRequestProcessorRegistry pluginRequestProcessorRegistry;
-    private final PluginJarLocationMonitor pluginJarLocationMonitor;
 
-    private JobRunner runner;
     private final PackageRepositoryExtension packageRepositoryExtension;
     private final SCMExtension scmExtension;
     private final TaskExtension taskExtension;
-    private AgentInstruction agentInstruction = NONE;
+    private volatile JobRunner runner;
+    private volatile AgentInstruction agentInstruction = NONE;
 
     @Autowired
     public AgentHTTPClientController(RemotingClient client,
@@ -75,7 +74,7 @@ public class AgentHTTPClientController extends AgentController {
                                      PluginRequestProcessorRegistry pluginRequestProcessorRegistry,
                                      AgentHealthHolder agentHealthHolder,
                                      PluginJarLocationMonitor pluginJarLocationMonitor) {
-        super(sslInfrastructureService, systemEnvironment, agentRegistry, pluginManager, subprocessLogger, agentUpgradeService, agentHealthHolder);
+        super(sslInfrastructureService, systemEnvironment, agentRegistry, pluginManager, subprocessLogger, agentUpgradeService, agentHealthHolder, pluginJarLocationMonitor);
         this.client = client;
         this.packageRepositoryExtension = packageRepositoryExtension;
         this.scmExtension = scmExtension;
@@ -84,7 +83,6 @@ public class AgentHTTPClientController extends AgentController {
         this.sslInfrastructureService = sslInfrastructureService;
         this.artifactExtension = artifactExtension;
         this.pluginRequestProcessorRegistry = pluginRequestProcessorRegistry;
-        this.pluginJarLocationMonitor = pluginJarLocationMonitor;
     }
 
     @Override
@@ -113,42 +111,36 @@ public class AgentHTTPClientController extends AgentController {
     }
 
     @Override
-    public void work() {
-        LOG.debug("[Agent Loop] Trying to retrieve work.");
-        if (pluginJarLocationMonitor.hasRunAtLeastOnce()) {
-            retrieveCookieIfNecessary();
-            retrieveWork();
-            LOG.debug("[Agent Loop] Successfully retrieved work.");
-        } else {
-            LOG.debug("[Agent Loop] PluginLocationMonitor has not yet run. Not retrieving work since plugins may not be initialized.");
-        }
+    public WorkAttempt tryDoWork() {
+        retrieveCookieIfNecessary();
+        return doWork();
     }
 
     private void retrieveCookieIfNecessary() {
         if (!getAgentRuntimeInfo().hasCookie() && sslInfrastructureService.isRegistered()) {
-            LOG.info("About to get cookie from the server.");
+            LOG.info("[Agent Loop] Registered, but need new agent cookie - about to get cookie from the server.");
             String cookie = client.getCookie(getAgentRuntimeInfo());
             getAgentRuntimeInfo().setCookie(cookie);
-            LOG.info("Got cookie: {}", cookie);
+            LOG.info("[Agent Loop] Got new cookie - ready to retrieve work.");
         }
     }
 
-    void retrieveWork() {
+    private WorkAttempt doWork() {
         AgentIdentifier agentIdentifier = agentIdentifier();
         LOG.debug("[Agent Loop] {} is checking for work from Go", agentIdentifier);
-        Work work;
         try {
             getAgentRuntimeInfo().idle();
-            work = client.getWork(getAgentRuntimeInfo());
-            if (!(work instanceof NoWork)) {
-                LOG.debug("[Agent Loop] Got work from server: [{}]", work.description());
-            }
+            Work work = client.getWork(getAgentRuntimeInfo());
+            LOG.debug("[Agent Loop] Got work from server: [{}]", work.description());
             runner = new JobRunner();
             final AgentWorkContext agentWorkContext = new AgentWorkContext(agentIdentifier, client, manipulator, getAgentRuntimeInfo(), packageRepositoryExtension, scmExtension, taskExtension, artifactExtension, pluginRequestProcessorRegistry);
             runner.run(work, agentWorkContext);
+            LOG.debug("[Agent Loop] Successfully executed work.");
+            return WorkAttempt.fromWork(work);
         } catch (UnregisteredAgentException e) {
-            LOG.warn("[Agent Loop] Invalid agent certificate with fingerprint {}. Registering with server on next iteration.", e.getUuid());
-            sslInfrastructureService.invalidateAgentCertificate();
+            LOG.warn("[Agent Loop] Agent is not registered. [{}] Registering with server on next iteration.", e.getMessage());
+            sslInfrastructureService.createSslInfrastructure();
+            return WorkAttempt.FAILED;
         } finally {
             getAgentRuntimeInfo().idle();
         }
