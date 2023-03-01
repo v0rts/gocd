@@ -67,7 +67,7 @@ final Map<String, String> libraries = [
   jcommander          : 'com.beust:jcommander:1.82',
   jdom                : 'org.jdom:jdom2:2.0.6.1',
   jetBrainsAnnotations: 'org.jetbrains:annotations:24.0.0',
-  jetty               : 'org.eclipse.jetty:jetty-server:9.4.50.v20221201',
+  jetty               : 'org.eclipse.jetty:jetty-server:9.4.51.v20230217',
   jgit                : 'org.eclipse.jgit:org.eclipse.jgit:6.4.0.202211300538-r',
   jodaTime            : 'joda-time:joda-time:2.12.2', // joda-time version has to be compatible with the jruby version
   jolt                : 'com.bazaarvoice.jolt:jolt-core:0.1.7',
@@ -80,7 +80,7 @@ final Map<String, String> libraries = [
   logback             : 'ch.qos.logback:logback-classic:1.2.11',
   lombok              : 'org.projectlombok:lombok:1.18.26',
   mockitoBom          : 'org.mockito:mockito-bom:5.1.1',
-  mybatis             : 'org.mybatis:mybatis:3.5.11',
+  mybatis             : 'org.mybatis:mybatis:3.5.12',
   mybatisSpring       : 'org.mybatis:mybatis-spring:2.0.7',
   mysql               : 'com.mysql:mysql-connector-j:8.0.32',
   nanohttpd           : 'org.nanohttpd:nanohttpd:2.3.1',
