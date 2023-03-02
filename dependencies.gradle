@@ -66,7 +66,7 @@ final Map<String, String> libraries = [
   jaxen               : 'jaxen:jaxen:2.0.0',
   jcommander          : 'com.beust:jcommander:1.82',
   jdom                : 'org.jdom:jdom2:2.0.6.1',
-  jetBrainsAnnotations: 'org.jetbrains:annotations:24.0.0',
+  jetBrainsAnnotations: 'org.jetbrains:annotations:24.0.1',
   jetty               : 'org.eclipse.jetty:jetty-server:9.4.51.v20230217',
   jgit                : 'org.eclipse.jgit:org.eclipse.jgit:6.4.0.202211300538-r',
   jodaTime            : 'joda-time:joda-time:2.12.2', // joda-time version has to be compatible with the jruby version
@@ -75,7 +75,7 @@ final Map<String, String> libraries = [
   jsonUnit            : 'net.javacrumbs.json-unit:json-unit-fluent:2.36.1',
   jsoup               : 'org.jsoup:jsoup:1.15.4',
   junit5Bom           : 'org.junit:junit-bom:5.9.2',
-  liquibase           : 'org.liquibase:liquibase-core:4.19.0',
+  liquibase           : 'org.liquibase:liquibase-core:4.19.1',
   liquibaseSlf4j      : 'com.mattbertolini:liquibase-slf4j:4.1.0',
   logback             : 'ch.qos.logback:logback-classic:1.2.11',
   lombok              : 'org.projectlombok:lombok:1.18.26',
