@@ -102,9 +102,6 @@ api/api-access-token-v1/config/
 api/api-artifact-store-config-v1/logs/
 api/api-artifact-store-config-v1/out/
 api/api-artifact-store-config-v1/target/
-api/api-backups-v1/logs/
-api/api-backups-v1/out/
-api/api-backups-v1/target/
 api/api-backups-v2/out/
 api/api-backups-v2/target/
 api/api-backups-v2/logs/
@@ -126,10 +123,6 @@ api/api-config-repo-operations-v1/target/
 api/api-version-v1/out/
 api/api-version-v1/logs/
 api/api-version-v1/target/
-api/api-dashboard-v3/config/
-api/api-dashboard-v3/out/
-api/api-dashboard-v3/logs/
-api/api-dashboard-v3/target/
 api/api-environments-v3/config/
 api/api-environments-v3/logs/
 api/api-environments-v3/out/
@@ -171,9 +164,6 @@ api/api-server-health-messages-v1/target/
 api/api-server-health-v1/logs/
 api/api-server-health-v1/out/
 api/api-server-health-v1/target/
-api/api-shared-v1/config/
-api/api-shared-v1/out/
-api/api-shared-v1/target/
 api/api-user-representers-v1/logs/
 api/api-user-representers-v1/out/
 api/api-user-representers-v1/target/
@@ -358,10 +348,6 @@ api/api-internal-environments-v1/out/
 api/api-internal-environments-v1/target/
 api/api-internal-environments-v1/logs/
 api/api-internal-environments-v1/config/
-api/api-shared-v10/out/
-api/api-shared-v10/target/
-api/api-shared-v10/logs/
-api/api-shared-v10/config/
 api/api-shared-v11/out/
 api/api-shared-v11/target/
 api/api-shared-v11/logs/
