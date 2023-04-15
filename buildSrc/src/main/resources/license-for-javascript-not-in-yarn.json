@@ -1,12 +1,12 @@
 {
-  "bootstrap": {
-    "moduleName": "bootstrap",
+  "bootstrap-dropdown": {
+    "moduleName": "bootstrap-dropdown",
     "moduleVersion": "2.3.2",
     "moduleUrls": [
       "https://github.com/twbs/bootstrap"
     ],
     "filenames": [
-      "bootstrap-2.3.2.min.js"
+      "bootstrap-dropdown-2.3.2.js"
     ],
     "moduleLicenses": [
       {
@@ -33,12 +33,12 @@
   },
   "d3": {
     "moduleName": "d3",
-    "moduleVersion": "3.1.5",
+    "moduleVersion": "3.5.17",
     "moduleUrls": [
       "https://github.com/d3/d3"
     ],
     "filenames": [
-      "d3-3.1.4.min.js"
+      "d3-3.5.17.js"
     ],
     "moduleLicenses": [
       {
@@ -47,30 +47,14 @@
       }
     ]
   },
-  "jquery-dirtyform-plugin": {
-    "moduleName": "jquery-dirtyform-plugin",
-    "moduleVersion": "unknown",
-    "moduleUrls": [
-      "https://github.com/acvwilson/dirty_form"
-    ],
-    "filenames": [
-      "jquery.dirtyform.js"
-    ],
-    "moduleLicenses": [
-      {
-        "moduleLicense": "MIT",
-        "moduleLicenseUrl": "https://spdx.org/licenses/MIT.html"
-      }
-    ]
-  },
-  "jquery with sizzle.js": {
-    "moduleName": "jquery with sizzle.js",
-    "moduleVersion": "1.7.2",
+  "jquery": {
+    "moduleName": "jquery",
+    "moduleVersion": "2.2.4",
     "moduleUrls": [
       "https://github.com/jquery/jquery"
     ],
     "filenames": [
-      "jquery-1.7.2.js"
+      "jquery-2.2.4.js"
     ],
     "moduleLicenses": [
       {
@@ -81,12 +65,12 @@
   },
   "jquery-ui": {
     "moduleName": "jquery-ui",
-    "moduleVersion": "1.7.3",
+    "moduleVersion": "1.13.2",
     "moduleUrls": [
       "https://github.com/jquery/jquery-ui"
     ],
     "filenames": [
-      "jquery-ui-1.7.3.custom.min.js"
+      "jquery-ui-1.13.2.js"
     ],
     "moduleLicenses": [
       {
@@ -97,12 +81,12 @@
   },
   "lodash": {
     "moduleName": "lodash",
-    "moduleVersion": "4.2.1",
+    "moduleVersion": "4.17.21",
     "moduleUrls": [
       "https://github.com/lodash/lodash"
     ],
     "filenames": [
-      "lodash.js"
+      "lodash-4.17.21.js"
     ],
     "moduleLicenses": [
       {

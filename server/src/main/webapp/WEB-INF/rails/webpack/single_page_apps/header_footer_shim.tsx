@@ -18,44 +18,40 @@ import "foundation-sites";
 import $ from "jquery";
 import m from "mithril";
 import {footerMeta, headerMeta} from "models/current_user_permissions";
-import {DataSharingCleaner} from "models/shared/data_sharing_cleaner";
 import {VersionUpdater} from "models/shared/version_updater";
 import {ModalManager} from "views/components/modal/modal_manager";
 import {SiteFooter} from "views/pages/partials/site_footer";
 import {SiteHeader} from "views/pages/partials/site_header";
 
 $(() => {
-  window.addEventListener("DOMContentLoaded", () => {
-    $(document).foundation();
-    ModalManager.onPageLoad();
-    VersionUpdater.update();
-    DataSharingCleaner.clean();
+  $(document).foundation();
+  ModalManager.onPageLoad();
+  VersionUpdater.update();
 
-    const footerData = footerMeta();
-    const headerData = headerMeta();
+  const footerData = footerMeta();
+  const headerData = headerMeta();
 
-    const menuMountPoint = document.getElementById("app-menu");
+  const menuMountPoint = document.getElementById("app-menu");
 
-    if (menuMountPoint) {
-      m.mount(menuMountPoint, {
-        view() {
-          return <SiteHeader {...headerData}/>;
-        }
-      });
-    } else {
-      throw Error("Could not find menu mount point");
-    }
+  if (menuMountPoint) {
+    m.mount(menuMountPoint, {
+      view() {
+        return <SiteHeader {...headerData}/>;
+      }
+    });
+  } else {
+    throw Error("Could not find menu mount point");
+  }
 
-    const footerMountPoint = document.getElementById("app-footer");
+  const footerMountPoint = document.getElementById("app-footer");
 
-    if (footerMountPoint) {
-      m.mount(footerMountPoint, {
-        view() {
-          return <SiteFooter {...footerData}/>;
-        }
-      });
-    } else {
-      throw Error("Could not find footer mount point");
-    }
-  });
+  if (footerMountPoint) {
+    m.mount(footerMountPoint, {
+      view() {
+        return <SiteFooter {...footerData}/>;
+      }
+    });
+  } else {
+    throw Error("Could not find footer mount point");
+  }
 });
