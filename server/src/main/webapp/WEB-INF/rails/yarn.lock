@@ -1326,10 +1326,10 @@
   resolved "https://registry.yarnpkg.com/@types/mithril/-/mithril-2.0.12.tgz#3391c691617c79e2e8e60dfa97527fc948cf07db"
   integrity sha512-vedzt04n3EB7rcnfSLCv3+w3qJLkGWdsNRBKvelTqhSJSfg73Roq9b+rcnn9zeqGYtQAMqNcO6vNBR/w0OzipQ==
 
-"@types/node@*", "@types/node@>=10.0.0", "@types/node@^18.15.11":
-  version "18.15.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.11.tgz#b3b790f09cb1696cffcec605de025b088fa4225f"
-  integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
+"@types/node@*", "@types/node@>=10.0.0", "@types/node@^20.1.3":
+  version "20.1.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.3.tgz#bc8e7cd8065a5fc355a3a191a68db8019c58bc00"
+  integrity sha512-NP2yfZpgmf2eDRPmgGq+fjGjSwFgYbihA8/gK+ey23qT9RkxsgNTZvGOEpXgzIGqesTYkElELLgtKoMQTys5vA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
