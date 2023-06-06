@@ -13,25 +13,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ *  ---- WARNING ----
+ * Do not add any imports to this file. It is intended as pure-mixins, as comments in shared/_mixins.scss
+ * If you add imports here they will end up creation a lot of duplicated CSS, especially from
+ * fontawesome due to size and the number of places this is imported.
  */
-@import "font-awesome-sprockets";
-@import "font-awesome/scss/variables";
-@import "bourbon/core/bourbon";
 
 <%
   variables = {}
-  variable_definitions = File.read(File.join(Rails.root, 'node_modules/font-awesome/scss/_variables.scss')).lines.grep(/\$fa-var-/).collect(&:strip)
+  variable_definitions = File.read(File.join(Rails.root, 'node_modules/@fortawesome/fontawesome-free/scss/_variables.scss')).lines.grep(/\$fa-var-/).collect(&:strip)
   variable_definitions.each do |definition|
-    definition =~ /\$fa-var-(.*): "\\(.*)";/
-    variables[$1] = $2;
+    definition =~ /\$fa-var-(.*): \\(.*);/
+    variables[$1] = $2
   end
 %>
 
 $fa-font-icons: (
-                <% variables.each do |name, unicode| %>
-                  fa-var-<%= name %>: '<%= unicode %>',
-                <% end %>
-                );
+<% variables.each do |name, unicode| %>
+  fa-var-<%= name %>: "<%= unicode %>",
+<% end %>
+);
 
 @function unicode($str) {
   @return unquote("\"")+unquote(str-insert($str, "\\", 1))+unquote("\"")
@@ -45,23 +47,27 @@ $fa-font-icons: (
   }
 }
 
-@mixin icon-only($type, $font: 'font-awesome') {
-  @if $font == 'font-awesome' {
-    font-family: 'FontAwesome';
-    @include icon-glyph("fa-var-#{$type}");
+@mixin icon-only($type, $font: "font-awesome") {
+  @if $font == "font-awesome" {
+    font-family: "Font Awesome 6 Free", sans-serif;
+    font-weight: 900;
+  } @else if $font == "font-awesome-brands" {
+    font-family: "Font Awesome 6 Brands", sans-serif;
+    font-weight: 400;
   } @else {
     @error "Could not find font family #{$font}";
   }
+
+  @include icon-glyph("fa-var-#{$type}");
 }
 
-@mixin icon($type, $size: auto, $margin: auto, $line-height: 1em, $color: auto, $top: auto, $shadow: none, $font: 'font-awesome') {
+@mixin icon($type, $size: auto, $margin: auto, $line-height: 1em, $color: auto, $top: auto, $shadow: none, $font: "font-awesome") {
   @include icon-only($type: $type, $font: $font);
 
-  font-weight:            normal;
-  font-style:             normal;
-  display:                inline-block;
-  text-decoration:        inherit;
-  line-height:            $line-height;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  line-height: $line-height;
 
   @if $margin != auto {
     margin: $margin;
@@ -71,7 +77,7 @@ $fa-font-icons: (
   }
   @if $top != auto {
     position: relative;
-    top:      $top;
+    top: $top;
   }
   @if $color != auto {
     color: $color;
@@ -82,12 +88,12 @@ $fa-font-icons: (
   -webkit-font-smoothing: antialiased;
 }
 
-@mixin in-progress-spinner($type: spinner, $font: 'font-awesome') {
-  @include icon-only($type: $type, $font: $font);
+@mixin in-progress-spinner($type: spinner) {
+  @include icon-only($type: $type);
   @include animation(spin 1s linear infinite);
 }
 
-@mixin icon-before($type, $size: auto, $margin: 5px, $line-height: 1em, $color: auto, $top: auto, $shadow: none, $font: 'font-awesome', $progress-spinner: false) {
+@mixin icon-before($type, $size: auto, $margin: 5px, $line-height: 1em, $color: auto, $top: auto, $shadow: none, $font: "font-awesome", $progress-spinner: false) {
   &:before {
     @include icon($type, $size, $margin, $line-height, $color, $top, $shadow, $font: $font);
     @content;
@@ -100,7 +106,7 @@ $fa-font-icons: (
   }
 }
 
-@mixin icon-after($type, $size: auto, $margin: 5px, $line-height: 1em, $color: auto, $top: auto, $shadow: none, $font: 'font-awesome', $progress-spinner: false) {
+@mixin icon-after($type, $size: auto, $margin: 5px, $line-height: 1em, $color: auto, $top: auto, $shadow: none, $font: "font-awesome", $progress-spinner: false) {
   &:after {
     @include icon($type, $size, $margin, $line-height, $color, $top, $shadow, $font: $font);
     @content;

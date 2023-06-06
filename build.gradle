@@ -31,7 +31,7 @@ plugins {
   id 'base'
   id 'org.owasp.dependencycheck' version '8.2.1'
   id 'com.github.hierynomus.license-base' version '0.16.1'
-  id 'com.github.jk1.dependency-license-report' version '2.1'
+  id 'com.github.jk1.dependency-license-report' version '2.4'
 }
 
 apply from: 'dependencies.gradle'
@@ -160,9 +160,9 @@ project.ext.packaging = [
   adoptiumJavaVersion: new AdoptiumVersion(
     feature: 17,
     interim: 0,    // set to `null` for the first release of a new featureVersion
-    update : 6,    // set to `null` for the first release of a new featureVersion
+    update : 7,    // set to `null` for the first release of a new featureVersion
     patch  : null, // set to `null` for most releases. Patch releases are "exceptional".
-    build  : 10
+    build  : 7
   )
 ]
 
@@ -214,12 +214,6 @@ allprojects {
         attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.class, LibraryElements.JAR))
       }
     }
-
-    // it's rather convenient to allow compile and runtime classpaths for tests inherit from the main compile classpath
-    testImplementation.extendsFrom compileClasspath
-
-    // this is a sensible default so we don't need to specify an annotation processor dependency twice
-    compileOnly.extendsFrom annotationProcessor
   }
 }
 
@@ -991,7 +985,7 @@ task newApi {
           }
 
           dependencies {
-            implementation project(':api:api-base')
+            implementation project(path: ':api:api-base', configuration: 'runtimeElements')
 
             testImplementation project(path: ':api:api-base', configuration: 'testOutput')
 

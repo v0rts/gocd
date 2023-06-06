@@ -92,99 +92,6 @@ h4 {
   font-size: 18px;
 }
 
-.environment-listview {
-  border: 1px solid #ececec;
-  margin: 0 15px;
-  border-radius: 3px;
-  background: #fff;
-}
-
-.environment-listview .environment-header {
-  display: flex;
-  height: 30px;
-  cursor: pointer;
-  padding: 10px 50px 10px 20px;
-  overflow: hidden;
-
-  &::after {
-    content: "\f105";
-    font-family: FontAwesome;
-    position: absolute;
-    right: 35px;
-    font-size: 30px;
-    font-weight: 400;
-    color: #ccc;
-  }
-
-  h2.entity_title {
-    font-size: 14px;
-    font-weight: 600;
-    color: black;
-    line-height: 30px;
-    min-width: 325px;
-    max-width: 325px;
-    padding: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    &.disabled {
-      color: #999;
-      font-style: italic;
-    }
-  }
-
-  .key-value-pair {
-    padding-left: 15px;
-    line-height: 30px;
-    min-width: 250px;
-    max-width: 250px;
-
-    .key {
-      min-width: auto;
-    }
-  }
-}
-
-.environment-listview .environment-body {
-  border-top: 1px solid #ececec;
-  padding: 15px;
-  display: none;
-
-  h3 {
-    margin: 10px 0 20px;
-    border-bottom: 1px dotted #ccc;
-    padding-bottom: 10px;
-  }
-
-  .added_item ul {
-    margin-left: 23px;
-
-    li {
-      margin-top: 10px;
-      font-size: rem-calc(13px);
-    }
-  }
-}
-
-.environment-listview.expanded {
-  box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 15%);
-
-  .environment-body {
-    display: block;
-  }
-
-  .environment-header::after {
-    content: "\f107";
-  }
-}
-
-.environment_show {
-  .row {
-    margin-top: 15px;
-  }
-}
-
 .yui-t7 #yui-main .yui-b {
   background: transparent;
 }
@@ -536,8 +443,7 @@ $arrow-border-active-color: lighten(#000, 50%);
 
 // tab style
 
-.sub_tab_container,
-.agent_details {
+.sub_tab_container {
   .sub_tabs_container {
     margin-bottom: 0;
     background: none !important;
@@ -611,7 +517,6 @@ $arrow-border-active-color: lighten(#000, 50%);
     }
   }
 
-  &.project_management,
   &.general,
   &.materials,
   &.stages,
@@ -689,7 +594,6 @@ div#tab_container {
 }
 
 .general li#general a,
-.project_management li#project_management a,
 .materials li#materials a,
 .stages li#stages a,
 .environment_variables li#environment_variables a,
@@ -697,13 +601,9 @@ div#tab_container {
 .permissions li#permissions a,
 .stage li#stage a,
 .jobs li#jobs a,
-.stage_variables li#stage_variables a,
 .settings li#settings a,
 .tasks li#tasks a,
-.artifacts li#artifacts a,
-.jobs_variables li#jobs_variables a,
-.tabs li#tabs a,
-.jobs_permissions li#jobs_permissions a {
+.artifacts li#artifacts a {
   color: #333;
   background: $current-tab-bg;
   position: relative;
@@ -712,11 +612,9 @@ div#tab_container {
 }
 
 #group_edit_form .form_buttons .submit,
-#pipeline_snippet_view #view_group .link_as_button,
+#pipeline_snippet_view #view_group .form_buttons .link_as_button,
 #pipeline_snippet_edit #edit_group .form_buttons .link_as_button,
 button.submit {
-  background: #ccc;
-  color: #333 !important;
   font-size: rem-calc(13px);
   font-weight: 600;
   border: 0;
@@ -728,49 +626,6 @@ button.submit {
     color: #fff !important;
     transition: background-color 0.25s ease-out, color 0.25s ease-out;
   }
-}
-
-.pipeline_header .toggle-new-view,
-.page_header a.agents-toggle-new-view,
-.pipelines .page_header .toggle-new-view {
-  display: inline-block;
-  text-align: center;
-  line-height: 1;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  vertical-align: middle;
-  border: 0;
-  border-radius: $global-border-radius;
-  padding: 0.5em 1em;
-  background-color: $primary-btn-bg;
-  color: $go-white;
-  font-size: rem-calc(13px);
-  font-weight: 600;
-  position: relative;
-  margin: 0 10px;
-  top: -2px;
-
-  &:hover {
-    transition: all 0.3s ease-in-out;
-    background-color: $primary-btn-bg-hover;
-    color: $go-white;
-  }
-}
-
-.pipelines .page_header .toggle-new-view {
-  top: 4px;
-}
-
-.pipeline_header .analytics-link-wrapper .pipeline-analytics-icon {
-  margin-right: 12px;
-  padding: 0;
-  font-size: 16px;
-  color: $btn-hover;
-  cursor: pointer;
-}
-
-.page_header a.agents-toggle-new-view {
-  margin-top: 6px;
 }
 
 #agents_form {
@@ -827,14 +682,6 @@ button.submit {
 .enhanced_dropdown .add_panel {
   background: none;
   overflow: hidden;
-}
-
-button#confirm-pause-up42 {
-  height: auto;
-  line-height: normal;
-  padding: 0 !important;
-  margin-left: 10px;
-  min-width: inherit;
 }
 
 .icon16.setting {
@@ -1158,13 +1005,13 @@ div.stage_bar {
   &.Passed {
     color: white;
 
-    @include icon-after($passed-icon, $margin: 0, $line-height: 1.2em);
+    @include icon-after($passed-icon, $margin: 0, $line-height: 1.1em);
   }
 
   &.Failed {
     color: white;
 
-    @include icon-after($failed-icon, $margin: 0, $line-height: 1.2em);
+    @include icon-after($failed-icon, $margin: 0, $line-height: 1.1em);
   }
 
   &.Cancelled {
@@ -1185,7 +1032,7 @@ div.stage_bar {
 
     color: $icon-txt;
 
-    @include icon-after($cancelled-icon, $margin: 0, $line-height: 1.2em);
+    @include icon-after($cancelled-icon, $margin: 0, $line-height: 1.1em);
   }
 }
 
@@ -1428,21 +1275,6 @@ form#notification_form fieldset {
   }
 }
 
-button#signin2 {
-  min-width: 100px;
-  padding: 6px 9px;
-  background-color: #f6f6f6;
-  border: 0;
-  background-image: none;
-  color: #fff !important;
-  height: 35px;
-
-  span {
-    font-size: 12px !important;
-    color: #fff;
-  }
-}
-
 a:link.help,
 a:visited.help {
   margin-top: 9px;
@@ -1478,12 +1310,6 @@ a:visited.help {
 .ui-dialog-title,
 #MB_caption {
   color: #333;
-}
-
-.template_group {
-  h2.entity_title {
-    border: 0;
-  }
 }
 
 .fieldset .form_item {
@@ -1551,89 +1377,12 @@ a:visited.help {
   }
 }
 
-.unpause_wrapper button.primary {
-  background-color: #666 !important;
-  height: 22px;
-  border: 1px solid #666;
-
-  &:hover {
-    background-color: #666 !important;
-  }
-}
-
-.pause_wrapper button.submit {
-  height: 22px;
-  border: 1px solid #ccc;
-}
-
 #stages .build_cause .modified_files div {
   padding: 2px 5px 5px 20px;
 }
 
 #pipeline_status_bar .pipeline .stages .selected .stage_bar_wrapper {
   background-repeat: repeat-x;
-}
-
-$new-theme-material-popup-user-width: 20em;
-$new-theme-material-popup-comment-width: 32em;
-$new-theme-material-popup-hash-width: 12em;
-$new-theme-material-popup-vsm-width: 4em;
-$new-theme-material-popup-revision-width: ($new-theme-material-popup-hash-width + $new-theme-material-popup-vsm-width);
-$new-theme-material-popup-width: ($new-theme-material-popup-user-width + $new-theme-material-popup-comment-width + $new-theme-material-popup-revision-width);
-
-@mixin new-theme-changes-table {
-  td.user,
-  td.modified_by {
-    max-width: $new-theme-material-popup-user-width;
-    width: $new-theme-material-popup-user-width;
-  }
-
-  td.comment {
-    word-wrap: break-word;
-    word-break: keep-all;
-    max-width: $new-theme-material-popup-comment-width;
-    width: $new-theme-material-popup-comment-width;
-  }
-
-  td.revision {
-    overflow: hidden;
-    max-width: $new-theme-material-popup-hash-width;
-    width: $new-theme-material-popup-hash-width;
-    font-family: "courier new", monospace !important;
-    font-style: normal;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-}
-
-#pipelines .enhanced_dropdown,
-#stages .fbh_microcontent_popup .enhanced_dropdown,
-#pipelines .enhanced_dropdown .scrollable_panel {
-  max-width: $new-theme-material-popup-width;
-  z-index: 2 !important;
-
-  .build_cause.list_table {
-    .change {
-      @include new-theme-changes-table;
-
-      td.revision {
-        width: $new-theme-material-popup-revision-width;
-        max-width: $new-theme-material-popup-revision-width;
-
-        span.wrapped_word {
-          vertical-align: text-bottom;
-          font-family: "courier new", monospace !important;
-          font-style: normal;
-          max-width: $new-theme-material-popup-hash-width;
-          display: inline-block;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
-      }
-    }
-  }
 }
 
 .vsm-entity.pipeline ul.instances {
@@ -1692,31 +1441,6 @@ ul.plugins .plugin {
   }
 }
 
-// add user & modal
-
-span#add_error_message {
-  display: block;
-  margin: 0 15px 10px;
-}
-
-input#search_id {
-  background-position: calc(100% - 8px) center;
-}
-
-.enhanced_dropdown {
-  .list_table {
-    font-weight: 600;
-
-    tbody {
-      background: transparent;
-
-      tr:nth-child(even) {
-        background-color: transparent;
-      }
-    }
-  }
-}
-
 .Failing {
   position: relative;
 }
@@ -1772,19 +1496,6 @@ input#search_id {
   margin-top: 0;
 }
 
-.tristate {
-  background-position: 0 5px;
-}
-
-.promote_button {
-  background-color: transparent;
-
-  .promote_up,
-  .promote_down {
-    background-color: transparent;
-  }
-}
-
 table.variables th {
   font-size: 14px;
   padding-bottom: 5px;
@@ -1817,24 +1528,6 @@ table.variables th {
 
 .build_detail .sidebar_history .time_ago {
   margin-left: 0 !important;
-}
-
-.changes_button_wrapper button.submit,
-.operate button.submit,
-.deploy button.submit,
-.pause_wrapper button.submit {
-  background-color: #dedede;
-}
-
-.exec_task_editor {
-  label.inline {
-    display: inline-block;
-    margin-bottom: 5px;
-  }
-
-  textarea.exec-task-arguments {
-    height: 100px;
-  }
 }
 
 #content_area textarea {
@@ -1898,13 +1591,6 @@ code,
   }
 }
 
-.template_group h2.entity_title {
-  background-position: -12px -15px;
-  font-size: 18px;
-  margin-top: 7px;
-  font-weight: 400;
-}
-
 #build-status-panel {
   padding: 0 30px;
 }
@@ -1964,7 +1650,7 @@ code,
 }
 
 .admin-tab-contents {
-  padding: 20px 30px;
+  padding: 0 30px;
 
   h1 {
     font-weight: 600;
@@ -1972,37 +1658,6 @@ code,
     border-bottom: 1px solid $border-color;
     font-size: 20px;
     padding-bottom: 10px;
-  }
-
-  .title_secondary_info {
-    float: right;
-  }
-
-  .title_action_wrapper {
-    ul {
-      margin-top: 1px;
-      margin-left: 10px;
-
-      li {
-        a {
-          margin-left: 0;
-          padding-left: 10px;
-        }
-
-        .delete_icon_disabled {
-          margin-top: 3px;
-        }
-
-        .delete_icon {
-          margin-left: 10px;
-          padding-left: 0;
-        }
-
-        > span {
-          padding-left: 10px;
-        }
-      }
-    }
   }
 
   h2.entity_title {
@@ -2016,22 +1671,9 @@ code,
     background-position: -8px -10px;
   }
 
-  .list_table {
-    .actions {
-      .delete_icon_disabled {
-        margin-top: 3px;
-      }
-    }
-  }
-
   .heading {
-    border-bottom: 1px solid $border-color;
     padding-bottom: 10px;
     margin-bottom: 20px;
-
-    h2 {
-      font-size: 20px;
-    }
 
     span {
       margin-top: 12px;
@@ -2057,43 +1699,8 @@ code,
   font-size: 20px;
 }
 
-.job_tabs_section,
-.artifact {
-  span.contextual_help {
-    position: relative;
-    top: -13px;
-  }
-}
-
-.on_cancel_task {
-  .task_entry {
-    clear: both;
-    float: left;
-    width: 100%;
-  }
-}
-
-.agent_details_pane div {
-  clear: both;
-}
-
-.path_textbox {
-  box-shadow: none;
-
-  label {
-    padding: 7px 4px 7px 6px;
-    background: #e5e5e5;
-  }
-}
-
 .content_wrapper_outer {
   clear: both;
-}
-
-.edit_icon_disabled,
-.lock_icon_disabled,
-.view_icon_disabled {
-  margin-top: 3px;
 }
 
 #links {

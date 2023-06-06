@@ -26,10 +26,10 @@ enum Distro implements DistroBehavior {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [ // See https://endoflife.date/alpine
-        new DistroVersion(version: '3.14', releaseName: '3.14', eolDate: parseDate('2023-05-01')),
         new DistroVersion(version: '3.15', releaseName: '3.15', eolDate: parseDate('2023-11-01')),
         new DistroVersion(version: '3.16', releaseName: '3.16', eolDate: parseDate('2024-05-23')),
         new DistroVersion(version: '3.17', releaseName: '3.17', eolDate: parseDate('2024-11-22')),
+        new DistroVersion(version: '3.18', releaseName: '3.18', eolDate: parseDate('2025-05-09')),
       ]
     }
 
@@ -264,6 +264,7 @@ enum Distro implements DistroBehavior {
       return alpine.getInstallPrerequisitesCommands(v) +
         [
           'apk add --no-cache sudo',
+          'rm -rf /lib/libudev.so*', // btrfs is installed by Docker, but requires eudev-libs, which causes issues with OSHI JNA libary on Alpine with glibc and JVM crashes. Dont think we need udev as it's only needed by btrfs for multipath support.
         ]
     }
 

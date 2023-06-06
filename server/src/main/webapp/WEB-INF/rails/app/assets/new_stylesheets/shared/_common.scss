@@ -66,7 +66,7 @@ $auth-config-icon-text-padding: 20px;
 }
 
 .delete-button {
-  @include icon-before($type: trash, $color: $white, $margin: 0 5px 0 0, $progress-spinner: true);
+  @include icon-before($type: trash-can, $color: $white, $margin: 0 5px 0 0, $progress-spinner: true);
 }
 
 .app-footer {
@@ -343,16 +343,4 @@ ul.key-value-pair {
   font-weight: 600;
   font-size: 14px;
   line-height: $component-icon-size;
-}
-
-.unknown-plugin-icon {
-  @include icon-before($type: question, $size: $auth-config-plugin-icon-size, $color: $light-gray);
-
-  &::before {
-    margin: 0;
-  }
-}
-
-.collapse_header_error_message {
-  font-size: 13px;
 }

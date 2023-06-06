@@ -207,25 +207,21 @@ a.link_as_button {
 
 /* pipeline module buttons */
 
-.changes_button_wrapper button.submit,
 .operate button.submit,
 .deploy button.submit {
   background-color: #f6f6f6;
 }
 
-.changes_button_wrapper button.submit span,
 .operate button.submit span,
 .deploy button.submit span {
   color: #333;
 }
 
-.changes_button_wrapper button.submit:hover,
 .operate button.submit:hover,
 .deploy button.submit:hover {
   background-color: #555;
 }
 
-.changes_button_wrapper button.submit:hover span,
 .operate button.submit:hover span,
 .deploy button.submit:hover span {
   color: #fff;
@@ -256,20 +252,6 @@ a.link_as_button_hover span {
   padding: 0;
   color: #fff;
   height: auto;
-}
-
-a.save-edit-xml,
-button.primary,
-a.primary_link_as_button,
-a.primary {
-  background-color: #39c;
-}
-
-a.save-edit-xml:hover,
-button.primary:hover,
-a.primary_link_as_button:hover,
-a.primary:hover {
-  background-color: #52b3e3;
 }
 
 * html button.submit {
@@ -454,15 +436,6 @@ a.xlink_as_button {
   color: #fff;
 }
 
-#content_titlebar .help {
-  text-indent: -10000px;
-  background: transparent image_url("buttons_sprites.png") no-repeat -320px top;
-  width: 22px;
-  height: 23px;
-  margin: 0 0 0 0.8em;
-  float: left;
-}
-
 .pipeline_history h2.entity_title,
 .yui-b .Job h2.entity_title,
 .job_details h1.entity_title,
@@ -478,25 +451,6 @@ a.xlink_as_button {
   color: #3d3d3d;
   font-size: 21px;
   padding: 0;
-}
-
-.tristate {
-  margin: 5px 0 3px 3px;
-  padding-left: 19px;
-  background-position: 1px 3px;
-  background-repeat: no-repeat;
-}
-
-.tristate.add {
-  background-image: image_url("tri-state-checkbox-checked.png");
-}
-
-.tristate.remove {
-  background-image: image_url("tri-state-checkbox-empty.png");
-}
-
-.tristate.nochange {
-  background-image: image_url("tri-state-checkbox-slash.png");
 }
 
 /*
@@ -568,22 +522,6 @@ a.xlink_as_button {
   top: auto;
   left: auto;
   border: 1px solid #8d8d8d;
-}
-
-.enhanced_dropdown .scrollable_panel input {
-
-}
-
-.enhanced_dropdown .loading {
-  background: image_url("spinner.gif") 50% 50% no-repeat transparent;
-  padding: 1em;
-}
-
-.enhanced_dropdown .error {
-  background: image_url("g9/icons/error_small.png") 5px 62% no-repeat transparent;
-  padding: 1em 1em 1em 2em;
-  color: #ff3e44;
-  border: 1px solid #d4d4d4;
 }
 
 .enhanced_dropdown,
@@ -714,34 +652,6 @@ table {
   color: #999;
 }
 
-/* Sortable Table */
-
-.sortable_table th a span {
-  background-image: image_url("g9/icons/icon_sort_sortable.png");
-  background-position: right;
-  background-repeat: no-repeat;
-  padding-right: 15px;
-  display: inline-block;
-}
-
-.sortable_table th a span:hover {
-  background-image: image_url("g9/icons/icon_sort_sortable_hover.png");
-}
-
-.sortable_table th a.sorted_asc span {
-  background-image: image_url("g9/icons/icon_sorted_up.png");
-}
-
-.sortable_table th a.sorted_desc span {
-  background-image: image_url("g9/icons/icon_sorted_down.png");
-}
-
-/* Selectable Table */
-.selectable_table .selector {
-  padding: 0;
-  text-align: center;
-}
-
 .required .asterisk {
   color: #c00;
 }
@@ -753,8 +663,6 @@ table {
 #header::after,
 #body::after,
 #footer::after,
-#content_titlebar::after,
-#content_statusbar::after,
 .content::after,
 #header .pipeline_flow .pipeline::after,
 .page_title_bar::after,
@@ -774,8 +682,6 @@ table {
   #header,
   #body,
   #footer,
-  #content_titlebar,
-  #content_statusbar,
   .content,
   #header .pipeline_flow .pipeline,
   .page_title_bar,
@@ -796,8 +702,6 @@ table {
 * + html #header,
 * + html #body,
 * + html #footer,
-* + html #content_titlebar,
-* + html #content_statusbar,
 * + html .content,
 * + html #header .pipeline_flow .pipeline,
 * + html .page_title_bar,
