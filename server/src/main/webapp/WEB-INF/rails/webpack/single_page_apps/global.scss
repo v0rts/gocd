@@ -88,6 +88,8 @@ body {
   color: $body-color;
   text-align: left;
   background-color: $body-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 p {
@@ -95,10 +97,9 @@ p {
 }
 
 $fa-font-path: "@fortawesome/fontawesome-free/webfonts";
-$fa-style-family-brands: "#{str-slice($fa-style-family, 1, -5)} Brands";
 
 @include font-face(
-  $font-family: $fa-style-family,
+  $font-family: FontAwesome,
   $file-path: "#{$fa-font-path}/fa-solid-900",
   $file-formats: ("woff2"),
 ) {
@@ -107,7 +108,7 @@ $fa-style-family-brands: "#{str-slice($fa-style-family, 1, -5)} Brands";
 }
 
 @include font-face(
-  $font-family: $fa-style-family-brands,
+  $font-family: FontAwesomeBrands,
   $file-path: "#{$fa-font-path}/fa-brands-400",
   $file-formats: ("woff2"),
 ) {

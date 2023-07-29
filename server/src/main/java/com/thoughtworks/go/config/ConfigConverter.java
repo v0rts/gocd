@@ -64,8 +64,8 @@ public class ConfigConverter {
 
     private final GoCipher cipher;
     private final CachedGoConfig cachedGoConfig;
-    private AgentService agentService;
-    private Cloner cloner = ClonerFactory.instance();
+    private final AgentService agentService;
+    private final Cloner cloner = ClonerFactory.instance();
 
     public ConfigConverter(GoCipher goCipher, CachedGoConfig cachedGoConfig, AgentService agentService) {
         this.cipher = goCipher;
@@ -136,7 +136,7 @@ public class ConfigConverter {
             return new EnvironmentVariableConfig(cipher, crEnvironmentVariable.getName(), crEnvironmentVariable.getEncryptedValue());
         } else if (!crEnvironmentVariable.hasValue() && "".equals(crEnvironmentVariable.getEncryptedValue())) {
             // encrypted value is an empty string - user wants an empty, but secure value, possibly to override at trigger-time
-            String encryptedValue = null;
+            String encryptedValue;
             try {
                 encryptedValue = cipher.encrypt("");
             } catch (CryptoException e) {
@@ -187,9 +187,9 @@ public class ConfigConverter {
         if (crTask == null)
             throw new ConfigConvertionException("task cannot be null");
 
-        if (crTask instanceof CRPluggableTask)
+        if (crTask instanceof CRPluggableTask) {
             return toPluggableTask((CRPluggableTask) crTask);
-        else if (crTask instanceof CRBuildTask) {
+        } else if (crTask instanceof CRBuildTask) {
             return toBuildTask((CRBuildTask) crTask);
         } else if (crTask instanceof CRExecTask) {
             return toExecTask((CRExecTask) crTask);
@@ -254,7 +254,9 @@ public class ConfigConverter {
                 buildTask = new AntTask();
                 break;
             case nant:
-                buildTask = new NantTask();
+                NantTask nantTask = new NantTask();
+                nantTask.setNantPath(((CRNantTask)crBuildTask).getNantPath());
+                buildTask = nantTask;
                 break;
             default:
                 throw new RuntimeException(
@@ -363,49 +365,52 @@ public class ConfigConverter {
     }
 
     private PluggableSCMMaterialConfig toPluggableScmMaterialConfig(CRPluggableScmMaterial crPluggableScmMaterial, PartialConfigLoadContext context, SCMs newSCMs) {
-        String id = crPluggableScmMaterial.getScmId();
         CRPluginConfiguration pluginConfig = crPluggableScmMaterial.getPluginConfiguration();
         SCM scmConfig;
 
         if (pluginConfig == null) {
-            scmConfig = getSCMs().find(id);
+            // Without plugin config, we can only find it by ID. Let's try and find it, or fail.
+            scmConfig = Optional.ofNullable(existingServerSCMs().find(crPluggableScmMaterial.getScmId()))
+                .orElseThrow(() -> new ConfigConvertionException(String.format("Failed to find referenced scm '%s'", crPluggableScmMaterial.getScmId())));
         } else {
-            scmConfig = new SCM(id, toPluginConfiguration(pluginConfig), toConfiguration(crPluggableScmMaterial.getConfiguration()));
+            // Plugin configuration exists, let's see if there is a duplicate
+            scmConfig = new SCM(crPluggableScmMaterial.getScmId(), toPluginConfiguration(pluginConfig), toConfiguration(crPluggableScmMaterial.getConfiguration()));
             scmConfig.ensureIdExists();
             scmConfig.setName(crPluggableScmMaterial.getName());
-            if (getSCMs().findDuplicate(scmConfig) == null) {
-                SCM duplicate = newSCMs.findDuplicate(scmConfig);
-                if (duplicate == null) {
-                    newSCMs.add(scmConfig);
-                } else {
-                    scmConfig = duplicate;
-                }
-            } else {
-                scmConfig = getSCMs().findDuplicate(scmConfig);
-                if (scmConfig.getOrigin() instanceof RepoConfigOrigin) {
-                    RepoConfigOrigin origin = (RepoConfigOrigin) scmConfig.getOrigin();
-                    if (origin.getMaterial().equals(context.configMaterial()) && (newSCMs.findDuplicate(scmConfig) == null)) {
-                        newSCMs.add(scmConfig);
+            SCM alreadyKnownToServer = existingServerSCMs().findDuplicate(scmConfig);
+            if (alreadyKnownToServer != null) {
+                // We have a duplicate within the existing SCMs
+                if (alreadyKnownToServer.getOrigin() instanceof RepoConfigOrigin) {
+                    // The duplicate was from a config repo, but it's still a new SCM if it comes from this
+                    // config repo, and we have not already added it
+                    RepoConfigOrigin origin = (RepoConfigOrigin) alreadyKnownToServer.getOrigin();
+                    if (origin.getMaterial().equals(context.configMaterial()) && newSCMs.findDuplicate(alreadyKnownToServer) == null) {
+                        newSCMs.add(alreadyKnownToServer);
                     }
+                }
+                scmConfig = alreadyKnownToServer;
+            } else {
+                // There are no existing SCMs like this on the server, so as long as we haven't tracked one like this already
+                // to add, it's a new one.
+                SCM alreadyInNewScms = newSCMs.findDuplicate(scmConfig);
+                if (alreadyInNewScms != null) {
+                    scmConfig = alreadyInNewScms;
+                } else {
+                    newSCMs.add(scmConfig);
                 }
             }
         }
-
-        if (scmConfig == null)
-            throw new ConfigConvertionException(
-                    String.format("Failed to find referenced scm '%s'", id));
 
         return new PluggableSCMMaterialConfig(toMaterialName(crPluggableScmMaterial.getName()),
                 scmConfig, crPluggableScmMaterial.getDestination(),
                 toFilter(crPluggableScmMaterial.getFilterList()), crPluggableScmMaterial.isWhitelist());
     }
 
-    private SCMs getSCMs() {
+    private SCMs existingServerSCMs() {
         return this.cachedGoConfig.currentConfig().getSCMs();
     }
 
     private ScmMaterialConfig toScmMaterialConfig(CRScmMaterial crScmMaterial) {
-        String materialName = crScmMaterial.getName();
         if (crScmMaterial instanceof CRGitMaterial) {
             CRGitMaterial git = (CRGitMaterial) crScmMaterial;
             String gitBranch = git.getBranch();
@@ -422,14 +427,7 @@ public class ConfigConverter {
             CRHgMaterial hg = (CRHgMaterial) crScmMaterial;
             HgMaterialConfig hgConfig = new HgMaterialConfig();
             hgConfig.setUrl(hg.getUrl());
-            hgConfig.setUserName(hg.getUsername());
-            hgConfig.setPassword(hg.getPassword());
             hgConfig.setBranchAttribute(hg.getBranch());
-            hgConfig.setAutoUpdate(hg.isAutoUpdate());
-            hgConfig.setFilter(toFilter(crScmMaterial));
-            hgConfig.setInvertFilter(false);
-            hgConfig.setFolder(hg.getDestination());
-            hgConfig.setName(toMaterialName(materialName));
             setCommonMaterialMembers(hgConfig, crScmMaterial);
             setCommonScmMaterialMembers(hgConfig, hg);
             return hgConfig;
@@ -446,7 +444,6 @@ public class ConfigConverter {
             CRSvnMaterial crSvnMaterial = (CRSvnMaterial) crScmMaterial;
             SvnMaterialConfig svnMaterialConfig = new SvnMaterialConfig();
             svnMaterialConfig.setUrl(crSvnMaterial.getUrl());
-            svnMaterialConfig.setUserName(crSvnMaterial.getUsername());
             svnMaterialConfig.setCheckExternals(crSvnMaterial.isCheckExternals());
             setCommonMaterialMembers(svnMaterialConfig, crScmMaterial);
             setCommonScmMaterialMembers(svnMaterialConfig, crSvnMaterial);
@@ -455,7 +452,6 @@ public class ConfigConverter {
             CRTfsMaterial crTfsMaterial = (CRTfsMaterial) crScmMaterial;
             TfsMaterialConfig tfsMaterialConfig = new TfsMaterialConfig();
             tfsMaterialConfig.setUrl(crTfsMaterial.getUrl());
-            tfsMaterialConfig.setUserName(crTfsMaterial.getUsername());
             tfsMaterialConfig.setDomain(crTfsMaterial.getDomain());
             tfsMaterialConfig.setProjectPath(crTfsMaterial.getProject());
             setCommonMaterialMembers(tfsMaterialConfig, crTfsMaterial);
@@ -813,7 +809,7 @@ public class ConfigConverter {
         CRFetchPluggableArtifactTask crTask = new CRFetchPluggableArtifactTask(
                 null, null, null, task.getStage().toString(),
                 task.getJob().toString(), task.getArtifactId(), configuration);
-        crTask.setPipeline(task.getPipelineName().toString());
+        crTask.setPipeline(Objects.toString(task.getPipelineName(), null));
         commonCRTaskMembers(crTask, task);
         return crTask;
     }
@@ -822,7 +818,7 @@ public class ConfigConverter {
         CRFetchArtifactTask fetchTask = new CRFetchArtifactTask(null, null, null, task.getStage().toString(), task.getJob().toString(), task.getSrc(), null, false);
 
         fetchTask.setDestination(task.getDest());
-        fetchTask.setPipeline(task.getPipelineName().toString());
+        fetchTask.setPipeline(Objects.toString(task.getPipelineName(), null));
         fetchTask.setSourceIsDirectory(!task.isSourceAFile());
 
         commonCRTaskMembers(fetchTask, task);
@@ -904,7 +900,7 @@ public class ConfigConverter {
     }
 
     private List<CRConfigurationProperty> configurationToCRConfiguration(Configuration config) {
-        ArrayList<CRConfigurationProperty> properties = new ArrayList();
+        List<CRConfigurationProperty> properties = new ArrayList<>();
         if (config != null) {
             for (ConfigurationProperty p : config) {
                 CRConfigurationProperty crProp = new CRConfigurationProperty(p.getKey().getName());
@@ -965,7 +961,7 @@ public class ConfigConverter {
     }
 
     private CRPluggableScmMaterial pluggableScmMaterialConfigToCRPluggableScmMaterial(PluggableSCMMaterialConfig pluggableScmMaterialConfig) {
-        SCMs scms = getSCMs();
+        SCMs scms = existingServerSCMs();
         String id = pluggableScmMaterialConfig.getScmId();
         SCM scmConfig = scms.find(id);
         if (scmConfig == null)
@@ -1031,7 +1027,7 @@ public class ConfigConverter {
     }
 
     private CRP4Material p4MaterialToCRP4Material(String materialName, P4MaterialConfig p4MaterialConfig) {
-        CRP4Material crP4Material = new CRP4Material(materialName, p4MaterialConfig.getFolder(), p4MaterialConfig.isAutoUpdate(), p4MaterialConfig.isInvertFilter(), p4MaterialConfig.getUsername(), p4MaterialConfig.filter().ignoredFileNames(), p4MaterialConfig.getServerAndPort(), p4MaterialConfig.getView(), p4MaterialConfig.getUseTickets());
+        CRP4Material crP4Material = new CRP4Material(materialName, p4MaterialConfig.getFolder(), p4MaterialConfig.isAutoUpdate(), p4MaterialConfig.isInvertFilter(), p4MaterialConfig.getUserName(), p4MaterialConfig.filter().ignoredFileNames(), p4MaterialConfig.getServerAndPort(), p4MaterialConfig.getView(), p4MaterialConfig.getUseTickets());
 
         if (p4MaterialConfig.getEncryptedPassword() != null) {
             crP4Material.setEncryptedPassword(p4MaterialConfig.getEncryptedPassword());
@@ -1041,7 +1037,7 @@ public class ConfigConverter {
     }
 
     private CRSvnMaterial svnMaterialToCRSvnMaterial(String materialName, SvnMaterialConfig svnMaterial) {
-        CRSvnMaterial crSvnMaterial = new CRSvnMaterial(materialName, svnMaterial.getFolder(), svnMaterial.isAutoUpdate(), svnMaterial.isInvertFilter(), svnMaterial.getUsername(), svnMaterial.filter().ignoredFileNames(), svnMaterial.getUrl(), svnMaterial.isCheckExternals());
+        CRSvnMaterial crSvnMaterial = new CRSvnMaterial(materialName, svnMaterial.getFolder(), svnMaterial.isAutoUpdate(), svnMaterial.isInvertFilter(), svnMaterial.getUserName(), svnMaterial.filter().ignoredFileNames(), svnMaterial.getUrl(), svnMaterial.isCheckExternals());
         crSvnMaterial.setEncryptedPassword(svnMaterial.getEncryptedPassword());
         return crSvnMaterial;
     }
@@ -1050,7 +1046,7 @@ public class ConfigConverter {
         CRTfsMaterial crTfsMaterial = new CRTfsMaterial(materialName,
                 tfsMaterialConfig.getFolder(),
                 tfsMaterialConfig.isAutoUpdate(),
-                tfsMaterialConfig.isInvertFilter(), tfsMaterialConfig.getUsername(), tfsMaterialConfig.filter().ignoredFileNames(), tfsMaterialConfig.getUrl(),
+                tfsMaterialConfig.isInvertFilter(), tfsMaterialConfig.getUserName(), tfsMaterialConfig.filter().ignoredFileNames(), tfsMaterialConfig.getUrl(),
                 tfsMaterialConfig.getProjectPath(),
                 tfsMaterialConfig.getDomain()
         );

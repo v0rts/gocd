@@ -29,9 +29,9 @@ import java.util.stream.Collectors
 
 plugins {
   id 'base'
-  id 'org.owasp.dependencycheck' version '8.2.1'
+  id 'org.owasp.dependencycheck' version '8.3.1'
   id 'com.github.hierynomus.license-base' version '0.16.1'
-  id 'com.github.jk1.dependency-license-report' version '2.4'
+  id 'com.github.jk1.dependency-license-report' version '2.5'
 }
 
 apply from: 'dependencies.gradle'
@@ -101,9 +101,9 @@ List<String> partitionFiles(Collection originalFiles) {
   return (currentPartition ?: []) as List<String>
 }
 
-def GO_VERSION_PREVIOUS = '23.1.0'
-def GO_VERSION_SEGMENTS = [year: 23, releaseInYear: 2, patch: 0]
-def GO_VERSION_NEXT = '23.3.0'
+def GO_VERSION_PREVIOUS = '23.2.0'
+def GO_VERSION_SEGMENTS = [year: 23, releaseInYear: 3, patch: 0]
+def GO_VERSION_NEXT = '23.4.0'
 
 def GO_VERSION = [GO_VERSION_SEGMENTS.year, GO_VERSION_SEGMENTS.releaseInYear, GO_VERSION_SEGMENTS.patch].join('.')
 def DIST_VERSION = releaseRevision()
@@ -160,7 +160,7 @@ project.ext.packaging = [
   adoptiumJavaVersion: new AdoptiumVersion(
     feature: 17,
     interim: 0,    // set to `null` for the first release of a new featureVersion
-    update : 7,    // set to `null` for the first release of a new featureVersion
+    update : 8,    // set to `null` for the first release of a new featureVersion
     patch  : null, // set to `null` for most releases. Patch releases are "exceptional".
     build  : 7
   )
@@ -200,6 +200,7 @@ allprojects {
 
   repositories {
     mavenCentral()
+    maven { url 'https://repo.terracotta.org/maven2/' } // Needed for later ehcache repos
   }
 
   if (project.name == 'build-platform') {
@@ -249,8 +250,6 @@ subprojects {
     exclude '**/*.gif'
     exclude '**/*.woff'
     exclude '**/*.woff2'
-    exclude '**/*.ttf'
-    exclude '**/*.eot'
     exclude '**/*.svg'
     exclude '**/*.json'
     exclude '**/*.scss.d.ts'
@@ -386,11 +385,25 @@ subprojects {
         module("dom4j:dom4j") {
           replacedBy("org.dom4j:dom4j", "Upgrade the legacy dom4j in old Hibernate 3.6; dom4j 2 should be sufficiently compatible")
         }
+        module("net.sf.ehcache:ehcache") {
+          replacedBy("net.sf.ehcache.internal:ehcache-core", "Use the much slimmer core artifact which is fine for our use case")
+        }
       }
       components {
         // workaround for dom4j Gradle metadata optional dependency issues to avoid it pulling in
         // optional dependencies when it should not (https://github.com/dom4j/dom4j/issues/99)
         withModule('org.dom4j:dom4j', { details -> details.allVariants { withDependencies { clear() } } })
+        // workaround for Guava metadata declaring dependencies that are not needed at runtime
+        // see https://github.com/google/guava/pull/6606
+        withModule('com.google.guava:guava', { details ->
+          details.allVariants {
+            withDependencies {
+              removeAll {
+                it.group in [ "com.google.code.findbugs", "org.checkerframework", "com.google.errorprone" ]
+              }
+            }
+          }
+        })
       }
     }
   }
@@ -646,8 +659,8 @@ task sparkTest { thisTask ->
 task sparkTestJunitHtmlReport(type: TestReport) {
   dependsOn sparkTest
 
-  testResults.from(project(':api').subprojects*.test)
-  testResults.from(project(':spark').subprojects*.test)
+  testResults.from(project(':api').subprojects*.test.binaryResultsDirectory.locationOnly)
+  testResults.from(project(':spark').subprojects*.test.binaryResultsDirectory.locationOnly)
   destinationDirectory = file("${project.buildDir}/reports/tests/sparkTest")
 }
 
@@ -681,7 +694,7 @@ task allTestsJunitHtmlReport(type: TestReport) { TestReport thisTask ->
   description = "Run all api tests"
 
   forAllTask { Test eachTestTask ->
-    testResults.from(eachTestTask)
+    testResults.from(eachTestTask.binaryResultsDirectory.locationOnly)
     eachTestTask.finalizedBy(thisTask)
   }
   destinationDirectory = file("${project.buildDir}/reports/tests/allTests")
