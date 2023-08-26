@@ -29,7 +29,7 @@ import java.util.stream.Collectors
 
 plugins {
   id 'base'
-  id 'org.owasp.dependencycheck' version '8.3.1'
+  id 'org.owasp.dependencycheck' version '8.4.0'
   id 'com.github.hierynomus.license-base' version '0.16.1'
   id 'com.github.jk1.dependency-license-report' version '2.5'
 }
@@ -101,9 +101,9 @@ List<String> partitionFiles(Collection originalFiles) {
   return (currentPartition ?: []) as List<String>
 }
 
-def GO_VERSION_PREVIOUS = '23.2.0'
-def GO_VERSION_SEGMENTS = [year: 23, releaseInYear: 3, patch: 0]
-def GO_VERSION_NEXT = '23.4.0'
+def GO_VERSION_PREVIOUS = '23.3.0'
+def GO_VERSION_SEGMENTS = [year: 23, releaseInYear: 4, patch: 0]
+def GO_VERSION_NEXT = '23.5.0'
 
 def GO_VERSION = [GO_VERSION_SEGMENTS.year, GO_VERSION_SEGMENTS.releaseInYear, GO_VERSION_SEGMENTS.patch].join('.')
 def DIST_VERSION = releaseRevision()
@@ -125,7 +125,6 @@ if (System.getenv().containsKey("GO_SERVER_URL")) {
   println(separator)
   println("node: ${getVersion("node", "--version")}")
   println(" npm: ${getVersion((isWindows ? "npm.cmd" : 'npm'), "--version")}")
-  println("yarn: ${getVersion((isWindows ? "yarn.cmd" : 'yarn'), "--version")}")
   println(" git: ${getVersion("git", "--version")}")
   println("  hg: ${getVersion("hg", "--quiet", "--version")}")
   println(" svn: ${getVersion("svn", "--quiet", "--version")}")
@@ -183,6 +182,7 @@ dependencyCheck {
 
   analyzers {
     bundleAuditEnabled = false // Currently there is a separate bundle audit security check job independent of Gradle
+    nodeAudit.yarnEnabled = false // Doesn't work correctly with Yarn 3+ https://github.com/jeremylong/DependencyCheck/issues/4894
     assemblyEnabled = false
     retirejs {
       filterNonVulnerable = true
@@ -399,7 +399,7 @@ subprojects {
           details.allVariants {
             withDependencies {
               removeAll {
-                it.group in [ "com.google.code.findbugs", "org.checkerframework", "com.google.errorprone" ]
+                it.name in [ "jsr305", "checker-qual", "error_prone_annotations", "listenablefuture" ]
               }
             }
           }

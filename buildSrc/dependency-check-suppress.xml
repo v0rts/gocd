@@ -192,6 +192,23 @@
 
   <suppress>
     <notes><![CDATA[
+    GoCD is not affected by the issue claimed at https://github.com/quartz-scheduler/quartz/issues/943 and https://nvd.nist.gov/vuln/detail/CVE-2023-39017
+    because there is no way to affect contents of JobDataMaps, and GoCD does not use JMS in this way either.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.quartz\-scheduler/quartz@.*$</packageUrl>
+    <cve>CVE-2023-39017</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    This is a false positive within OSSIndex as the vulnerability is with the PostgreSQL server rather than the client libraries.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.postgresql/postgresql@.*$</packageUrl>
+    <vulnerabilityName>CVE-2020-21469</vulnerabilityName>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
     GoCD is not vulnerable to these issues as it does not use Angular in a vulnerable way.
     (no use of, or ability to set `xlink:href`, no use of `<select>` elements, no use of `sanitize()`, no use of
     `angular.merge()`, no use of `usemap` attribute, not a Firefox add-on
@@ -207,32 +224,6 @@
     <vulnerabilityName>XSS in $sanitize in Safari/Firefox</vulnerabilityName>
   </suppress>
 
-  <suppress>
-    <notes><![CDATA[
-    GoCD is not vulnerable to these issues as it does not use jQuery in a vulnerable way.
-    - no user controlled use of `jQuery(strInput)`
-    - no use of cross-site AJAX requests
-    - no use of `jquery.extend`
-    - no ability to pass untrusted code to `.html()`, `.append()`
-    - no ability for users to control boolean attribute names
-    ]]></notes>
-    <packageUrl regex="true">^pkg:javascript/jquery@2\..*$</packageUrl>
-
-    <cve>CVE-2015-9251</cve>
-    <vulnerabilityName>GHSA-rmxg-73gg-4p98</vulnerabilityName>
-
-    <cve>CVE-2019-11358</cve>
-    <vulnerabilityName>GHSA-6c3j-c64m-qhgq</vulnerabilityName>
-
-    <cve>CVE-2020-11022</cve>
-    <vulnerabilityName>GHSA-gxr4-xjj5-5px2</vulnerabilityName>
-    <cve>CVE-2020-11023</cve>
-    <vulnerabilityName>GHSA-jpcq-cgw6-v4j6</vulnerabilityName>
-    <cve>CVE-2020-23064</cve>
-    
-    <vulnerabilityName>jQuery 1.x and 2.x are End-of-Life and no longer receiving security updates</vulnerabilityName>
-  </suppress>
-  
   <!-- Suppression rules for dependencies only visible after a ./gradlew prepare (yarn install / bundle install / tw-go-plugins bundled download -->
   <suppress>
     <notes><![CDATA[
@@ -260,10 +251,10 @@
     <cve>CVE-2022-42920</cve>
   </suppress>
 
-  <suppress until="2023-08-01Z">
+  <suppress until="2023-10-01Z">
     <notes><![CDATA[
     Time-limited suppression of issue from nokogiri-java via embedded neko-htmlunit-2.63.0.jar pending https://github.com/sparklemotion/nokogiri/issues/2565
-    and corresponding release of nokogiri. We are probably not affected, but there is no mitigation we can apply right now eitehr. Needs upgrade to neko-htmlunit 2.70.0.
+    and corresponding release of nokogiri. We are probably not affected, but there is no mitigation we can apply right now either. Needs upgrade to neko-htmlunit 2.70.0.
     ]]></notes>
     <sha1>d4d159a789c5446eea7edc184cab9adab12baa1c</sha1>
     <cve>CVE-2023-2798</cve>

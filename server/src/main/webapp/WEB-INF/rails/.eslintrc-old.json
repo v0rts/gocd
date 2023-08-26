@@ -1,24 +1,63 @@
 {
-  "plugins": [
-    "es5"
+  "extends": [
+    "eslint:recommended"
   ],
+  "env": {
+    "browser": true,
+    "amd": true,
+    "es2018": true,
+    "jasmine": true,
+    "jquery": true
+  },
   "rules": {
-    "es5/no-arrow-functions": "error",
-    "es5/no-binary-and-octal-literals": "error",
-    "es5/no-block-scoping": "error",
-    "es5/no-classes": "error",
-    "es5/no-computed-properties": "error",
-    "es5/no-default-parameters": "error",
-    "es5/no-destructuring": "error",
-    "es5/no-exponentiation-operator": "error",
-    "es5/no-for-of": "error",
-    "es5/no-generators": "error",
-    "es5/no-modules": "error",
-    "es5/no-object-super": "error",
-    "es5/no-rest-parameters": "error",
-    "es5/no-shorthand-properties": "error",
-    "es5/no-spread": "error",
-    "es5/no-template-literals": "error",
-    "es5/no-unicode-code-point-escape": "error"
+    "arrow-parens": [
+      "error"
+    ],
+    "arrow-spacing": [
+      "error"
+    ],
+    "template-curly-spacing": [
+      "error",
+      "never"
+    ],
+    "no-const-assign": [
+      "error"
+    ],
+    "prefer-const": [
+      "error"
+    ],
+    "eol-last": [
+      "error"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "off"
+    ],
+    "indent-legacy": [
+      "error",
+      2
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-unused-vars": [
+      "off"
+    ],
+    "no-empty": [
+      "off"
+    ],
+    "no-undef": [
+      "off"
+    ],
+    "no-redeclare": [
+      "off"
+    ],
+    "no-cond-assign": [
+      "off"
+    ]
   }
 }

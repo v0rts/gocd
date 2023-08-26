@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thoughtworks.go.security;
 
-import org.apache.commons.codec.digest.DigestUtils;
+package com.thoughtworks.go.build
 
-import java.security.GeneralSecurityException;
-import java.security.cert.X509Certificate;
+import java.util.regex.Pattern
+import java.util.stream.Collectors
 
-import static com.thoughtworks.go.util.ExceptionUtils.bomb;
+class TextUtils {
+  private static final Pattern NEW_LINES = Pattern.compile(/\r\n|\r|\n/)
+  private static final Pattern NEW_LINE = Pattern.compile(/\n/)
 
-public class CertificateUtil {
-    public static String md5Fingerprint(X509Certificate certificate) {
-        try {
-            return DigestUtils.sha256Hex(certificate.getEncoded());
-        } catch (GeneralSecurityException gse) {
-            throw bomb(gse);
-        }
-    }
+  static String toPlatformLineSeparators(String input) {
+    return NEW_LINES.matcher(input).replaceAll(System.lineSeparator())
+  }
+
+  static String indent(String input, String indentPrefix) {
+    return NEW_LINE.splitAsStream(input).map { line -> indentPrefix + line }.collect(Collectors.joining("\n"))
+  }
 }
