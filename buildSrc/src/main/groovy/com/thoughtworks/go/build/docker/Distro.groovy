@@ -26,10 +26,10 @@ enum Distro implements DistroBehavior {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [ // See https://endoflife.date/alpine
-        new DistroVersion(version: '3.15', releaseName: '3.15', eolDate: parseDate('2023-11-01')),
         new DistroVersion(version: '3.16', releaseName: '3.16', eolDate: parseDate('2024-05-23')),
         new DistroVersion(version: '3.17', releaseName: '3.17', eolDate: parseDate('2024-11-22')),
         new DistroVersion(version: '3.18', releaseName: '3.18', eolDate: parseDate('2025-05-09')),
+        new DistroVersion(version: '3.19', releaseName: '3.19', eolDate: parseDate('2025-11-01')),
       ]
     }
 
@@ -49,7 +49,7 @@ enum Distro implements DistroBehavior {
     List<String> getInstallPrerequisitesCommands(DistroVersion v) {
       return [
         // procps is needed for tanuki wrapper shell script
-        'apk add --no-cache nss git mercurial subversion openssh-client bash curl procps'
+        'apk add --no-cache git openssh-client bash curl procps'
       ]
     }
 
@@ -67,8 +67,8 @@ enum Distro implements DistroBehavior {
         '  apk add --no-cache tzdata --virtual .build-deps curl binutils zstd',
         '  GLIBC_VER="2.34-r0"',
         '  ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download"',
-        '  ZLIB_URL="https://archive.archlinux.org/packages/z/zlib/zlib-1%3A1.2.13-2-x86_64.pkg.tar.zst"',
-        '  ZLIB_SHA256=c4f394724b20b84d7304b23bbb58442b6ef53e5cbac89eb51e39d7f0a46abafd',
+        '  ZLIB_URL="https://archive.archlinux.org/packages/z/zlib/zlib-1%3A1.3-2-x86_64.pkg.tar.zst"',
+        '  ZLIB_SHA256=805ad81ea00486717df264b05567a4a0b812a484a7482110b6159fbea6dc7e63',
         '  curl -LfsS https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub',
         '  SGERRAND_RSA_SHA256="823b54589c93b02497f1ba4dc622eaef9c813e6b0f0ebbb2f771e32adf9f4ef2"',
         '  echo "${SGERRAND_RSA_SHA256} */etc/apk/keys/sgerrand.rsa.pub" | sha256sum -c -',
@@ -117,7 +117,7 @@ enum Distro implements DistroBehavior {
     @Override
     List<String> getInstallPrerequisitesCommands(DistroVersion v) {
       return [
-        "${pkgFor(v)} install -y git-core mercurial subversion openssh-clients bash unzip procps-ng coreutils-single glibc-langpack-en ${v.lessThan(9) ? ' curl' : ' curl-minimal'}",
+        "${pkgFor(v)} install -y git-core openssh-clients bash unzip procps-ng coreutils-single glibc-langpack-en ${v.lessThan(9) ? ' curl' : ' curl-minimal'}",
         "${pkgFor(v)} clean all",
         "rm -rf /var/cache/yum /var/cache/dnf",
       ]
@@ -153,7 +153,7 @@ enum Distro implements DistroBehavior {
     @Override
     List<String> getInstallPrerequisitesCommands(DistroVersion v) {
       return [
-        'DEBIAN_FRONTEND=noninteractive apt-get install -y git-core subversion mercurial openssh-client bash unzip curl ca-certificates locales procps sysvinit-utils coreutils',
+        'DEBIAN_FRONTEND=noninteractive apt-get install -y git-core openssh-client bash unzip curl ca-certificates locales procps coreutils',
         'DEBIAN_FRONTEND=noninteractive apt-get clean all',
         'rm -rf /var/lib/apt/lists/*',
         'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'

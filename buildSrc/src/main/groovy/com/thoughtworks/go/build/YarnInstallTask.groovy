@@ -33,8 +33,9 @@ class YarnInstallTask extends DefaultTask {
       inputs.file(project.file("${getWorkingDir()}/package.json"))
       inputs.file(project.file("${getWorkingDir()}/yarn.lock"))
       inputs.file(project.file("${getWorkingDir()}/.yarnrc.yml"))
-      inputs.dir(project.file("${getWorkingDir()}/.yarn/releases"))
+      inputs.dir(project.file("${getWorkingDir()}/.yarn/patches"))
       inputs.dir(project.file("${getWorkingDir()}/.yarn/plugins"))
+      inputs.dir(project.file("${getWorkingDir()}/.yarn/releases"))
     })
   }
 
@@ -59,8 +60,7 @@ class YarnInstallTask extends DefaultTask {
       execTask.standardOutput = System.out
       execTask.errorOutput = System.err
       execTask.workingDir = this.getWorkingDir()
-
       execTask.commandLine = OperatingSystem.current().isWindows() ? ["yarn.cmd", "install", "--no-immutable"] : ["yarn", "install", "--immutable"]
-    }
+    }  
   }
 }

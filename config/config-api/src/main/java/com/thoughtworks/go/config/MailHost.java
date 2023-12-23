@@ -130,19 +130,13 @@ public class MailHost implements Validatable, PasswordEncrypter {
     }
 
     @Tolerate
-    @Deprecated // use `getUsername()` instead
+    @Deprecated(since = "use `getUsername()` instead")
     public String getUserName() {
         return getUsername();
     }
 
     public String getPassword() {
         return getCurrentPassword();
-    }
-
-    @Tolerate
-    @Deprecated // use `isTls()` instead, left here for rails
-    public boolean getTls() {
-        return isTls();
     }
 
     @Override

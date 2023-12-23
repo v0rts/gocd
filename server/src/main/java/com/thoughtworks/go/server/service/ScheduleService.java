@@ -166,7 +166,7 @@ public class ScheduleService {
                     }
                 }
             } catch (Throwable e) {
-                LOGGER.error("[Pipeline Schedule] An exception occurred while scheduling the pipeline. {}", e);
+                LOGGER.error("[Pipeline Schedule] An exception occurred while scheduling the pipeline.", e);
             }
         }
     }
@@ -572,7 +572,7 @@ public class ScheduleService {
                 // (e.g. CannotScheduleException thrown when there are no agents for run-on-all-agent jobs)
                 transactionTemplate.executeWithExceptionHandling(new com.thoughtworks.go.server.transaction.TransactionCallbackWithoutResult() {
                     @Override
-                    public void doInTransactionWithoutResult(TransactionStatus status) throws Exception {
+                    public void doInTransactionWithoutResult(TransactionStatus status) {
                         if (job.isCompleted()) {
                             Stage stage = stageService.stageById(job.getStageId());
                             automaticallyTriggerRelevantStagesFollowingCompletionOf(stage);

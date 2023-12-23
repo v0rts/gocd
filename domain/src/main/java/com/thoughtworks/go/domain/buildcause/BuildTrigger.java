@@ -15,12 +15,12 @@
  */
 package com.thoughtworks.go.domain.buildcause;
 
-import java.io.Serializable;
-
 import com.thoughtworks.go.domain.MaterialRevisions;
 
+import java.io.Serializable;
+
 /**
- * @understands how a pipeline was triggered
+ * Understands how a pipeline was triggered
  */
 public class BuildTrigger implements Serializable {
     private String message;
@@ -58,9 +58,6 @@ public class BuildTrigger implements Serializable {
         return dbName;
     }
 
-    /**
-     * @deprecated encapsulate this properly when we use Hibernate
-     */
     public void setMessage(String message) {
         this.message = message;
     }

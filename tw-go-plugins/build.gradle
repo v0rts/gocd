@@ -27,37 +27,37 @@ def dependencies = [
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-ldap-authentication-plugin',
-    tagName: 'v2.2.1-231',
-    asset: 'gocd-ldap-authentication-plugin-2.2.1-231.jar',
-    checksum: '3e3dbcbd6b20e63672d80f3aa9951558dadf6d90204ec2d8702ea15d733dae53'
+    tagName: 'v2.2.2-264',
+    asset: 'gocd-ldap-authentication-plugin-2.2.2-264.jar',
+    checksum: '703c994c760ed7bdd66d0e5ac8b9aaef8f8bfce521613ccd87f6ba5914141b1c'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-filebased-authentication-plugin',
-    tagName: 'v2.1.2-191',
-    asset: 'gocd-filebased-authentication-plugin-2.1.2-191.jar',
-    checksum: 'b71cb26ea31b820a9b37edb870f1bbacdc8ea999983613105fa4333a9f86bf62'
+    tagName: 'v2.1.2-210',
+    asset: 'gocd-filebased-authentication-plugin-2.1.2-210.jar',
+    checksum: 'd25cde68fe700b80bd134fe0582ad6dea71075424e87f64ab797b194ee2ee6d3'
   ),
   new GithubArtifact(
     user: 'tomzo',
     repo: 'gocd-yaml-config-plugin',
-    tagName: 'v0.14.2-305',
-    asset: 'yaml-config-plugin-0.14.2-305.jar',
-    checksum: 'b48951ac8044fa86736cfe3d3e26e0b87940b68bbbb8d6da310fb3ec76c19136'
+    tagName: 'v0.14.3-321',
+    asset: 'yaml-config-plugin-0.14.3-321.jar',
+    checksum: 'f2c92ef8f5255ff0f6528944302e2a3b4980b6b963afbd391d15c66618a1bc5b'
   ),
   new GithubArtifact(
     user: 'tomzo',
     repo: 'gocd-json-config-plugin',
-    tagName: 'v0.6.1-165',
-    asset: 'json-config-plugin-0.6.1-165.jar',
-    checksum: '0ac7ad48a617520012022e01424457f6bf1ba50b36ec3040c863027f05d6403d'
+    tagName: 'v0.6.1-173',
+    asset: 'json-config-plugin-0.6.1-173.jar',
+    checksum: '2f5b62a89eda05dbd4f913b30562cb2792cc3c8e386428d0bf41ccdfbd901275'
   ),
   new GithubArtifact(
     user: 'gocd',
     repo: 'gocd-file-based-secrets-plugin',
-    tagName: 'v1.1.2-170',
-    asset: 'gocd-file-based-secrets-plugin-1.1.2-170.jar',
-    checksum: '7aa5af90c565c1cd5076611851f28182f640404b5b6a8fe1d11d4bd3e2b91b5d'
+    tagName: 'v1.1.2-191',
+    asset: 'gocd-file-based-secrets-plugin-1.1.2-191.jar',
+    checksum: '8b381825add2202b587caa8a181c8ced9b0d97fd216cae6eaf904a2f612ae846'
   )
 ]
 

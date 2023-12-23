@@ -15,8 +15,6 @@
  */
 package com.thoughtworks.go.server.domain.xml;
 
-import com.thoughtworks.go.domain.XmlRepresentable;
-import com.thoughtworks.go.domain.XmlWriterContext;
 import com.thoughtworks.go.presentation.pipelinehistory.PipelineInstanceModels;
 import com.thoughtworks.go.server.domain.xml.builder.DocumentBuilder;
 import org.dom4j.Document;
@@ -41,8 +39,4 @@ public class PipelinesXmlRepresenter implements XmlRepresentable {
         return builder.build();
     }
 
-    @Override
-    public String httpUrl(String baseUrl) {
-        return null;
-    }
 }

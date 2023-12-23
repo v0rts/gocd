@@ -15,17 +15,17 @@
  */
 package com.thoughtworks.go.config.preprocessor;
 
+import com.thoughtworks.go.config.ParamsConfig;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import com.thoughtworks.go.config.ParamsConfig;
-
 /**
- * @understands creating reference collecting handler
+ * Understands creating reference collecting handler
  */
 public class ParamReferenceCollectorFactory implements ParamHandlerFactory {
 
-    private HashSet<String> params = new HashSet<>();
+    private final Set<String> params = new HashSet<>();
 
     @Override
     public ParamHandler createHandler(Object resolvable, String fieldName, String stringToResolve) {

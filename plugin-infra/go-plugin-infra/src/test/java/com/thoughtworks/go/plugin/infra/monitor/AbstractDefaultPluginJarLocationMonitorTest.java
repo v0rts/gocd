@@ -16,20 +16,26 @@
 package com.thoughtworks.go.plugin.infra.monitor;
 
 import com.thoughtworks.go.plugin.FileHelper;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
+import java.util.Objects;
 
+@ExtendWith(MockitoExtension.class)
 abstract class AbstractDefaultPluginJarLocationMonitorTest {
-    private static final int NO_OF_TRIES_TO_CHECK_MONITOR_RUN = 150;
+    public static final long TEST_MONITOR_INTERVAL_MILLIS = 100L;
+    public static final long TEST_TIMEOUT = TEST_MONITOR_INTERVAL_MILLIS * 5;
+
     File pluginWorkDir;
     FileHelper tempFolder;
 
@@ -39,41 +45,27 @@ abstract class AbstractDefaultPluginJarLocationMonitorTest {
         pluginWorkDir = this.tempFolder.newFolder("plugin-work-dir");
     }
 
-    void waitAMoment() throws InterruptedException {
-        Thread.yield();
-        Thread.sleep(2000);
-    }
-
-    void waitUntilNextRun(DefaultPluginJarLocationMonitor monitor) throws InterruptedException {
-        long previousRun = monitor.getLastRun();
-        int numberOfTries = 0;
-        while (previousRun >= monitor.getLastRun() && numberOfTries < NO_OF_TRIES_TO_CHECK_MONITOR_RUN) {
-            Thread.yield();
-            Thread.sleep(100);
-            numberOfTries++;
-        }
-        if (numberOfTries >= NO_OF_TRIES_TO_CHECK_MONITOR_RUN) {
-            throw new RuntimeException("Number of tries exceeded, but monitor thread hasn't run yet");
-        }
-    }
-
-    void copyPluginToThePluginDirectory(File pluginDir,
-                                        String destinationFilenameOfPlugin) throws IOException, URISyntaxException {
-        URL resource = getClass().getClassLoader().getResource("defaultFiles/descriptor-aware-test-plugin.jar");
-
-        FileUtils.copyURLToFile(resource, new File(pluginDir, destinationFilenameOfPlugin));
-    }
-
-    void updateFileContents(File someFile) {
-        try (FileOutputStream output = new FileOutputStream(someFile)) {
-            IOUtils.write("some rubbish", output, Charset.defaultCharset());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     BundleOrPluginFileDetails pluginFileDetails(File directory, String pluginFile, boolean bundledPlugin) {
         return new BundleOrPluginFileDetails(new File(directory, pluginFile), bundledPlugin, pluginWorkDir);
     }
 
+    void addPlugin(BundleOrPluginFileDetails plugin) throws IOException {
+        try (InputStream is = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("defaultFiles/descriptor-aware-test-plugin.jar"))) {
+            Path tempFile = Files.createTempFile(tempFolder.getRoot().toPath(), "plugin-", null);
+            Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(tempFile, plugin.file().toPath(), StandardCopyOption.ATOMIC_MOVE);
+        }
+    }
+
+    void updatePlugin(BundleOrPluginFileDetails plugin) throws IOException {
+        Files.setLastModifiedTime(plugin.file().toPath(), FileTime.from(Instant.now()));
+    }
+
+    void deletePlugin(BundleOrPluginFileDetails plugin) throws IOException {
+        Files.delete(plugin.file().toPath());
+    }
+
+    void renamePlugin(BundleOrPluginFileDetails orgExternalFile, BundleOrPluginFileDetails newExternalFile) throws IOException {
+        Files.move(orgExternalFile.file().toPath(), newExternalFile.file().toPath(), StandardCopyOption.ATOMIC_MOVE);
+    }
 }

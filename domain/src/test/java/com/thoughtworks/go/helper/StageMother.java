@@ -34,7 +34,7 @@ import static com.thoughtworks.go.util.GoConstants.DEFAULT_APPROVED_BY;
 
 public class StageMother {
 
-    protected StageMother() {
+    private StageMother() {
     }
 
     public static Stage withOneScheduledBuild(String stageName, String failedBuildplanName,
@@ -98,11 +98,13 @@ public class StageMother {
         return stage;
     }
 
+    @SuppressWarnings("unused") // Used by stages_controller_spec.rb
     public static Stage createPassedStageWithFakeDuration(String pipelineName, int pipelineCounter, String stageName, int stageCounter, String jobName, final DateTime scheduleTime,
                                                           DateTime completedTime) {
         return createStageWithFakeDuration(pipelineName, pipelineCounter, stageName, stageCounter, jobName, scheduleTime, completedTime, JobResult.Passed);
     }
 
+    @SuppressWarnings("unused") // Used by stages_controller_spec.rb
     public static Stage createFailedStageWithFakeDuration(String pipelineName, int pipelineCounter, String stageName, int stageCounter, String jobName, final DateTime scheduleTime,
                                                           DateTime completedTime) {
         return createStageWithFakeDuration(pipelineName, pipelineCounter, stageName, stageCounter, jobName, scheduleTime, completedTime, JobResult.Failed);
@@ -239,8 +241,8 @@ public class StageMother {
         return stageInstanceModel;
     }
 
-
-    public  static Stage unrunStage(String stageName) {
+    @SuppressWarnings("unused") // Used from value_stream_map_model_spec.rb
+    public static Stage unrunStage(String stageName) {
         return new NullStage(stageName, new JobInstances());
     }
 }

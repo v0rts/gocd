@@ -101,8 +101,8 @@ public class GoConfigServiceTest {
         instanceFactory = mock(InstanceFactory.class);
 
         ConfigElementImplementationRegistry registry = ConfigElementImplementationRegistryMother.withNoPlugins();
-        goConfigService = new GoConfigService(goConfigDao, this.clock, new GoConfigMigration(new TimeProvider(),
-                registry), goCache, configRepo, registry,
+        goConfigService = new GoConfigService(goConfigDao, this.clock, new GoConfigMigration(new TimeProvider()
+        ), goCache, configRepo, registry,
                 instanceFactory, mock(CachedGoPartials.class));
     }
 
@@ -519,7 +519,7 @@ public class GoConfigServiceTest {
     }
 
     @Test
-    public void shouldReturnDependentPiplinesForAGivenPipeline() {
+    public void shouldReturnDependentPipelinesForAGivenPipeline() {
         PipelineConfig up = createPipelineConfig("blahPipeline", "blahStage");
         up.addMaterialConfig(MaterialConfigsMother.hgMaterialConfig());
         PipelineConfig down1 = GoConfigMother.createPipelineConfigWithMaterialConfig("down1", new DependencyMaterialConfig(new CaseInsensitiveString("blahPipeline"), new CaseInsensitiveString("blahStage")));
@@ -733,7 +733,7 @@ public class GoConfigServiceTest {
 
         String entityValue = pipeline.getParams().getParamNamed("foo").getValue();
         assertThat(entityValue, not(containsString("CONTENTS_OF_FILE")));
-        assertThat(entityValue, isEmptyString());
+        assertThat(entityValue, is(emptyString()));
     }
 
     @Test

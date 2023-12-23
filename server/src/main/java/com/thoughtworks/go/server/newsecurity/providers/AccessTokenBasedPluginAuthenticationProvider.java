@@ -24,7 +24,7 @@ import com.thoughtworks.go.server.exceptions.InvalidAccessTokenException;
 import com.thoughtworks.go.server.newsecurity.models.AccessTokenCredential;
 import com.thoughtworks.go.server.newsecurity.models.AuthenticationToken;
 import com.thoughtworks.go.server.security.AuthorityGranter;
-import com.thoughtworks.go.server.security.userdetail.GoUserPrinciple;
+import com.thoughtworks.go.server.security.userdetail.GoUserPrincipal;
 import com.thoughtworks.go.server.service.AuthorizationExtensionCacheService;
 import com.thoughtworks.go.server.service.GoConfigService;
 import com.thoughtworks.go.server.service.PluginRoleService;
@@ -89,8 +89,7 @@ public class AccessTokenBasedPluginAuthenticationProvider extends AbstractPlugin
             User user = new User(fetched.getUsername().getUsername().toString(), fetched.getDisplayName(), fetched.getEmail());
             return new AuthenticationResponse(user, roles);
         } else {
-            String msg = String.format("Access Token belonging to the user has either been disabled, removed or expired. ", username, pluginId, authConfig.getId());
-            throw new InvalidAccessTokenException(msg);
+            throw new InvalidAccessTokenException("Access Token belonging to the user has either been disabled, removed or expired.");
         }
     }
 
@@ -100,10 +99,10 @@ public class AccessTokenBasedPluginAuthenticationProvider extends AbstractPlugin
     }
 
     @Override
-    protected AuthenticationToken<AccessTokenCredential> createAuthenticationToken(GoUserPrinciple userPrinciple,
+    protected AuthenticationToken<AccessTokenCredential> createAuthenticationToken(GoUserPrincipal userPrincipal,
                                                                                    AccessTokenCredential credentials,
                                                                                    String pluginId,
                                                                                    String authConfigId) {
-        return new AuthenticationToken<>(userPrinciple, credentials, pluginId, clock.currentTimeMillis(), authConfigId);
+        return new AuthenticationToken<>(userPrincipal, credentials, pluginId, clock.currentTimeMillis(), authConfigId);
     }
 }

@@ -19,23 +19,6 @@
 
   <suppress>
     <notes><![CDATA[
-    https://nvd.nist.gov/vuln/detail/CVE-2020-13697 as described only affects usage of "Nanolets" which is packaged
-    separately and which is not used within GoCD.
-    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.nanohttpd/nanohttpd@.*$</packageUrl>
-    <cve>CVE-2020-13697</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-    GoCD use of NanoHttpd is only in AgentStatusHttpd which only supports GET requests for status, so does not parse
-    body content to make it vulnerable to CVE-2022-21230.
-    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.nanohttpd/nanohttpd@.*$</packageUrl>
-    <cve>CVE-2022-21230</cve>
-  </suppress>
-
-  <suppress>
-    <notes><![CDATA[
     GoCD does not use Spring's ServiceExporter in a vulnerable way, as described in https://nvd.nist.gov/vuln/detail/CVE-2016-1000027
     https://github.com/spring-projects/spring-framework/issues/24434 and https://blog.gypsyengineer.com/en/security/detecting-dangerous-spring-exporters-with-codeql.html
     ]]></notes>
@@ -77,7 +60,8 @@
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-.*@.*$</packageUrl>
     <cve>CVE-2022-22950</cve>
-    <cve>CVE-2023-20863</cve>
+    <cve>CVE-2023-20861</cve>
+    <vulnerabilityName>CVE-2023-20863</vulnerabilityName>
   </suppress>
   <suppress>
     <notes><![CDATA[
@@ -94,15 +78,6 @@
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-.*@.*$</packageUrl>
     <cve>CVE-2022-22970</cve>
-  </suppress>
-  <suppress>
-    <notes><![CDATA[
-    It doesn't appear that GoCD is directly vulnerable to https://spring.io/security/cve-2023-20861 as it does not seem
-    possible for a user (other than an administator) to supply a SpEL expression anywhere. There is some more detail
-    at https://github.com/spring-projects/spring-framework/issues/30140 on what was fixed in later supported versions.
-    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework/spring\-.*@.*$</packageUrl>
-    <cve>CVE-2023-20861</cve>
   </suppress>
 
   <suppress>
@@ -175,12 +150,12 @@
     ]]></notes>
     <packageUrl regex="true">^pkg:maven/com\.h2database/h2@1\.4\.200$</packageUrl>
     <cve>CVE-2021-42392</cve>
-    <vulnerabilityName>GHSA-h376-j262-vhq6</vulnerabilityName>
+    <vulnerabilityName>GHSA-h376-j262-vhq6</vulnerabilityName> <!-- CVE-2021-42392 is picked up by Trivy under GHSA id -->
     <cve>CVE-2022-23221</cve>
     <cve>CVE-2022-45868</cve>
     <vulnerabilityName>CVE-2018-14335</vulnerabilityName>
   </suppress>
-  
+
   <suppress>
     <notes><![CDATA[
     This seems like it's not a real issue based on discussion at https://github.com/FasterXML/jackson-databind/issues/3972 - seems
@@ -200,26 +175,32 @@
   </suppress>
 
   <suppress>
-    <notes><![CDATA[
-    This is a false positive within OSSIndex as the vulnerability is with the PostgreSQL server rather than the client libraries.
+   <notes><![CDATA[
+    GoCD is not affected by https://nvd.nist.gov/vuln/detail/CVE-2023-36479 since it does not use CgiServlet or CGI at all.
     ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.postgresql/postgresql@.*$</packageUrl>
-    <vulnerabilityName>CVE-2020-21469</vulnerabilityName>
+    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-servlets@.*$</packageUrl>
+    <cve>CVE-2023-36479</cve>
   </suppress>
 
   <suppress>
     <notes><![CDATA[
-    GoCD is not vulnerable to these issues as it does not use Angular in a vulnerable way.
-    (no use of, or ability to set `xlink:href`, no use of `<select>` elements, no use of `sanitize()`, no use of
-    `angular.merge()`, no use of `usemap` attribute, not a Firefox add-on
+    GoCD does not seem to be vulnerable to these issues as it does not use Angular in a vulnerable way.
+    (no use of, or ability to use `.merge()`, `.sanitize()`, `.copy()`, `$resource` service, set `xlink:href`,
+    no use of `<select>` elements, no use of `usemap` attribute, not a Firefox add-on, and don't care about Internet Explorer)
     ]]></notes>
     <packageUrl regex="true">^pkg:javascript/angularjs@.*$</packageUrl>
+    <cve>CVE-2019-10768</cve>
     <cve>CVE-2019-14863</cve>
     <cve>CVE-2020-7676</cve>
+    <cve>CVE-2022-25869</cve>
+    <cve>CVE-2023-26116</cve>
+    <cve>CVE-2023-26117</cve>
+    <cve>CVE-2023-26118</cve>
     <vulnerabilityName>DOS in $sanitize</vulnerabilityName>
-    <vulnerabilityName>Prototype pollution</vulnerabilityName>
+    <vulnerabilityName>Cross-Site Scripting via JSONP</vulnerabilityName>
     <vulnerabilityName>The attribute usemap can be used as a security exploit</vulnerabilityName>
     <vulnerabilityName>Universal CSP bypass via add-on in Firefox</vulnerabilityName>
+    <vulnerabilityName>XSS via JQLite DOM manipulation functions in AngularJS</vulnerabilityName>
     <vulnerabilityName>End-of-Life: Long term support for AngularJS has been discontinued</vulnerabilityName>
     <vulnerabilityName>XSS in $sanitize in Safari/Firefox</vulnerabilityName>
   </suppress>
@@ -240,7 +221,7 @@
     <filePath regex="true">^.*/gems/.*/(htmlunit|capybara)/.*\.js$</filePath>
     <vulnerabilityName regex="true">.*</vulnerabilityName>
   </suppress>
-  
+
   <suppress>
     <notes><![CDATA[
     Suppress false positive from nokogiri-java via embedded xalan-2.7.3.jar which is correctly identifying that BCEL is embedded, but
@@ -251,24 +232,24 @@
     <cve>CVE-2022-42920</cve>
   </suppress>
 
-  <suppress until="2023-10-01Z">
+  <suppress until="2024-02-01Z">
     <notes><![CDATA[
-    Time-limited suppression of issue from nokogiri-java via embedded neko-htmlunit-2.63.0.jar pending https://github.com/sparklemotion/nokogiri/issues/2565
-    and corresponding release of nokogiri. We are probably not affected, but there is no mitigation we can apply right now either. Needs upgrade to neko-htmlunit 2.70.0.
+    Time-limited suppression of issues from nokogiri-java via embedded neko-htmlunit-2.63.0.jar pending https://github.com/sparklemotion/nokogiri/issues/2565
+    and corresponding release of nokogiri. We are probably not affected, but there is no mitigation we can apply right now either. Needs upgrade to neko-htmlunit 3.0.0+.
     ]]></notes>
     <sha1>d4d159a789c5446eea7edc184cab9adab12baa1c</sha1>
     <cve>CVE-2023-2798</cve>
     <cve>CVE-2023-26119</cve>
+    <cve>CVE-2023-49093</cve>
   </suppress>
 
   <suppress>
     <notes><![CDATA[
-    Suppress false positive from Apache Mina, as used by the LDAP Authentication plugin. The plugin does not use the SFTP/SSHD parts of Mina,
-    only that needed for talking to an LDAP server so does not appear to be affected by https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2023-35887
-    which should really only be recorded against mini-sshd, not mina-core.  
+    Suppress false positive from the JSON Config repo plugin at plugins-{version}.zip/gocd-json-config-plugin.jar. This plugin is being mis-identified as the json-c project which is completely different.
+    Not sure if/how this can be fixed upstream in OWASP Dependency Check as in our case it's being reported against a SHA for the plugin jar itself which
+    does not have a Maven identifier.
     ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.apache\.mina/mina\-core@2\.0\..*$</packageUrl>
-    <cve>CVE-2023-35887</cve>
+    <cpe>cpe:/a:json-c:json-c</cpe>
   </suppress>
 
 </suppressions>

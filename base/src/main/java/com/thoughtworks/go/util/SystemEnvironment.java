@@ -18,7 +18,6 @@ package com.thoughtworks.go.util;
 import ch.qos.logback.classic.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.TestOnly;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -35,8 +34,6 @@ import static java.util.concurrent.TimeUnit.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class SystemEnvironment implements Serializable, ConfigDirProvider {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SystemEnvironment.class);
 
     public static final String CRUISE_LISTEN_HOST = "cruise.listen.host";
     public static final String CRUISE_SERVER_PORT = "cruise.server.port";
@@ -139,11 +136,10 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public static final GoSystemProperty<String> JETTY_XML_FILE_NAME = new GoStringSystemProperty("jetty.xml.file.name", JETTY_XML);
 
-    public static final String JETTY9 = "com.thoughtworks.go.server.Jetty9Server";
-    public static final GoSystemProperty<String> APP_SERVER = new CachedProperty<>(new GoStringSystemProperty("app.server", JETTY9));
+    public static final String JETTY = "com.thoughtworks.go.server.JettyServer";
+    public static final GoSystemProperty<String> APP_SERVER = new CachedProperty<>(new GoStringSystemProperty("app.server", JETTY));
     public static final GoSystemProperty<String> GO_LANDING_PAGE = new GoStringSystemProperty("go.landing.page", "/pipelines");
 
-    public static final GoSystemProperty<Boolean> ARTIFACT_VIEW_INCLUDE_ALL_FILES = new GoBooleanSystemProperty("go.view-artifacts.include-all", true);
     public static final GoSystemProperty<Boolean> FETCH_ARTIFACT_AUTO_SUGGEST = new GoBooleanSystemProperty("go.fetch-artifact.auto-suggest", true);
     public static final GoSystemProperty<Boolean> GO_FETCH_ARTIFACT_TEMPLATE_AUTO_SUGGEST = new GoBooleanSystemProperty("go.fetch-artifact.template.auto-suggest", true);
 
@@ -318,20 +314,6 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
         return new File(getConfigDir(), get(JETTY_XML_FILE_NAME));
     }
 
-    /**
-     * @deprecated use <code>new SystemEnvironment().getXXXXX()</code> instead.
-     */
-    public static String getProperty(String property, String defaultValue) {
-        return new SystemEnvironment().getPropertyImpl(property, defaultValue);
-    }
-
-    /**
-     * @deprecated use <code>new SystemEnvironment().getXXXXX()</code> instead.
-     */
-    public static String getProperty(String property) {
-        return new SystemEnvironment().getPropertyImpl(property);
-    }
-
     private String getPropertyImpl(String property, String defaultValue) {
         return System.getProperty(property, defaultValue);
     }
@@ -406,7 +388,9 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
             try (InputStream is = getClass().getResourceAsStream(CRUISE_PROPERTIES)) {
                 properties.load(is);
             } catch (Exception e) {
-                LOG.error("Unable to load newProperties file {}", CRUISE_PROPERTIES);
+                // Deliberately avoiding initializing the logger during class load to allow for manual
+                // logger configuration during startup
+                LoggerFactory.getLogger(SystemEnvironment.class).error("Unable to load newProperties file {}", CRUISE_PROPERTIES);
             }
         }
         return properties;
@@ -509,7 +493,7 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
     }
 
     public long getUnresponsiveJobWarningThreshold() {
-        return Long.parseLong(getPropertyImpl(UNRESPONSIVE_JOB_WARNING_THRESHOLD, "5")) * 60 * 1000;//mins to mills
+        return Long.parseLong(getPropertyImpl(UNRESPONSIVE_JOB_WARNING_THRESHOLD, "5")) * 60 * 1000; // mins to millis
     }
 
     public boolean getParentLoaderPriority() {
@@ -629,11 +613,7 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
     }
 
     public String getAgentStatusHostname() {
-        if (isBlank(AGENT_STATUS_API_BIND_HOST.getValue())) {
-            return null;
-        } else {
-            return AGENT_STATUS_API_BIND_HOST.getValue();
-        }
+        return AGENT_STATUS_API_BIND_HOST.getValue();
     }
 
     public int getAgentStatusPort() {
@@ -694,6 +674,10 @@ public class SystemEnvironment implements Serializable, ConfigDirProvider {
 
     public boolean shouldInitializeConfigRepositoriesOnStartup() {
         return INITIALIZE_CONFIG_REPOSITORIES_ON_STARTUP.getValue();
+    }
+
+    public long getPluginLocationMonitorIntervalInMillis() {
+        return SECONDS.toMillis(PLUGIN_LOCATION_MONITOR_INTERVAL_IN_SECONDS.getValue());
     }
 
     public static abstract class GoSystemProperty<T> {

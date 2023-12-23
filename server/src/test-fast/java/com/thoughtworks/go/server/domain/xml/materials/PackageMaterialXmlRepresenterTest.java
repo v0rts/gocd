@@ -17,13 +17,12 @@ package com.thoughtworks.go.server.domain.xml.materials;
 
 import com.thoughtworks.go.config.materials.PackageMaterial;
 import com.thoughtworks.go.domain.MaterialRevision;
-import com.thoughtworks.go.domain.XmlWriterContext;
 import com.thoughtworks.go.domain.materials.Modification;
 import com.thoughtworks.go.helper.MaterialsMother;
 import com.thoughtworks.go.junit5.FileSource;
+import com.thoughtworks.go.server.domain.xml.XmlWriterContext;
 import com.thoughtworks.go.server.domain.xml.builder.ElementBuilder;
 import com.thoughtworks.go.util.DateUtils;
-import com.thoughtworks.go.util.SystemEnvironment;
 import org.dom4j.dom.DOMElement;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -42,7 +41,7 @@ public class PackageMaterialXmlRepresenterTest {
         MaterialRevision revision = new MaterialRevision(material, modification);
         DOMElement root = new DOMElement("materials");
         ElementBuilder builder = new ElementBuilder(root);
-        XmlWriterContext context = new XmlWriterContext("https://test.host/go", null, null, null, new SystemEnvironment());
+        XmlWriterContext context = new XmlWriterContext("https://test.host/go", null, null);
 
         new PackageMaterialXmlRepresenter("up42", 1, revision).populate(builder, context);
 

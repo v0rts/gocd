@@ -15,14 +15,14 @@
  */
 package com.thoughtworks.go.config;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @understands a custom data structure for templates to editable pipelines.
+ * Understands a custom data structure for templates to editable pipelines.
  */
-
 public class TemplateToPipelines {
-    private  List<PipelineEditabilityInfo> pipelines = new ArrayList<>();
+    private List<PipelineEditabilityInfo> pipelines = new ArrayList<>();
     private CaseInsensitiveString templateName;
     private boolean canEdit;
     private boolean isAdmin;

@@ -15,9 +15,6 @@
  */
 package com.thoughtworks.go.util;
 
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,22 +27,8 @@ public class TestUtils {
 
     }
 
-    public static TypeSafeMatcher<String> contains(final String toMatch) {
-        return new TypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafely(String underTest) {
-                return underTest.contains(toMatch);
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("The actual string does not contain the expected string.");
-            }
-        };
-    }
-
-    public static void copyAndClose(InputStream fileInputStream, OutputStream fileOutputStream) {
-        try (InputStream is = fileInputStream; OutputStream os = fileOutputStream) {
+    public static void copyAndClose(InputStream inputStream, OutputStream outputStream) {
+        try (InputStream is = inputStream; OutputStream os = outputStream) {
             is.transferTo(os);
         } catch (IOException e) {
             bomb(e);

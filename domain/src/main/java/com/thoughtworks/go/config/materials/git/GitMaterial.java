@@ -184,9 +184,6 @@ public class GitMaterial extends ScmMaterial implements PasswordAwareMaterial {
         }
     }
 
-    /**
-     * @deprecated Breaks encapsulation really badly. But we need it for IBatis :-(
-     */
     @Override
     public String getUrl() {
         return url.originalArgument();
@@ -284,7 +281,7 @@ public class GitMaterial extends ScmMaterial implements PasswordAwareMaterial {
     }
 
     @Override
-    public Class getInstanceType() {
+    public Class<GitMaterialInstance> getInstanceType() {
         return GitMaterialInstance.class;
     }
 
@@ -419,8 +416,10 @@ public class GitMaterial extends ScmMaterial implements PasswordAwareMaterial {
 
     private boolean isRepositoryChanged(GitCommand command, File workingDirectory) {
         UrlArgument currentWorkingUrl = command.workingRepositoryUrl();
-        LOG.trace("Current repository url of [{}]: {}", workingDirectory, currentWorkingUrl);
-        LOG.trace("Target repository url: {}", url);
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Current repository url of [{}]: {}", workingDirectory, currentWorkingUrl);
+            LOG.trace("Target repository url: {}", url);
+        }
         return !MaterialUrl.sameUrl(url.forDisplay(), currentWorkingUrl.forDisplay())
                 || !isRemoteFetchConfigEqual(command)
                 || !isBranchEqual(command)

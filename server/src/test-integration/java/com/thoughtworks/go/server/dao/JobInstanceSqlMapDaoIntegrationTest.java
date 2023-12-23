@@ -51,7 +51,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.support.TransactionCallback;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -642,7 +641,7 @@ public class JobInstanceSqlMapDaoIntegrationTest {
         // in setup, we created 2 scheduled builds
         assertThat(jobInstanceDao.orderedScheduledBuilds().size(), is(2));
 
-        JobIdentifier jobIdentifier = new JobIdentifier(PIPELINE_NAME, "LABEL-1", STAGE_NAME, "1", JOB_NAME);
+        JobIdentifier jobIdentifier = new JobIdentifier(PIPELINE_NAME, 1, "LABEL-1", STAGE_NAME, "1", JOB_NAME);
 
         long newestId = schedule(JOB_NAME, stageId, new Date(10001), jobIdentifier);
         long olderId = schedule(JOB_NAME, stageId, new Date(10000), jobIdentifier);

@@ -15,29 +15,25 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_10_0.dtd">
 
 <Configure id="Server" class="org.eclipse.jetty.server.Server">
-    <!--Do not remove/modify the below line containing jetty version, else all your changes to this file will be reverted.-->
-    <!--jetty-v9.4.48.v20220622-->
+
+    <!-- Do not remove/modify the below line containing jetty version, else all your changes to this file will be reverted.
+         This is used by the GoCD server to determine whether a breaking change has been made to Jetty config and the
+         user's custom configuration needs to be overridden with that packages.
+
+         See com.thoughtworks.go.server.JettyServer#JETTY_CONFIG_VERSION
+    -->
+    <!-- jetty-config-gocd-v10 -->
+
     <!-- =========================================================== -->
     <!-- Server Thread Pool                                          -->
     <!-- =========================================================== -->
 
-    <!--<Get name="ThreadPool">-->
-        <!--<Set name="minThreads" type="int"><Property name="jetty.threadPool.minThreads" deprecated="threads.min" default="10"/></Set>-->
-        <!--<Set name="maxThreads" type="int"><Property name="jetty.threadPool.maxThreads" deprecated="threads.max" default="200"/></Set>-->
-        <!--<Set name="idleTimeout" type="int"><Property name="jetty.threadPool.idleTimeout" deprecated="threads.timeout" default="60000"/></Set>-->
-        <!--<Set name="detailedDump">false</Set>-->
-    <!--</Get>-->
-
     <Get name="ThreadPool">
         <Set name="minThreads">20</Set>
         <Set name="maxThreads">300</Set>
-        <!-- New Jetty QTP does not have these two properties below.
-        <Set name="lowThreads">10</Set>
-        <Set name="SpawnOrShrinkAt">2</Set>
-        -->
     </Get>
     <Call name="setAttribute">
         <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
@@ -47,13 +43,14 @@
     <Call name="addBean">
         <Arg>
             <New class="org.eclipse.jetty.server.LowResourceMonitor">
-                <Arg><Ref id="Server"/></Arg>
+                <Arg><Ref refid="Server"/></Arg>
                 <Set name="period"><Property name="jetty.lowresources.period" default="1000"/></Set>
+
                 <Set name="lowResourcesIdleTimeout"><Property name="jetty.lowresources.idleTimeout" default="500"/></Set>
-                <Set name="monitorThreads"><Property name="jetty.lowresources.monitorThreads"  default="true"/></Set>
-                <Set name="maxConnections"><Property name="jetty.lowresources.maxConnections"  default="0"/></Set>
-                <Set name="maxMemory"><Property name="jetty.lowresources.maxMemory"  default="0"/></Set>
                 <Set name="maxLowResourcesTime"><Property name="jetty.lowresources.maxLowResourcesTime" default="5000"/></Set>
+
+                <Set name="monitorThreads"><Property name="jetty.lowresources.monitorThreads"  default="true"/></Set>
+                <Set name="maxMemory"><Property name="jetty.lowresources.maxMemory"  default="0"/></Set>
             </New>
         </Arg>
     </Call>
@@ -67,11 +64,14 @@
             <Arg>
                 <New class="org.eclipse.jetty.server.handler.RequestLogHandler">
                     <Set name="requestLog">
-                        <New class="com.thoughtworks.go.server.logging.Slf4jRequestLogger">
+                        <New class="org.eclipse.jetty.server.CustomRequestLog">
+                            <Arg><New class="org.eclipse.jetty.server.Slf4jRequestLogWriter"/></Arg>
+                            <!-- This is org.eclipse.jetty.server.CustomRequestLog#NCSA_FORMAT with milliseconds added -->
+                            <Arg>%{client}a - %u %t "%r" %s %O %{ms}T</Arg>
                             <Set name="ignorePaths">
                               <Array type="java.lang.String">
                                 <Item>/go/assets/*</Item>
-                                <Item>/go/server/api/server_health_messages</Item>
+                                <Item>/go/api/server_health_messages</Item>
                               </Array>
                             </Set>
                         </New>

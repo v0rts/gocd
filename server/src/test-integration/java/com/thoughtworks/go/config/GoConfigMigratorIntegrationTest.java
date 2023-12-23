@@ -215,7 +215,7 @@ public class GoConfigMigratorIntegrationTest {
     @Test
     public void shouldMigrateApprovalsCorrectlyBug2112() throws Exception {
         File bjcruise = new File("../common/src/test/resources/data/bjcruise-cruise-config-1.0.xml");
-        assertThat(bjcruise.exists()).isTrue();
+        assertThat(bjcruise).exists();
         String xml = FileUtils.readFileToString(bjcruise, StandardCharsets.UTF_8);
 
         CruiseConfig cruiseConfig = loadConfigFileWithContent(xml);
@@ -264,7 +264,7 @@ public class GoConfigMigratorIntegrationTest {
 
     @Test
     public void shouldFailIfJobsWithSameNameButDifferentCasesExistInConfig() throws Exception {
-        FileUtils.writeStringToFile(configFile, ConfigFileFixture.JOBS_WITH_DIFFERNT_CASE, UTF_8);
+        FileUtils.writeStringToFile(configFile, ConfigFileFixture.JOBS_WITH_DIFFERENT_CASE, UTF_8);
         GoConfigHolder configHolder = goConfigMigrator.migrate();
         Assertions.assertThat(configHolder).isNull();
         PipelineConfig frameworkPipeline = goConfigService.getCurrentConfig().getPipelineConfigByName(new CaseInsensitiveString("framework"));

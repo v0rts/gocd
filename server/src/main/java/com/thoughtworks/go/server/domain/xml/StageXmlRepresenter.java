@@ -17,8 +17,6 @@ package com.thoughtworks.go.server.domain.xml;
 
 import com.thoughtworks.go.domain.Stage;
 import com.thoughtworks.go.domain.StageIdentifier;
-import com.thoughtworks.go.domain.XmlRepresentable;
-import com.thoughtworks.go.domain.XmlWriterContext;
 import com.thoughtworks.go.server.domain.xml.builder.DocumentBuilder;
 import org.dom4j.Document;
 
@@ -51,8 +49,4 @@ public class StageXmlRepresenter implements XmlRepresentable {
                     .attr("href", ctx.jobXmlLink(job.getIdentifier()))))).build();
     }
 
-    @Override
-    public String httpUrl(String baseUrl) {
-        return null;
-    }
 }

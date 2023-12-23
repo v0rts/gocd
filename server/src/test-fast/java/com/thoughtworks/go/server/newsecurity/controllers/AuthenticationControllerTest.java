@@ -25,7 +25,7 @@ import com.thoughtworks.go.server.newsecurity.providers.PasswordBasedPluginAuthe
 import com.thoughtworks.go.server.newsecurity.providers.WebBasedPluginAuthenticationProvider;
 import com.thoughtworks.go.server.newsecurity.utils.SessionUtils;
 import com.thoughtworks.go.server.security.GoAuthority;
-import com.thoughtworks.go.server.security.userdetail.GoUserPrinciple;
+import com.thoughtworks.go.server.security.userdetail.GoUserPrincipal;
 import com.thoughtworks.go.server.service.SecurityService;
 import com.thoughtworks.go.util.SystemEnvironment;
 import com.thoughtworks.go.util.TestingClock;
@@ -40,7 +40,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class AuthenticationControllerTest {
@@ -102,14 +101,14 @@ class AuthenticationControllerTest {
             void shouldRedirectToHomePageIfUserSuccessfullyAuthenticatedByPlugin() {
                 authenticateAsAnonymous();
 
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
-                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, CREDENTIALS, null, 0, null);
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
+                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, CREDENTIALS, null, 0, null);
 
                 when(authenticationProvider.authenticate(CREDENTIALS, null)).thenReturn(usernamePasswordAuthenticationToken);
 
                 final RedirectView redirectView = controller.performLogin(BOB, PASSWORD, request);
 
-                final AuthenticationToken<UsernamePassword> authenticationToken = (AuthenticationToken<UsernamePassword>) SessionUtils.getAuthenticationToken(request);
+                final AuthenticationToken<?> authenticationToken = SessionUtils.getAuthenticationToken(request);
                 assertThat(authenticationToken.getUser().getUsername()).isEqualTo(BOB);
                 assertThat(authenticationToken.getCredentials()).isEqualTo(CREDENTIALS);
                 assertThat(authenticationToken.getUser().getAuthorities()).hasSize(1).containsExactly(GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
@@ -122,8 +121,8 @@ class AuthenticationControllerTest {
             void shouldRedirectToLastSavedUrlIfCredentialsAreAuthenticatedByPlugin() {
                 authenticateAsAnonymous();
 
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
-                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, CREDENTIALS, null, 0, null);
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
+                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, CREDENTIALS, null, 0, null);
 
                 when(authenticationProvider.authenticate(CREDENTIALS, null)).thenReturn(usernamePasswordAuthenticationToken);
 
@@ -152,8 +151,8 @@ class AuthenticationControllerTest {
 
             @Test
             void shouldRedirectToHomepageIfUserIsAlreadyAuthenticated() {
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME);
-                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, CREDENTIALS, null, 0, null);
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME);
+                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, CREDENTIALS, null, 0, null);
                 SessionUtils.setAuthenticationTokenAfterRecreatingSession(usernamePasswordAuthenticationToken, request);
 
                 originalSession = request.getSession(false);
@@ -194,8 +193,8 @@ class AuthenticationControllerTest {
 
             @Test
             void shouldRedirectToHomepageIfUserIsAlreadyAuthenticated() {
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME);
-                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, CREDENTIALS, null, 0, null);
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME);
+                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, CREDENTIALS, null, 0, null);
 
                 SessionUtils.setAuthenticationTokenAfterRecreatingSession(usernamePasswordAuthenticationToken, request);
                 originalSession = request.getSession();
@@ -266,8 +265,8 @@ class AuthenticationControllerTest {
 
             @Test
             void shouldRedirectToHomepageIfUserIsAlreadyAuthenticated() {
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME);
-                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, CREDENTIALS, null, 0, null);
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME);
+                final AuthenticationToken<UsernamePassword> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, CREDENTIALS, null, 0, null);
                 SessionUtils.setAuthenticationTokenAfterRecreatingSession(usernamePasswordAuthenticationToken, request);
                 originalSession = request.getSession(false);
 
@@ -283,8 +282,8 @@ class AuthenticationControllerTest {
                 originalSession = request.getSession(false);
 
                 final AccessToken credentials = new AccessToken(Map.of("Foo", "Bar"));
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
-                final AuthenticationToken<AccessToken> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, credentials, null, 0, null);
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
+                final AuthenticationToken<AccessToken> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, credentials, null, 0, null);
 
                 when(webBasedPluginAuthenticationProvider.fetchAccessToken(eq(PLUGIN_ID), any(), any(), any()))
                     .thenReturn(credentials);
@@ -295,7 +294,7 @@ class AuthenticationControllerTest {
                 assertThat(redirectView.getUrl()).isEqualTo("/go/pipelines");
                 assertThat(originalSession).isNotSameAs(request.getSession(false));
 
-                final AuthenticationToken<AccessToken> authenticationToken = (AuthenticationToken<AccessToken>) SessionUtils.getAuthenticationToken(request);
+                final AuthenticationToken<?> authenticationToken = SessionUtils.getAuthenticationToken(request);
                 assertThat(authenticationToken.getUser().getUsername()).isEqualTo(BOB);
                 assertThat(authenticationToken.getCredentials()).isEqualTo(credentials);
                 assertThat(authenticationToken.getUser().getAuthorities())
@@ -330,9 +329,9 @@ class AuthenticationControllerTest {
             void shouldRedirectToLastSavedUrlAfterSuccessfulAuthenticationByPlugin() {
                 authenticateAsAnonymous();
 
-                final GoUserPrinciple goUserPrinciple = new GoUserPrinciple(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
+                final GoUserPrincipal goUserPrincipal = new GoUserPrincipal(BOB, DISPLAY_NAME, GoAuthority.ROLE_GROUP_SUPERVISOR.asAuthority());
                 final AccessToken credentials = new AccessToken(Map.of("Foo", "Bar"));
-                final AuthenticationToken<AccessToken> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrinciple, credentials, null, 0, null);
+                final AuthenticationToken<AccessToken> usernamePasswordAuthenticationToken = new AuthenticationToken<>(goUserPrincipal, credentials, null, 0, null);
 
                 when(webBasedPluginAuthenticationProvider.fetchAccessToken(PLUGIN_ID, Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap()))
                     .thenReturn(credentials);

@@ -56,7 +56,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * @understands the configuration for cruise
+ * Understands the configuration for cruise
  */
 @ConfigTag("cruise")
 public class BasicCruiseConfig implements CruiseConfig {
@@ -543,7 +543,7 @@ public class BasicCruiseConfig implements CruiseConfig {
     @Override
     public Hashtable<CaseInsensitiveString, Node> getDependencyTable() {
         final Hashtable<CaseInsensitiveString, Node> hashtable = new Hashtable<>();
-        this.accept((PiplineConfigVisitor) pipelineConfig -> hashtable.put(pipelineConfig.name(), pipelineConfig.getDependenciesAsNode()));
+        this.accept((PipelineConfigVisitor) pipelineConfig -> hashtable.put(pipelineConfig.name(), pipelineConfig.getDependenciesAsNode()));
         return hashtable;
     }
 
@@ -821,7 +821,7 @@ public class BasicCruiseConfig implements CruiseConfig {
     }
 
     @Override
-    public void accept(final PiplineConfigVisitor visitor) {
+    public void accept(final PipelineConfigVisitor visitor) {
         accept((PipelineGroupVisitor) group -> group.accept(visitor));
     }
 

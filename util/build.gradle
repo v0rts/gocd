@@ -19,8 +19,6 @@ description = 'GoCD Utils'
 dependencies {
   implementation project(path: ':base', configuration: 'runtimeElements')
   api project.deps.springContext
-  api project.deps.springWebmvc
-  api project.deps.servletApi
   api project.deps.gson
   implementation project.deps.cloning
   testImplementation project(path: ':test:test-utils', configuration: 'runtimeElements')

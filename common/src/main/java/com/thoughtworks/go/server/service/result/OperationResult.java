@@ -19,20 +19,16 @@ import com.thoughtworks.go.serverhealth.HealthStateType;
 import com.thoughtworks.go.serverhealth.ServerHealthState;
 
 /**
- * @understands the current status of a given task.
+ * Understands the current status of a given task.
  */
 public interface OperationResult {
 
-    @Deprecated
     ServerHealthState success(HealthStateType healthStateType);
 
-    @Deprecated
     ServerHealthState error(String message, String description, HealthStateType type);
 
-    @Deprecated
     ServerHealthState warning(String message, String description, HealthStateType type);
 
-    @Deprecated
     ServerHealthState getServerHealthState();
 
     boolean canContinue();

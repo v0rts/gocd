@@ -20,14 +20,12 @@ import com.thoughtworks.go.config.materials.git.GitMaterial;
 import com.thoughtworks.go.domain.MaterialRevision;
 import com.thoughtworks.go.domain.MaterialRevisions;
 import com.thoughtworks.go.domain.PipelineTimelineEntry;
-import com.thoughtworks.go.domain.XmlWriterContext;
 import com.thoughtworks.go.domain.materials.Modification;
 import com.thoughtworks.go.domain.materials.ModifiedAction;
 import com.thoughtworks.go.helper.PipelineHistoryMother;
 import com.thoughtworks.go.junit5.FileSource;
 import com.thoughtworks.go.presentation.pipelinehistory.PipelineInstanceModel;
 import com.thoughtworks.go.util.DateUtils;
-import com.thoughtworks.go.util.SystemEnvironment;
 import org.dom4j.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +48,7 @@ public class PipelineXmlRepresenterTest {
 
     @BeforeEach
     void setUp() {
-        context = new XmlWriterContext("https://go-server/go", null, null, null, new SystemEnvironment());
+        context = new XmlWriterContext("https://go-server/go", null, null);
         Date scheduledDate = parseISO8601("2019-12-31T15:31:49+05:30");
         model = PipelineHistoryMother.pipelineInstanceModel("up42", 100, scheduledDate);
         GitMaterial gitMaterial = gitMaterial("https://material/example.git");

@@ -18,7 +18,7 @@ package com.thoughtworks.go.domain;
 import java.io.Serializable;
 
 /**
- * @understands different states agent can be in
+ * Understands different states agent can be in
  */
 public enum AgentStatus implements Comparable<AgentStatus>, Serializable {
     Pending("Pending", AgentConfigStatus.Pending, AgentRuntimeStatus.Unknown),
@@ -33,7 +33,7 @@ public enum AgentStatus implements Comparable<AgentStatus>, Serializable {
     private final AgentConfigStatus configStatus;
     private final AgentRuntimeStatus runtimeStatus;
 
-    private AgentStatus(String name, AgentConfigStatus configStatus, AgentRuntimeStatus runtimeStatus) {
+    AgentStatus(String name, AgentConfigStatus configStatus, AgentRuntimeStatus runtimeStatus) {
         this.name = name;
         this.configStatus = configStatus;
         this.runtimeStatus = runtimeStatus;

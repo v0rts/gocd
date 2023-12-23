@@ -32,7 +32,6 @@ import com.thoughtworks.go.domain.materials.Modification;
 import com.thoughtworks.go.helper.JobInstanceMother;
 import com.thoughtworks.go.helper.PipelineConfigMother;
 import com.thoughtworks.go.helper.StageMother;
-import com.thoughtworks.go.presentation.pipelinehistory.StageInstanceModels;
 import com.thoughtworks.go.server.cache.GoCache;
 import com.thoughtworks.go.server.dao.FeedModifier;
 import com.thoughtworks.go.server.dao.PipelineDao;
@@ -41,7 +40,7 @@ import com.thoughtworks.go.server.domain.Username;
 import com.thoughtworks.go.server.messaging.StageStatusMessage;
 import com.thoughtworks.go.server.messaging.StageStatusTopic;
 import com.thoughtworks.go.server.newsecurity.utils.SessionUtils;
-import com.thoughtworks.go.server.security.userdetail.GoUserPrinciple;
+import com.thoughtworks.go.server.security.userdetail.GoUserPrincipal;
 import com.thoughtworks.go.server.service.result.HttpLocalizedOperationResult;
 import com.thoughtworks.go.server.service.result.HttpOperationResult;
 import com.thoughtworks.go.server.transaction.TestTransactionSynchronizationManager;
@@ -52,7 +51,6 @@ import com.thoughtworks.go.server.ui.JobInstanceModel;
 import com.thoughtworks.go.server.ui.ModificationForPipeline;
 import com.thoughtworks.go.server.ui.PipelineId;
 import com.thoughtworks.go.server.ui.StageSummaryModel;
-import com.thoughtworks.go.server.util.Pagination;
 import com.thoughtworks.go.util.GoConfigFileHelper;
 import com.thoughtworks.go.util.TestingClock;
 import com.thoughtworks.go.util.TimeProvider;
@@ -110,7 +108,7 @@ public class StageServiceTest {
 
         transactionSynchronizationManager = new TestTransactionSynchronizationManager();
         transactionTemplate = new TestTransactionTemplate(transactionSynchronizationManager);
-        SessionUtils.setCurrentUser(new GoUserPrinciple("anonymous", "anonymous", ROLE_ANONYMOUS.asAuthority()));
+        SessionUtils.setCurrentUser(new GoUserPrincipal("anonymous", "anonymous", ROLE_ANONYMOUS.asAuthority()));
     }
 
     @AfterEach
@@ -737,9 +735,7 @@ public class StageServiceTest {
             when(securityService.hasViewPermissionForPipeline(username, pipelineName)).thenReturn(true);
             when(pipelineDao.findPipelineByNameAndCounter(pipelineName, pipelineCounter)).thenReturn(null);
 
-            assertThatCode(() -> {
-                stageService.findStageWithIdentifier(pipelineName, pipelineCounter, stageName, "1", username);
-            }).isInstanceOf(RecordNotFoundException.class)
+            assertThatCode(() -> stageService.findStageWithIdentifier(pipelineName, pipelineCounter, stageName, "1", username)).isInstanceOf(RecordNotFoundException.class)
                 .hasMessage("Pipeline 'up42' with counter '1' not found!");
         }
 

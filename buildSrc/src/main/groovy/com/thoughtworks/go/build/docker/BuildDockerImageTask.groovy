@@ -52,11 +52,11 @@ class BuildDockerImageTask extends DefaultTask {
 
   @TaskAction
   def perform() {
-    if (distroVersion.pastEolGracePeriod) {
+    if (!project.hasProperty("skipDockerBuild") && distroVersion.pastEolGracePeriod) {
       throw new RuntimeException("The image $distro:v$distroVersion.version is unsupported. EOL was ${distroVersion.eolDate}, and GoCD build grace period has passed.")
     }
 
-    if (distroVersion.eol && !distroVersion.continueToBuild) {
+    if (!project.hasProperty("skipDockerBuild") && distroVersion.eol && !distroVersion.continueToBuild) {
       throw new RuntimeException("The image $distro:v$distroVersion.version was EOL on ${distroVersion.eolDate}. Set :continueToBuild option to continue building through the grace period.")
     }
 
@@ -168,7 +168,7 @@ class BuildDockerImageTask extends DefaultTask {
   }
 
   void writeTemplateToFile(String templateFile, File outputFile) {
-    Configuration configuration = new Configuration(Configuration.VERSION_2_3_28)
+    Configuration configuration = new Configuration(Configuration.VERSION_2_3_32)
     configuration.setDefaultEncoding("utf-8")
     configuration.setLogTemplateExceptions(true)
     configuration.setNumberFormat("computer")

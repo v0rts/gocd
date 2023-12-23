@@ -15,9 +15,9 @@
  */
 package com.thoughtworks.go.agent.service;
 
+import com.thoughtworks.go.agent.URLService;
 import com.thoughtworks.go.agent.common.ssl.GoAgentServerHttpClient;
 import com.thoughtworks.go.util.SystemEnvironment;
-import com.thoughtworks.go.agent.URLService;
 import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 import static com.thoughtworks.go.agent.common.util.HeaderUtil.parseExtraProperties;
@@ -86,7 +87,7 @@ public class AgentUpgradeService {
     private void checkForUpgradeAndExtraProperties(String agentMd5, String launcherMd5, String agentPluginsMd5, String tfsImplMd5) throws IOException {
         HttpGet method = getAgentLatestStatusGetMethod();
         try (final CloseableHttpResponse response = httpClient.execute(method)) {
-            if (response.getStatusLine().getStatusCode() != 200) {
+            if (response.getStatusLine().getStatusCode() != HttpURLConnection.HTTP_OK) {
                 LOGGER.error("[Agent Upgrade] Got status {} {} from GoCD", response.getStatusLine().getStatusCode(), response.getStatusLine());
                 return;
             }
@@ -96,7 +97,7 @@ public class AgentUpgradeService {
             validateMd5(tfsImplMd5, response, AGENT_TFS_SDK_MD5_HEADER, "tfs-impl jar");
             updateExtraProperties(response.getFirstHeader(AGENT_EXTRA_PROPERTIES_HEADER));
         } catch (IOException ioe) {
-            String message = String.format("[Agent Upgrade] Couldn't connect to: %s: %s", urlService.getAgentLatestStatusUrl(), ioe.toString());
+            String message = String.format("[Agent Upgrade] Couldn't connect to: %s: %s", urlService.getAgentLatestStatusUrl(), ioe);
             LOGGER.error(message);
             LOGGER.debug(message, ioe);
             throw ioe;

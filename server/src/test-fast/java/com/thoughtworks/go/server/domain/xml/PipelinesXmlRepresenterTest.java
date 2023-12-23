@@ -15,11 +15,9 @@
  */
 package com.thoughtworks.go.server.domain.xml;
 
-import com.thoughtworks.go.domain.XmlWriterContext;
 import com.thoughtworks.go.junit5.FileSource;
 import com.thoughtworks.go.presentation.pipelinehistory.PipelineInstanceModel;
 import com.thoughtworks.go.presentation.pipelinehistory.PipelineInstanceModels;
-import com.thoughtworks.go.util.SystemEnvironment;
 import org.dom4j.Document;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,7 +31,7 @@ public class PipelinesXmlRepresenterTest {
     @ParameterizedTest
     @FileSource(files = "/feeds/pipelines.xml")
     void shouldConvertPipelineInstanceModelsToDocument(String expectedXML) {
-        XmlWriterContext context = new XmlWriterContext("https://go-server/go", null, null, null, new SystemEnvironment());
+        XmlWriterContext context = new XmlWriterContext("https://go-server/go", null, null);
         PipelineInstanceModel up42Model = pipelineInstanceModel("up42");
         PipelineInstanceModel up43Model = pipelineInstanceModel("up43");
         PipelineInstanceModels models = createPipelineInstanceModels(up42Model, up43Model);
@@ -48,7 +46,7 @@ public class PipelinesXmlRepresenterTest {
 
     @Test
     void shouldGenerateXmlWithRootElementAndSelfLinkWhenPipelineInstanceModelsIsEmpty() {
-        XmlWriterContext context = new XmlWriterContext("https://go-server/go", null, null, null, new SystemEnvironment());
+        XmlWriterContext context = new XmlWriterContext("https://go-server/go", null, null);
         PipelineInstanceModels models = createPipelineInstanceModels();
         PipelinesXmlRepresenter representer = new PipelinesXmlRepresenter(models);
 

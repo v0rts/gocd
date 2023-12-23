@@ -20,6 +20,7 @@ import com.github.jk1.license.render.JsonReportRenderer
 import com.github.jk1.license.task.ReportTask
 import com.thoughtworks.go.build.AdoptiumVersion
 import com.thoughtworks.go.build.InstallerType
+import de.undercouch.gradle.tasks.download.Download
 import nl.javadude.gradle.plugins.license.License
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
@@ -29,7 +30,7 @@ import java.util.stream.Collectors
 
 plugins {
   id 'base'
-  id 'org.owasp.dependencycheck' version '8.4.0'
+  id 'org.owasp.dependencycheck' version '9.0.7'
   id 'com.github.hierynomus.license-base' version '0.16.1'
   id 'com.github.jk1.dependency-license-report' version '2.5'
 }
@@ -43,25 +44,15 @@ if (file('build-ext.gradle').exists()) {
 def script = this
 
 def gitRevision = { ->
-  def hashStdOut = new ByteArrayOutputStream()
-  exec {
-    commandLine "git", "log", "-n", "1", "--format=%H"
-    standardOutput = hashStdOut
-    workingDir = script.buildscript.sourceFile.canonicalFile.parent
-  }
-
-  return hashStdOut.toString().trim()
+  def process = "git rev-list HEAD --max-count=1".execute(null, project.file(script.buildscript.sourceFile.canonicalFile.parent))
+  process.waitFor()
+  return process.text.stripIndent().trim()
 }
 
 def releaseRevision = { ->
-  def hashStdOut = new ByteArrayOutputStream()
-  exec {
-    commandLine "git", "log", "--pretty=format:"
-    standardOutput = hashStdOut
-    workingDir = script.buildscript.sourceFile.canonicalFile.parent
-  }
-
-  return hashStdOut.size().toString()
+  def process = "git rev-list HEAD --count".execute(null, project.file(script.buildscript.sourceFile.canonicalFile.parent))
+  process.waitFor()
+  return process.text.stripIndent().trim()
 }
 
 def getVersion = { ... args ->
@@ -101,9 +92,9 @@ List<String> partitionFiles(Collection originalFiles) {
   return (currentPartition ?: []) as List<String>
 }
 
-def GO_VERSION_PREVIOUS = '23.3.0'
-def GO_VERSION_SEGMENTS = [year: 23, releaseInYear: 4, patch: 0]
-def GO_VERSION_NEXT = '23.5.0'
+def GO_VERSION_PREVIOUS = '23.4.0'
+def GO_VERSION_SEGMENTS = [year: 23, releaseInYear: 5, patch: 0]
+def GO_VERSION_NEXT = '24.1.0'
 
 def GO_VERSION = [GO_VERSION_SEGMENTS.year, GO_VERSION_SEGMENTS.releaseInYear, GO_VERSION_SEGMENTS.patch].join('.')
 def DIST_VERSION = releaseRevision()
@@ -159,38 +150,11 @@ project.ext.packaging = [
   adoptiumJavaVersion: new AdoptiumVersion(
     feature: 17,
     interim: 0,    // set to `null` for the first release of a new featureVersion
-    update : 8,    // set to `null` for the first release of a new featureVersion
+    update : 9,    // set to `null` for the first release of a new featureVersion
     patch  : null, // set to `null` for most releases. Patch releases are "exceptional".
-    build  : 7
+    build  : 9
   )
 ]
-
-dependencyCheck {
-  failBuildOnCVSS = 1
-  cve {
-    def baseUrl
-
-    if (System.getenv().containsKey("GO_SERVER_URL")) {
-      baseUrl = "https://nexus.gocd.io/repository/nvd-nist"
-    } else {
-      baseUrl = "https://nvd.nist.gov/feeds"
-    }
-
-    urlModified = "${baseUrl}/json/cve/1.1/nvdcve-1.1-modified.json.gz"
-    urlBase = "${baseUrl}/json/cve/1.1/nvdcve-1.1-%d.json.gz"
-  }
-
-  analyzers {
-    bundleAuditEnabled = false // Currently there is a separate bundle audit security check job independent of Gradle
-    nodeAudit.yarnEnabled = false // Doesn't work correctly with Yarn 3+ https://github.com/jeremylong/DependencyCheck/issues/4894
-    assemblyEnabled = false
-    retirejs {
-      filterNonVulnerable = true
-    }
-  }
-  skipConfigurations = ['pmd']
-  suppressionFile = rootProject.file('buildSrc/dependency-check-suppress.xml').toPath().toString()
-}
 
 allprojects {
   apply plugin: 'idea'
@@ -274,6 +238,7 @@ subprojects {
     exclude '**/CommandLine.java'
     exclude '**/StreamPumper.java'
     exclude '**/StreamConsumer.java'
+    exclude '**/RuntimeTypeAdapterFactory*.java'
 
     // used by intellij for type hints when editing ftl files, intellij gets confused if it sees a license header in this file
     exclude '**/freemarker_implicit.ftl'
@@ -388,6 +353,9 @@ subprojects {
         module("net.sf.ehcache:ehcache") {
           replacedBy("net.sf.ehcache.internal:ehcache-core", "Use the much slimmer core artifact which is fine for our use case")
         }
+        module("commons-logging:commons-logging") {
+          replacedBy(project.deps.slf4jJcl, "Replace commons-logging implementations with the slf4j apis that redirect logs to slf4j per https://www.slf4j.org/legacy.html")
+        }
       }
       components {
         // workaround for dom4j Gradle metadata optional dependency issues to avoid it pulling in
@@ -410,10 +378,6 @@ subprojects {
 
   configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-      // replace  commons-logging implementations with the slf4j apis that redirect logs to slf4j per https://www.slf4j.org/legacy.html
-      if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
-        details.useTarget project.deps.slf4jJcl
-      }
       // Hamcrest core/library/all have been merged together: https://hamcrest.org/JavaHamcrest/distributables
       if (details.requested.group == 'org.hamcrest' && details.requested.name ==~ /hamcrest-(core|library|all)/) {
         details.useTarget project.deps.hamcrest
@@ -423,9 +387,14 @@ subprojects {
         details.useTarget project.deps.jakartaAnnotation
       }
       // Javax Servlet API has migrated to jakarta Servlet API
-      if (details.requested.group == 'javax.servlet' && details.requested.name == 'javax.servlet-api') {
+      if (details.requested.group in ['javax.servlet', 'org.eclipse.jetty.toolchain'] && details.requested.name in ['javax.servlet-api', 'jetty-servlet-api']) {
         details.useTarget project.deps.servletApi
       }
+      // Javax Transaction API has migrated to jakarta Transaction API
+      if (details.requested.group == 'javax.transaction' && details.requested.name == 'jta') {
+        details.useTarget project.deps.jakartaTransaction
+      }
+
     }
   }
 
@@ -637,15 +606,25 @@ task allDependencies {
   description = "Print dependency tree of all projects"
 }
 
-task compileAll { compileAllTask ->
-  group LifecycleBasePlugin.BUILD_GROUP
+private allCompileTasks(Closure<Boolean> include = { t -> true }) {
   allprojects.collect { Project prj ->
-    compileAll.dependsOn(prj.getTasks().withType(JavaCompile))
-    compileAll.dependsOn(prj.getTasks().withType(GroovyCompile))
+    prj.afterEvaluate {
+      compileAll.dependsOn(prj.getTasks().withType(JavaCompile).findAll(include))
+      compileAll.dependsOn(prj.getTasks().withType(GroovyCompile).findAll(include))
+    }
   }
 }
 
-task prepare(dependsOn: compileAll)
+
+task compileAll { compileAllTask ->
+  group LifecycleBasePlugin.BUILD_GROUP
+  allCompileTasks()
+}
+
+task prepare {
+  group LifecycleBasePlugin.BUILD_GROUP
+  allCompileTasks { Task task -> !task.name.toLowerCase().contains('test') && !task.project.path.toLowerCase().contains('test') }
+}
 
 task sparkTest { thisTask ->
   group LifecycleBasePlugin.VERIFICATION_GROUP
@@ -710,6 +689,78 @@ static List<String> getTestClassesForTask(List<String> testsToRun) {
     .filter { testToRun -> testToRun.endsWith("Test.*") }
     .map { testToRun -> testToRun.replaceAll(".\\*", "").replaceAll("[^\\w.*]", ".") }
     .collect(Collectors.toList())
+}
+
+dependencyCheck {
+  failBuildOnCVSS = 1
+  skipConfigurations = ['pmd']
+  suppressionFile = rootProject.file('buildSrc/dependency-check-suppress.xml').toPath().toString()
+
+  nvd {
+    apiKey = System.getenv("NVD_API_KEY") ?: ""
+  }
+
+  analyzers {
+    bundleAuditEnabled = false // Currently there is a separate bundle audit security check job independent of Gradle
+    nodeAudit.yarnEnabled = false // Doesn't work correctly with Yarn 3+ https://github.com/jeremylong/DependencyCheck/issues/4894
+    assemblyEnabled = false
+    retirejs.filterNonVulnerable = true // Reduces effort/memory processing retirejs results
+  }
+}
+
+if (System.getenv().containsKey("GO_SERVER_URL")) {
+  dependencyCheck {
+    data {
+      directory = "${layout.buildDirectory.get()}/dependency-check-data"
+    }
+  }
+
+  tasks.register('downloadDependencyCheckCache', Download) {
+    src 'https://nexus.gocd.io/repository/cache/dependency-check-data.zip'
+    dest layout.buildDirectory.file('dependency-check-data.zip')
+    onlyIfModified true
+  }
+
+  tasks.register('unzipDependencyCheckCache', Copy) {
+    dependsOn downloadDependencyCheckCache
+    from zipTree(downloadDependencyCheckCache.dest)
+    into layout.buildDirectory.dir("dependency-check-data")
+    def copyDetails = []
+    eachFile { copyDetails << it }
+    doLast {
+      copyDetails.each { FileCopyDetails details ->
+        def target = new File(destinationDir, details.path)
+        if (target.exists()) { target.setLastModified(details.lastModified) }
+      }
+    }
+  }
+
+  dependencyCheckUpdate.dependsOn unzipDependencyCheckCache
+  dependencyCheckAnalyze.dependsOn unzipDependencyCheckCache
+  dependencyCheckAggregate.dependsOn unzipDependencyCheckCache
+
+  tasks.register('uploadDependencyCheckCache', Zip) {
+    mustRunAfter dependencyCheckUpdate, dependencyCheckAnalyze, dependencyCheckAggregate
+
+    from layout.buildDirectory.file("dependency-check-data")
+    archiveFileName = "dependency-check-data-updated.zip"
+    destinationDirectory = layout.buildDirectory
+
+    doLast {
+      project.exec {
+        workingDir = projectDir
+        commandLine = [
+          "curl",
+          "-u", "${System.getenv("NEXUS_CACHE_USERNAME")}:${System.getenv("NEXUS_CACHE_PASSWORD")}",
+          "--include",
+          "--upload-file", uploadDependencyCheckCache.archiveFile.get(), 'https://nexus.gocd.io/repository/cache/dependency-check-data.zip'
+        ]
+        standardOutput = System.out
+        errorOutput = System.err
+        ignoreExitValue = true
+      }
+    }
+  }
 }
 
 task newSPA {
@@ -1238,7 +1289,7 @@ task upgradeApi {
           .replace(oldControllerClassSuffix, newControllerClassSuffix)
           .replaceAll("ApiVersion\\.v${currentMaxApiVersion}", "ApiVersion.v${apiVersion}")
       }
-      filter(FixCrLfFilter, eol: FixCrLfFilter.CrLf.UNIX)
+      filter(FixCrLfFilter, eol: FixCrLfFilter.CrLf.newInstance("unix"))
 
       eachFile { FileCopyDetails fcd ->
         List<String> segments = fcd.relativePath.segments

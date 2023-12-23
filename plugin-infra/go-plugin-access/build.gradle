@@ -43,6 +43,8 @@ dependencies {
   testImplementation project(path: ':test:test-utils', configuration: 'runtimeElements')
   testImplementation project(path: ':domain', configuration: 'testOutput')
   testImplementation project.deps.junit5Api
+  testImplementation project.deps.mockitoCore
+  testImplementation project.deps.mockitoJunit5
   testRuntimeOnly project.deps.junit5Engine
   testImplementation project.deps.assertJ
 }
