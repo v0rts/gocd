@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -197,7 +197,7 @@ class ElasticProfileWidget extends MithrilViewComponent<Attrs> {
         <ConceptDiagram image={elasticAgentProfileImg} css={conceptDiagramStyles}>
           <h2>What is an Elastic Agent Profile?</h2>
           <p>An Elastic Agent Profile usually contains the configuration for your agent.<br/>
-            Depending on the plugin used, this may contain the machine image (ami, docker image), size of the
+            Depending on the plugin used, this may contain the machine image (ami, container image), size of the
             CPU/memory/disk, network settings among other things.</p>
         </ConceptDiagram>
       </div>

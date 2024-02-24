@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -285,8 +285,7 @@ public class MaterialRevisions implements Serializable, Iterable<MaterialRevisio
     public DependencyMaterialRevision findDependencyMaterialRevision(String pipelineName) {
         for (MaterialRevision materialRevision : this) {
             Revision revision = materialRevision.getRevision();
-            if (revision instanceof DependencyMaterialRevision) {
-                DependencyMaterialRevision dependencyMaterialRevision = (DependencyMaterialRevision) revision;
+            if (revision instanceof DependencyMaterialRevision dependencyMaterialRevision) {
                 if (dependencyMaterialRevision.getPipelineName().equalsIgnoreCase(pipelineName)) {
                     return dependencyMaterialRevision;
                 }

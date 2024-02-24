@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,9 @@ class JsonErrorMessageRendererTest {
     void shouldHandleRequest() {
         final JsonErrorMessageRenderer messageRenderer = new JsonErrorMessageRenderer(MediaType.APPLICATION_JSON);
         assertThat(messageRenderer.getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-        assertThat(messageRenderer.getFormattedMessage("You are not authorized to access this URL. \"escape\"!")).isEqualTo("{\n" +
-                "  \"message\": \"You are not authorized to access this URL. \\\"escape\\\"!\"\n" +
-                "}");
+        assertThat(messageRenderer.getFormattedMessage("You are not authorized to access this URL. \"escape\"!")).isEqualTo("""
+                {
+                  "message": "You are not authorized to access this URL. \\"escape\\"!"
+                }""");
     }
 }

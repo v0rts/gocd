@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ public class ArtifactsServiceTest {
         final ByteArrayInputStream stream = new ByteArrayInputStream("".getBytes());
         String buildInstanceId = "1";
         final File destFile = new File(logsDir,
-                buildInstanceId + File.separator + "generated" + File.separator + LOG_XML_NAME);
+                String.join(File.separator, buildInstanceId, "generated", LOG_XML_NAME));
         final IOException ioException = new IOException();
 
         assumeArtifactsRoot(logsDir);
@@ -138,7 +138,7 @@ public class ArtifactsServiceTest {
         final ByteArrayInputStream stream = new ByteArrayInputStream("".getBytes());
         String buildInstanceId = "1";
         final File destFile = new File(logsDir,
-                buildInstanceId + File.separator + "generated" + File.separator + LOG_XML_NAME);
+                String.join(File.separator, buildInstanceId, "generated", LOG_XML_NAME));
         final IOException ioException = new IOException();
 
         doThrow(ioException).when(zipUtil).unzip(any(ZipInputStream.class), any(File.class));

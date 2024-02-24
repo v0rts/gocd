@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,11 +53,9 @@ public class ConfigSaveValidationContext implements ValidationContext {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ConfigSaveValidationContext)) {
+        if (!(o instanceof ConfigSaveValidationContext that)) {
             return false;
         }
-
-        ConfigSaveValidationContext that = (ConfigSaveValidationContext) o;
 
         if (immediateParent != null ? !immediateParent.equals(that.immediateParent) : that.immediateParent != null) {
             return false;

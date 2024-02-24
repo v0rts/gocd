@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -740,7 +740,6 @@ public class ChangesetServiceIntegrationTest {
         //Schedule second upstream
         List<MaterialRevision> revisionsForUpstream2 = new ArrayList<>();
         addRevisionWith2Mods(revisionsForUpstream2, git);
-        List<MaterialRevision> expectedGitRevision = revisionsForUpstream2;
         Pipeline upstreamTwo = dbHelper.checkinRevisionsToBuild(new ManualBuild(username), upstreamPipeline, revisionsForUpstream2);
 
         //Schedule second downstream

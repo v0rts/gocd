@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,9 +44,7 @@ public class UsernamePassword implements Credentials {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UsernamePassword)) return false;
-
-        UsernamePassword that = (UsernamePassword) o;
+        if (!(o instanceof UsernamePassword that)) return false;
 
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         return password != null ? password.equals(that.password) : that.password == null;

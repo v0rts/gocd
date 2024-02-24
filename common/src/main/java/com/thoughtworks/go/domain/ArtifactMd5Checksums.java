@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,11 +66,9 @@ public class ArtifactMd5Checksums implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ArtifactMd5Checksums)) {
+        if (!(o instanceof ArtifactMd5Checksums that)) {
             return false;
         }
-
-        ArtifactMd5Checksums that = (ArtifactMd5Checksums) o;
 
         if (checksumProperties != null ? !checksumProperties.equals(that.checksumProperties) : that.checksumProperties != null) {
             return false;

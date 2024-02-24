@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,9 +95,7 @@ public class AuthenticationToken<T extends Credentials> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AuthenticationToken)) return false;
-
-        AuthenticationToken<?> that = (AuthenticationToken<?>) o;
+        if (!(o instanceof AuthenticationToken<?> that)) return false;
 
         if (authenticatedAt != that.authenticatedAt) return false;
         if (invalidated != that.invalidated) return false;

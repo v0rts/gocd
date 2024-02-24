@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,23 @@ package com.thoughtworks.go.plugin.access.authorization.v2;
 
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class AuthenticationResponseDTOTest {
 
     @Test
     public void shouldAbleToDeserializeJSON() throws Exception {
 
-        String json = "{\n" +
-                "  \"user\": {\n" +
-                "      \"username\":\"gocd\",\n" +
-                "      \"display_name\": \"GoCD Admin\",\n" +
-                "      \"email\": \"gocd@go.cd\"\n" +
-                "  },\n" +
-                "  \"roles\": [\"admin\",\"blackbird\"]\n" +
-                "}";
+        String json = """
+                {
+                  "user": {
+                      "username":"gocd",
+                      "display_name": "GoCD Admin",
+                      "email": "gocd@go.cd"
+                  },
+                  "roles": ["admin","blackbird"]
+                }""";
 
         com.thoughtworks.go.plugin.access.authorization.v2.AuthenticationResponseDTO authenticationResponse = com.thoughtworks.go.plugin.access.authorization.v2.AuthenticationResponseDTO.fromJSON(json);
 

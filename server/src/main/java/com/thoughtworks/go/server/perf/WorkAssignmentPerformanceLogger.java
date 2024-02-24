@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,10 @@ public class WorkAssignmentPerformanceLogger {
     }
 
     public void retrievedWorkForAgent(AgentRuntimeInfo agentRuntimeInfo, Work work, long retrieveWorkStartTime, long retrieveWorkEndTime) {
-        if (work == null || !(work instanceof BuildWork)) {
+        if (work == null || !(work instanceof BuildWork buildWork)) {
             performanceLogger.log("WORK-NOWORK {} {} {}", agentRuntimeInfo.getIdentifier().getUuid(), retrieveWorkStartTime, retrieveWorkEndTime);
             return;
         }
-        BuildWork buildWork = (BuildWork) work;
 
         performanceLogger.log("WORK-RETRIEVED {} {} {} {}", agentRuntimeInfo.getIdentifier().getUuid(), buildWork.identifierForLogging(), retrieveWorkStartTime, retrieveWorkEndTime);
     }
@@ -47,10 +46,9 @@ public class WorkAssignmentPerformanceLogger {
     }
 
     public void assignedWorkToAgent(Work work, AgentIdentifier agentIdentifier, long assignWorkStartTime, long assignWorkEndTime) {
-        if (work == null || !(work instanceof BuildWork)) {
+        if (work == null || !(work instanceof BuildWork buildWork)) {
             return;
         }
-        BuildWork buildWork = (BuildWork) work;
 
         performanceLogger.log("WORK-ASSIGNED {} {} {} {}", agentIdentifier.getUuid(), buildWork.identifierForLogging(), assignWorkStartTime, assignWorkEndTime);
     }

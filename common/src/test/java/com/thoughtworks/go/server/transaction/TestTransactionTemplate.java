@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.thoughtworks.go.server.transaction;
 
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.TransactionException;
 
 public class TestTransactionTemplate extends TransactionTemplate {
 
@@ -35,10 +35,7 @@ public class TestTransactionTemplate extends TransactionTemplate {
                 o = action.doInTransaction(null);
                 synchronizationManager.executeAfterCompletion(TransactionSynchronization.STATUS_COMMITTED);
                 synchronizationManager.executeAfterCommit();
-            } catch (RuntimeException e) {
-                synchronizationManager.executeAfterCompletion(TransactionSynchronization.STATUS_ROLLED_BACK);
-                throw e;
-            } catch (Error e) {
+            } catch (RuntimeException | Error e) {
                 synchronizationManager.executeAfterCompletion(TransactionSynchronization.STATUS_ROLLED_BACK);
                 throw e;
             } finally {

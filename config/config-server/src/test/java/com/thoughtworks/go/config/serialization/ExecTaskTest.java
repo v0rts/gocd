@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,32 +28,33 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ExecTaskTest {
     @Test
     public void shouldSupportMultipleArgs() throws Exception {
-        String xml = "<exec command='ls'>\n"
-                + "  <arg>arg1</arg>\n"
-                + "  <arg>arg2</arg>\n"
-                + "</exec>";
+        String xml = """
+                <exec command='ls'>
+                  <arg>arg1</arg>
+                  <arg>arg2</arg>
+                </exec>""";
         ExecTask execTask = new MagicalGoConfigXmlLoader(new ConfigCache(), ConfigElementImplementationRegistryMother.withNoPlugins()).fromXmlPartial(xml, ExecTask.class);
         assertThat(execTask.getArgList(), is(new Arguments(new Argument("arg1"), new Argument("arg2"))));
     }
 
     @Test
     public void shouldNotSupportArgsAttributeWithArgSubElement() throws Exception {
-        String jobXml = "<job name='dev'>\n"
-                + "  <tasks>\n"
-                + "    <exec command='ls' args='arg1 arg2'>\n"
-                + "      <arg>arg1</arg>\n"
-                + "      <arg>arg2</arg>\n"
-                + "    </exec>\n"
-                + "  </tasks>"
-                + "</job>";
+        String jobXml = """
+                <job name='dev'>
+                  <tasks>
+                    <exec command='ls' args='arg1 arg2'>
+                      <arg>arg1</arg>
+                      <arg>arg2</arg>
+                    </exec>
+                  </tasks></job>""";
         String configXml = ConfigFileFixture.withJob(jobXml);
         try {
             ConfigElementImplementationRegistry registry = ConfigElementImplementationRegistryMother.withNoPlugins();

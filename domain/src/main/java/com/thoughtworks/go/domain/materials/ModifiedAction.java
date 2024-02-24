@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,12 @@ public enum ModifiedAction {
     unknown;
 
     public static ModifiedAction parseSvnAction(char action) {
-        switch (action) {
-            case 'A':
-                return added;
-            case 'M':
-                return modified;
-            case 'D':
-                return deleted;
-            default:
-                return unknown;
-        }
+        return switch (action) {
+            case 'A' -> added;
+            case 'M' -> modified;
+            case 'D' -> deleted;
+            default -> unknown;
+        };
     }
 
     public static ModifiedAction parseP4Action(String action) {

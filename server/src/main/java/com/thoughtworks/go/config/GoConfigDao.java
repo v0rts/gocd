@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,8 +109,7 @@ public class GoConfigDao {
         synchronized (GoConfigWriteLock.class) {
             try {
                 LOGGER.info("Config update request {} by {} is being processed", command, SessionUtils.currentUsername().getUsername());
-                if (command instanceof CheckedUpdateCommand) {
-                    CheckedUpdateCommand checkedCommand = (CheckedUpdateCommand) command;
+                if (command instanceof CheckedUpdateCommand checkedCommand) {
                     if (!checkedCommand.canContinue(cachedConfigService.currentConfig())) {
                         throw new ConfigUpdateCheckFailedException();
                     }

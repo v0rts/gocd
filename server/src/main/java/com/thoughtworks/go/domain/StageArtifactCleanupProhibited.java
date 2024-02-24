@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,9 @@ public class StageArtifactCleanupProhibited extends PersistentObject {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof StageArtifactCleanupProhibited)) {
+        if (!(o instanceof StageArtifactCleanupProhibited that)) {
             return false;
         }
-
-        StageArtifactCleanupProhibited that = (StageArtifactCleanupProhibited) o;
 
         if (prohibited != that.prohibited) {
             return false;

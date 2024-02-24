@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package com.thoughtworks.go.server.valuestreammap;
 
 import com.thoughtworks.go.domain.Stages;
 import com.thoughtworks.go.domain.valuestreammap.Node;
-import com.thoughtworks.go.domain.valuestreammap.ValueStreamMap;
 import com.thoughtworks.go.domain.valuestreammap.PipelineRevision;
 import com.thoughtworks.go.domain.valuestreammap.Revision;
+import com.thoughtworks.go.domain.valuestreammap.ValueStreamMap;
 import com.thoughtworks.go.server.dao.StageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,8 +36,7 @@ public class RunStagesPopulator {
     public void apply(ValueStreamMap graph) {
         for (Node node : graph.allNodes()) {
             for (Revision revision : node.revisions()) {
-                if (revision instanceof PipelineRevision) {
-                    PipelineRevision pipelineRevision = (PipelineRevision) revision;
+                if (revision instanceof PipelineRevision pipelineRevision) {
                     Stages latestStages = latestRunStagesForRevsion(pipelineRevision);
                     pipelineRevision.addStages(latestStages);
                 }

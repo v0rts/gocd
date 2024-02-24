@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,8 +67,7 @@ public class ScmVersionInfoProvider implements ServerInfoProvider {
     private String getHgVersion() {
         try {
             CommandLine hg = createCommandLine("hg").withArgs("version").withEncoding(UTF_8);
-            String hgOut = hg.runOrBomb(new NamedProcessTag("hg version check")).outputAsString();
-            return hgOut;
+            return hg.runOrBomb(new NamedProcessTag("hg version check")).outputAsString();
         } catch (Exception e) {
             return null;
         }

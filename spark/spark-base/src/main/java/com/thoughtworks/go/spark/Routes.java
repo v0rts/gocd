@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -705,10 +705,6 @@ public class Routes {
     public static class Support {
         public static final String BASE = "/api/support";
         public static final String PROCESS_LIST = "/process_list";
-    }
-
-    public static class ClusterProfiles {
-        public static final String SPA_BASE = "/admin/cluster_profiles";
     }
 
     public static class ServerInfo {

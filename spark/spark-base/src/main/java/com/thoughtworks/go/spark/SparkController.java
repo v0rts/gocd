@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,22 +58,11 @@ public interface SparkController {
     }
 
     default SupportedAction getAction(Request request) {
-        switch (request.requestMethod()) {
-            case "GET":
-                return SupportedAction.VIEW;
-            case "HEAD":
-                return SupportedAction.VIEW;
-            case "POST":
-                return SupportedAction.ADMINISTER;
-            case "PUT":
-                return SupportedAction.ADMINISTER;
-            case "PATCH":
-                return SupportedAction.ADMINISTER;
-            case "DELETE":
-                return SupportedAction.ADMINISTER;
-            default:
-                return SupportedAction.UNKNOWN;
-        }
+        return switch (request.requestMethod()) {
+            case "GET", "HEAD" -> SupportedAction.VIEW;
+            case "POST", "DELETE", "PATCH", "PUT" -> SupportedAction.ADMINISTER;
+            default -> SupportedAction.UNKNOWN;
+        };
     }
 
     default String currentUsernameString() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,9 +102,7 @@ public class EnvironmentVariable extends PersistentObject {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EnvironmentVariable)) return false;
-
-        EnvironmentVariable that = (EnvironmentVariable) o;
+        if (!(o instanceof EnvironmentVariable that)) return false;
 
         if (isSecure != that.isSecure) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;

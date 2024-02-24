@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,10 +46,11 @@ public class CRTimerTest extends AbstractCRTest<CRTimer> {
 
     @Test
     public void shouldDeserializeFromAPILikeObject() {
-        String json = "{\n" +
-                "    \"spec\": \"0 0 22 ? * MON-FRI\",\n" +
-                "    \"only_on_changes\": true\n" +
-                "  }";
+        String json = """
+                {
+                    "spec": "0 0 22 ? * MON-FRI",
+                    "only_on_changes": true
+                  }""";
         CRTimer deserializedValue = gson.fromJson(json,CRTimer.class);
 
         assertThat(deserializedValue.getSpec(),is("0 0 22 ? * MON-FRI"));

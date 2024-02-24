@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,11 +85,9 @@ public class DirHandler implements FetchHandler {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DirHandler)) {
+        if (!(o instanceof DirHandler that)) {
             return false;
         }
-
-        DirHandler that = (DirHandler) o;
 
         if (destOnAgent != null ? !destOnAgent.equals(that.destOnAgent) : that.destOnAgent != null) {
             return false;

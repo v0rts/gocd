@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,11 +191,12 @@ public abstract class ArtifactExtensionTestBase {
 
     @Test
     public void shouldSubmitPublishArtifactRequest() {
-        final String responseBody = "{\n" +
-                "  \"metadata\": {\n" +
-                "    \"artifact-version\": \"10.12.0\"\n" +
-                "  }\n" +
-                "}";
+        final String responseBody = """
+                {
+                  "metadata": {
+                    "artifact-version": "10.12.0"
+                  }
+                }""";
 
         when(pluginManager.submitTo(eq(PLUGIN_ID), eq(ARTIFACT_EXTENSION), requestArgumentCaptor.capture())).thenReturn(DefaultGoPluginApiResponse.success(responseBody));
 

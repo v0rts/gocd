@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,9 +85,8 @@ public class SecretsMessageConverterV1 implements SecretsMessageConverter {
 
     @Override
     public String getErrorMessageFromResponse(String responseBody) {
-        String errorMessage = (String) new Gson().fromJson(responseBody, Map.class).get("message");
 
-        return errorMessage;
+        return (String) new Gson().fromJson(responseBody, Map.class).get("message");
     }
 
     private JsonObject mapToJsonObject(Map<String, String> configuration) {

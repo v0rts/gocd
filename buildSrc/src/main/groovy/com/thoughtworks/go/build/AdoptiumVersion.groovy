@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,16 +53,13 @@ class AdoptiumVersion implements Serializable {
     update == null ? '' : 'U'
   }
 
-  def releaseSuffixHack(OperatingSystem os) {
-    OperatingSystem.windows == os ? '.1' : '' // Temporary hack for JDK 17.0.9 due to Windows builds being delayed
-  }
-
   def toDownloadURLFor(OperatingSystem os, Architecture arch) {
     "https://github.com/adoptium/temurin${feature}-binaries/releases/download/" +
-      "jdk-${urlSafeDisplayVersion()}${releaseSuffixHack(os)}/" +
+      "jdk-${urlSafeDisplayVersion()}/" +
       "OpenJDK${feature}${featureSuffix()}-jre_${arch.canonicalName}_${os.adoptiumAlias}_hotspot_${fileSafeDisplayVersion()}.${os.extension}"
   }
 
+  @SuppressWarnings('unused') // Used in Gradle build scripts
   def toSha256SumURLFor(OperatingSystem os, Architecture arch) {
     "${toDownloadURLFor(os, arch)}.sha256.txt"
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,9 @@ public class ModifiedFile extends PersistentObject implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ModifiedFile)) {
+        if (!(o instanceof ModifiedFile mod)) {
             return false;
         }
-
-        ModifiedFile mod = (ModifiedFile) o;
 
         boolean folderNamesAreEqual = (folderName != null)
                 ? folderName.equals(mod.folderName)

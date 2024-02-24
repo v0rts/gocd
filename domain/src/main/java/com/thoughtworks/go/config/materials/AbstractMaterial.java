@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -218,8 +218,7 @@ public abstract class AbstractMaterial extends PersistentObject implements Mater
 
     @Override
     public void updateFromConfig(MaterialConfig materialConfig) {
-        if (materialConfig instanceof PasswordAwareMaterial) {
-            PasswordAwareMaterial passwordConfig = (PasswordAwareMaterial) materialConfig;
+        if (materialConfig instanceof PasswordAwareMaterial passwordConfig) {
             ((PasswordAwareMaterial) this).setUserName(passwordConfig.getUserName());
             ((PasswordAwareMaterial) this).setPassword(passwordConfig.getPassword());
         }

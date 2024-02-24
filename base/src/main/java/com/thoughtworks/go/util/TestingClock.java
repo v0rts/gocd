@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,8 +100,7 @@ public class TestingClock implements Clock {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentTime);
         calendar.add(axis, duration);
-        Date date = calendar.getTime();
-        return date;
+        return calendar.getTime();
     }
 
     public void setTime(Date date) {

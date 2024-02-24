@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,9 @@ public class DeleteTemplateCommand implements NoOverwriteUpdateConfigCommand {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DeleteTemplateCommand)) {
+        if (!(o instanceof DeleteTemplateCommand command)) {
             return false;
         }
-
-        DeleteTemplateCommand command = (DeleteTemplateCommand) o;
 
         if (md5 != null ? !md5.equals(command.md5) : command.md5 != null) {
             return false;

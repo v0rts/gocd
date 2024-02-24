@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 package com.thoughtworks.go.server.service;
 
-import com.thoughtworks.go.config.*;
+import com.thoughtworks.go.config.CaseInsensitiveString;
+import com.thoughtworks.go.config.CruiseConfig;
+import com.thoughtworks.go.config.PipelineConfig;
+import com.thoughtworks.go.config.PipelineConfigs;
 import com.thoughtworks.go.config.exceptions.RecordNotFoundException;
 import com.thoughtworks.go.config.materials.dependency.DependencyMaterial;
 import com.thoughtworks.go.domain.MaterialInstance;
@@ -190,9 +193,8 @@ public class ValueStreamMapService {
 
     private void removeRevisionsBasedOnPermissionAndCurrentConfig(ValueStreamMap valueStreamMap, Username username) {
         for (Node node : valueStreamMap.allNodes()) {
-            if (node instanceof PipelineDependencyNode) {
+            if (node instanceof PipelineDependencyNode pipelineDependencyNode) {
                 String pipelineName = node.getName();
-                PipelineDependencyNode pipelineDependencyNode = (PipelineDependencyNode) node;
 
                 if (!goConfigService.hasPipelineNamed(new CaseInsensitiveString(pipelineName))) {
                     pipelineDependencyNode.setDeleted();

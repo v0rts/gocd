@@ -98,12 +98,12 @@
   },
   "momentjs": {
     "moduleName": "momentjs",
-    "moduleVersion": "2.29.4",
+    "moduleVersion": "2.30.1",
     "moduleUrls": [
       "https://github.com/moment/moment"
     ],
     "filenames": [
-      "moment-2.29.4.js"
+      "moment-2.30.1.js"
     ],
     "moduleLicenses": [
       {
@@ -152,23 +152,6 @@
     ],
     "filenames": [
       "pako_inflate-1.0.11.js"
-    ],
-    "moduleLicenses": [
-      {
-        "moduleLicense": "MIT",
-        "moduleLicenseUrl": "https://spdx.org/licenses/MIT.html"
-      }
-    ]
-  },
-  "prototypejs": {
-    "moduleName": "prototypejs",
-    "moduleVersion": "1.6.0.3",
-    "moduleUrls": [
-      "https://github.com/prototypejs/prototype",
-      "https://prototypejs.org/"
-    ],
-    "filenames": [
-      "prototype-1.6.0.3.js"
     ],
     "moduleLicenses": [
       {

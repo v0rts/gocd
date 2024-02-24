@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,8 +117,7 @@ public class PipelineConfigTreeValidator {
         for (StageConfig stageConfig : downstreamPipeline.getStages()) {
             for (JobConfig jobConfig : stageConfig.getJobs()) {
                 for (Task task : jobConfig.getTasks()) {
-                    if (task instanceof FetchTask) {
-                        FetchTask fetchTask = (FetchTask) task;
+                    if (task instanceof FetchTask fetchTask) {
                         if (fetchTask.getPipelineNamePathFromAncestor() != null && !StringUtils.isBlank(CaseInsensitiveString.str(fetchTask.getPipelineNamePathFromAncestor().getPath())) && fetchTask.getPipelineNamePathFromAncestor().pathIncludingAncestor().contains(pipelineConfig.name())) {
                             fetchTask = ClonerFactory.instance().deepClone(fetchTask);
                             fetchTask.validateTask(validationContext.withParent(downstreamPipeline).withParent(stageConfig).withParent(jobConfig));

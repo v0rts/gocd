@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,13 @@ public class XpathUtilsTest {
     public File temporaryFolder;
 
     private File testFile;
-    private static final String XML = "<root>\n"
-        + "<son>\n"
-        + "<grandson name=\"someone\"/>\n"
-        + "<grandson name=\"anyone\" address=\"\"></grandson>\n"
-        + "</son>\n"
-        + "</root>";
+    private static final String XML = """
+            <root>
+            <son>
+            <grandson name="someone"/>
+            <grandson name="anyone" address=""></grandson>
+            </son>
+            </root>""";
 
     @AfterEach
     public void tearDown() throws Exception {

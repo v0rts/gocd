@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,9 +85,8 @@ public abstract class MaterialInstance extends PersistentObject {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MaterialInstance)) return false;
+        if (!(o instanceof MaterialInstance that)) return false;
         if (!super.equals(o)) return false;
-        MaterialInstance that = (MaterialInstance) o;
         return Objects.equals(url, that.url) &&
                 Objects.equals(username, that.username) &&
                 Objects.equals(pipelineName, that.pipelineName) &&

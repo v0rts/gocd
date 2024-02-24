@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.thoughtworks.gocd;
 
 public class AssertJava {
-    private static final JavaVersion MINIMUM_SUPPORTED_VERSION = JavaVersion.VERSION_11;
+    private static final JavaVersion MINIMUM_SUPPORTED_VERSION = JavaVersion.VERSION_17;
 
     public static void assertVMVersion() {
         checkSupported(JavaVersion.current());

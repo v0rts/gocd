@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -389,9 +389,10 @@ public class BuildCauseProducerServiceConfigRepoIntegrationTest {
     @Test
     public void shouldNotScheduleWhenPipelineRemovedFromConfigRepoWhenManuallyTriggered() throws Exception {
         configTestRepo.addCodeToRepositoryAndPush(fileName, "removed pipeline from configuration",
-                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-                        + "<cruise xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"cruise-config.xsd\" schemaVersion=\"38\">\n"
-                        + "</cruise>");
+                """
+                        <?xml version="1.0" encoding="utf-8"?>
+                        <cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="38">
+                        </cruise>""");
 
         final HashMap<String, String> revisions = new HashMap<>();
         final HashMap<String, String> environmentVariables = new HashMap<>();

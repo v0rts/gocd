@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,14 +95,12 @@ public class NantTask extends BuildTask {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof NantTask)) {
+        if (!(o instanceof NantTask nantTask)) {
             return false;
         }
         if (!super.equals(o)) {
             return false;
         }
-
-        NantTask nantTask = (NantTask) o;
 
         return nantPath != null ? nantPath.equals(nantTask.nantPath) : nantTask.nantPath == null;
     }

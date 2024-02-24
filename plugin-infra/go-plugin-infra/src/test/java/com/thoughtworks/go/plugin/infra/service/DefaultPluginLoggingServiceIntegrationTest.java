@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -185,20 +185,17 @@ class DefaultPluginLoggingServiceIntegrationTest {
     }
 
     private Thread createThreadFor(final String pluginId, final String threadIdentifier) {
-        return new Thread() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 100; i++) {
-                    pluginLoggingService.info(pluginId, "LoggingClass", "info-" + threadIdentifier + "-" + i);
+        return new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                pluginLoggingService.info(pluginId, "LoggingClass", "info-" + threadIdentifier + "-" + i);
 
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
-        };
+        });
     }
 
     private void assertMessageInLog(File pluginLogFile, String expectedLoggingLevel, String loggerName, String expectedLogMessage) throws IOException {

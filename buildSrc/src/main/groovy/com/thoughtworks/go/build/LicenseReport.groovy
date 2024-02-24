@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ class LicenseReport {
             renderModuleData(markup, counter.incrementAndGet(), moduleName, moduleLicenseData)
           }
 
-          def jreLicense = project.packaging.adoptiumJavaVersion.toLicenseMetadata()
+          def jreLicense = project.packagedJavaVersion.toLicenseMetadata()
           renderModuleData(markup, counter.incrementAndGet(), jreLicense.moduleName, jreLicense)
         }
       }

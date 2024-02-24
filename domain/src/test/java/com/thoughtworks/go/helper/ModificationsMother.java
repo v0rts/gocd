@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,8 +150,7 @@ public class ModificationsMother {
 
         for (Material material : expandedMaterials) {
             Modification modification;
-            if (material instanceof DependencyMaterial) {
-                DependencyMaterial dependencyMaterial = (DependencyMaterial) material;
+            if (material instanceof DependencyMaterial dependencyMaterial) {
                 modification = oneModifiedFile(committer, dependencyMaterial.getPipelineName() + "/1/" + dependencyMaterial.getStageName() + "/" + revision, TWO_DAYS_AGO_CHECKIN,
                         dependencyMaterial.getPipelineName() + "-1.2.3");
             } else {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -302,8 +302,7 @@ public class AgentRegistrationController {
     }
 
     private String getErrorMessage(Exception e) {
-        if (e instanceof GoConfigInvalidException) {
-            GoConfigInvalidException exception = (GoConfigInvalidException) e;
+        if (e instanceof GoConfigInvalidException exception) {
             return StringUtils.join(exception.getAllErrors(), ", ");
         }
         return e.getMessage();

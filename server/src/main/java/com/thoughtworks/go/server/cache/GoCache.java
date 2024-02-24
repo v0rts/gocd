@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,13 +106,12 @@ public class GoCache {
     }
 
     private void logUnsavedPersistentObjectInteraction(Object value, String message) {
-        if (value instanceof PersistentObject) {
+        if (value instanceof PersistentObject persistentObject) {
             for (Class<? extends PersistentObject> nullObjectClass : nullObjectClasses) {
                 if (value.getClass().equals(nullObjectClass)) {
                     return;
                 }
             }
-            PersistentObject persistentObject = (PersistentObject) value;
             if (!persistentObject.hasId()) {
                 String msg = String.format(message, persistentObject);
                 IllegalStateException exception = new IllegalStateException();

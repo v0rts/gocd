@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public class HgCommandTest {
         clientRepo = TempDirUtils.createTempDirectoryIn(tempDir, "testHgClientRepo").toFile();
         secondBranchWorkingCopy = TempDirUtils.createTempDirectoryIn(tempDir, "second").toFile();
 
-        setUpServerRepoFromHgBundle(serverRepo, new File("../common/src/test/resources/data/hgrepo.hgbundle"));
+        setUpServerRepoFromHgBundle(serverRepo, new File("../common/src/test/resources/data/repos/hgrepo.hgbundle"));
         workingDirectory = new File(clientRepo.getPath());
         hgCommand = new HgCommand(null, workingDirectory, "default", serverRepo.getAbsolutePath(), null);
         hgCommand.clone(outputStreamConsumer, new UrlArgument(serverRepo.getAbsolutePath()));

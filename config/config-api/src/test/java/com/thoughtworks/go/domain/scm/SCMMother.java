@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@ import com.thoughtworks.go.domain.config.*;
 
 public class SCMMother {
     public static SCM create(String id) {
-        SCM scm = create(id, "scm-" + id, "plugin", "1.0", new Configuration());
-        return scm;
+        return create(id, "scm-" + id, "plugin", "1.0", new Configuration());
     }
 
     public static SCM create(String id, String name, String pluginId, String pluginVersion, Configuration configuration) {

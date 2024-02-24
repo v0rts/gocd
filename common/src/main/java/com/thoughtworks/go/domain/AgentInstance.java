@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -358,16 +358,11 @@ public class AgentInstance implements Comparable<AgentInstance> {
     }
 
     public boolean matches(FilterBy filter) {
-        switch (filter) {
-            case Pending:
-                return isPending();
-            case Elastic:
-                return isElastic();
-            case Null:
-                return isNullAgent();
-            default:
-                return false;
-        }
+        return switch (filter) {
+            case Pending -> isPending();
+            case Elastic -> isElastic();
+            case Null -> isNullAgent();
+        };
     }
 
     public Date cancelledAt() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,15 +72,13 @@ public class BuildTaskTest extends AbstractCRTest<CRBuildTask> {
 
     @Test
     public void shouldAppendTypeFieldWhenSerializingAntTask() {
-        CRTask value = antTask;
-        JsonObject jsonObject = (JsonObject) gson.toJsonTree(value);
+        JsonObject jsonObject = (JsonObject) gson.toJsonTree(antTask);
         assertThat(jsonObject.get("type").getAsString(), is("ant"));
     }
 
     @Test
     public void shouldAppendTypeFieldWhenSerializingRakeTask() {
-        CRTask value = rakeTask;
-        JsonObject jsonObject = (JsonObject) gson.toJsonTree(value);
+        JsonObject jsonObject = (JsonObject) gson.toJsonTree(rakeTask);
         assertThat(jsonObject.get("type").getAsString(), is("rake"));
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import static org.apache.commons.io.FileUtils.copyDirectory;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class SvnTestRepo extends TestRepo {
-    private static final String REPO_TEST_DATA_FOLDER = "../common/src/test/resources/data/svnrepo";
+    private static final String REPO_TEST_DATA_FOLDER = "../common/src/test/resources/data/repos/svnrepo";
 
     protected File tempRepo;
 

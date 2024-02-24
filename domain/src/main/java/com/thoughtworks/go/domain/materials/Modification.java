@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -219,11 +219,9 @@ public class Modification extends PersistentObject implements Comparable<Modific
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Modification)) {
+        if (!(o instanceof Modification that)) {
             return false;
         }
-
-        Modification that = (Modification) o;
 
         // Doesn't include additionalDataMap or materialInstance
         return Objects.equals(userName, that.userName) &&

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import com.thoughtworks.go.domain.NullTask;
 import com.thoughtworks.go.util.ConfigElementImplementationRegistryMother;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RakeTaskTest {
     @Test
@@ -37,9 +37,7 @@ public class RakeTaskTest {
     @Test
     public void shouldNotKillAllChildrenWhenEmptyOnCancel() throws Exception {
         RakeTask rakeTask = new MagicalGoConfigXmlLoader(new ConfigCache(), ConfigElementImplementationRegistryMother.withNoPlugins()).fromXmlPartial(
-                "<rake>"
-                + "  <oncancel />"
-                + "</rake>", RakeTask.class
+                "<rake><oncancel /></rake>", RakeTask.class
         );
         assertThat(rakeTask.cancelTask(), is(instanceOf(NullTask.class)));
     }

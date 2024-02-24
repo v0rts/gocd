@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,10 @@ describe("AnalyticsEndpoint", () => {
       AnalyticsEndpoint.define({
         "go.cd.analytics.v1.should.receive": (message, trans) => {
           messageContent = message.body;
-          trans.respond({ data: "correct" });
+          trans.respond({data: "correct"});
         },
         "go.cd.analytics.v1.should.not.receive": (_message, trans) => {
-          trans.respond({ data: "incorrect" });
+          trans.respond({data: "incorrect"});
         }
       });
 
@@ -41,7 +41,7 @@ describe("AnalyticsEndpoint", () => {
         trans.request("should.receive", "foo").done((data) => {
           response = data;
         }).fail((_error) => {
-          fail(); // eslint-disable-line no-undef
+          throw `unexpected failure: ${_error}`;
         }).always(() => {
           expect(response).toBe("correct");
           expect(messageContent).toBe("foo");

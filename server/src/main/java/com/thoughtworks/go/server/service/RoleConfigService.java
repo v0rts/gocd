@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,8 +145,7 @@ public class RoleConfigService {
     }
 
     private void validatePluginRoleMetadata(Role newRole) {
-        if (newRole instanceof PluginRoleConfig) {
-            PluginRoleConfig role = (PluginRoleConfig) newRole;
+        if (newRole instanceof PluginRoleConfig role) {
             String pluginId = pluginIdForRole(role);
 
             if (pluginId == null) {

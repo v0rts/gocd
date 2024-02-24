@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ function configuration(env: any, argv: any): webpack.Configuration {
     output: {
       path: configOptions.outputDir,
       publicPath: "/go/assets/webpack/",
-      filename: configOptions.production ? "[name]-[chunkhash].js" : "[name].js"
+      filename: configOptions.production ? "[name]-[contenthash].js" : "[name].js"
     },
     cache: true,
     bail: !argv.watch,

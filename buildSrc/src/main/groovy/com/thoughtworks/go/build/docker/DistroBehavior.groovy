@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ trait DistroBehavior {
   }
 
   List<String> getInstallJavaCommands(Project project) {
-    def downloadUrl = project.packaging.adoptiumJavaVersion.toDownloadURLFor(getOperatingSystem(), Architecture.dockerDynamic)
+    def downloadUrl = project.packagedJavaVersion.toDownloadURLFor(getOperatingSystem(), Architecture.dockerDynamic)
 
     return [
       "curl --fail --location --silent --show-error \"${downloadUrl}\" --output /tmp/jre.tar.gz",
@@ -86,6 +86,10 @@ trait DistroBehavior {
   }
 
   boolean isPrivilegedModeSupport() {
+    return false
+  }
+
+  boolean isContinuousRelease() {
     return false
   }
 

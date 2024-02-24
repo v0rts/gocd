@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,7 +144,7 @@ public class DefaultPluginLoggingService implements LoggingService {
 
     private Logger getLogger(String pluginId, String loggerName) {
         initializeLoggerForPluginId(pluginId);
-        return LoggerFactory.getLogger(PLUGIN_LOGGER_PREFIX + "." + pluginId + "." + loggerName);
+        return LoggerFactory.getLogger(String.join(".", PLUGIN_LOGGER_PREFIX, pluginId, loggerName));
     }
 
     private boolean alreadyInitialized(String pluginId) {

@@ -1,5 +1,5 @@
 <#--
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,12 @@
 </div>
 <script>
 window["tab-content-of-${customized_name?lower_case}_callback"] = function() {
-    var innerHTML = $("tab-content-of-${customized_name?lower_case}").innerHTML;
-    innerHTML = innerHTML ? innerHTML : "";
-    if (innerHTML.include("iframe")) {
+    const contentElement = $("#tab-content-of-${customized_name?lower_case}");
+    if ((contentElement.html() || "").includes("iframe")) {
         return;
     }
-    var iframe = '<iframe src="${req.getContextPath()}/${presenter.getRestfulUrl(customized_path)}" frameborder="0"></iframe>';
-    $("tab-content-of-${customized_name?lower_case}")
-      .innerHTML = '<div><a href="${req.getContextPath()}/${presenter.getRestfulUrl(customized_path)}">Download ${customized_name}</a></div>' + iframe;
-    $("tab-content-of-${customized_name?lower_case}")
-      .show();
+    const iframe = '<iframe src="${req.getContextPath()}/${presenter.getRestfulUrl(customized_path)}" frameborder="0"></iframe>';
+    contentElement.html('<div><a href="${req.getContextPath()}/${presenter.getRestfulUrl(customized_path)}">Download ${customized_name}</a></div>' + iframe);
+    contentElement.show();
 }
 </script>

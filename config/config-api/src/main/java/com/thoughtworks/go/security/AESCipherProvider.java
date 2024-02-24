@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,8 +71,7 @@ public class AESCipherProvider implements Serializable {
     private byte[] generateKey() throws NoSuchAlgorithmException {
         KeyGenerator keygen = KeyGenerator.getInstance("AES");
         keygen.init(128);
-        byte[] key = keygen.generateKey().getEncoded();
-        return key;
+        return keygen.generateKey().getEncoded();
     }
 
     public void resetCipher() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -233,6 +233,6 @@ public class DefaultCommentRendererTest {
     }
 
     private String dynamicLink(String id) {
-        return "<a href=\"http://mingle05/projects/cce/cards/" + id + "\" target=\"story_tracker\">#" + id + "</a>";
+        return String.join(id, "<a href=\"http://mingle05/projects/cce/cards/", "\" target=\"story_tracker\">#", "</a>");
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -180,8 +180,7 @@ public class PipelineStateDao extends SqlMapClientDaoSupport implements StageSta
             Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PipelineState.class).setProjection(pipelineName).add(
                     Restrictions.eq("locked", true));
             criteria.setCacheable(false);
-            List<String> list = criteria.list();
-            return list;
+            return (List<String>) criteria.list();
         });
     }
 }

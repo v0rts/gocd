@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,8 @@ describe("AddPipeline: TemplateEditor", () => {
     const dropdown = helper.byTestId("form-field-input-template");
     expect(dropdown).toBeInDOM();
     expect(helper.qa("option", dropdown).length).toBe(2);
+    expect(helper.qa("option")[0]).toContainText("one");
+    expect(helper.qa("option")[1]).toContainText("two");
 
     helper.clickByTestId("switch-paddle");
     expect(isUsingTemplate()).toBe(false);
@@ -102,7 +104,7 @@ class TestCache extends TemplateCache {
   prime(onComplete: () => void) { onComplete(); }
    // tslint:disable-next-line
   invalidate() {}
-  contents() { return [{name: "one", parameters: ["paramName"]}, {name: "two", parameters: []}]; }
+  contents() { return [{name: "two", parameters: []}, {name: "one", parameters: ["paramName"]}]; }
   failureReason() { return undefined; }
   failed() { return false; }
 }

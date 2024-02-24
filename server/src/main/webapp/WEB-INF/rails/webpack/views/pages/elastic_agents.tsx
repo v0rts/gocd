@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -354,7 +354,7 @@ export class ElasticAgentsPage extends Page<null, State> {
         connection URL, credentials, network, permission settings etc. Eg: Kubernetes Cluster Configurations.
       </li>
       <li>An elastic profile usually contains the configuration for your elastic agent. Depending on the plugin used, this may contain the machine
-        image (ami, docker image), size of the CPU/memory/disk, network settings among other things.
+        image (ami, container image), size of the CPU/memory/disk, network settings among other things.
       </li>
       <li>You can read more about elastic agent configurations from
         <Link target="_blank" href={docsUrl("configuration/elastic_agents.html")}> here</Link>.

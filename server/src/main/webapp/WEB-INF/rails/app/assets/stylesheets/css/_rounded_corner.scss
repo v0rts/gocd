@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/* rounded corner (use luke's trick) */
-.ab-corner {
-  border-style: solid;
-  border-color: #e7e1d1;
-  background-color: transparent;
-  display: block;
-  font-size: 0;
-  margin-left: 0;
-  margin-right: 0;
-  width: auto;
-  overflow: hidden;
-}
 
 /* float rounded corner container, with white background and grey border */
 .rounded-corner-for-pipeline,

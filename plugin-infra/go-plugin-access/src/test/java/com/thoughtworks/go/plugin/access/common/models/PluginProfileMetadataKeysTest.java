@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +21,24 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 
 public class PluginProfileMetadataKeysTest {
 
     @Test
     public void shouldUnJSONizeProfileMetadata() throws Exception {
-        PluginProfileMetadataKeys metadata = PluginProfileMetadataKeys.fromJSON("[{\n" +
-                "  \"key\": \"foo\",\n" +
-                "  \"metadata\": {\n" +
-                "    \"secure\": true,\n" +
-                "    \"required\": false\n" +
-                "  }\n" +
-                "}, {\n" +
-                "  \"key\": \"bar\"\n" +
-                "}]");
+        PluginProfileMetadataKeys metadata = PluginProfileMetadataKeys.fromJSON("""
+                [{
+                  "key": "foo",
+                  "metadata": {
+                    "secure": true,
+                    "required": false
+                  }
+                }, {
+                  "key": "bar"
+                }]""");
         assertThat(metadata.size(), is(2));
         PluginProfileMetadataKey foo = metadata.get("foo");
         assertThat(foo.getMetadata().isRequired(), is(false));
@@ -50,19 +51,20 @@ public class PluginProfileMetadataKeysTest {
 
     @Test
     public void shouldGetPluginConfigurations() throws Exception {
-        PluginProfileMetadataKeys metadata = PluginProfileMetadataKeys.fromJSON("[{\n" +
-                "  \"key\": \"username\",\n" +
-                "  \"metadata\": {\n" +
-                "    \"secure\": true,\n" +
-                "    \"required\": false\n" +
-                "  }\n" +
-                "}, {\n" +
-                "  \"key\": \"password\",\n" +
-                "  \"metadata\": {\n" +
-                "    \"secure\": true,\n" +
-                "    \"required\": true\n" +
-                "  }\n" +
-                "}]");
+        PluginProfileMetadataKeys metadata = PluginProfileMetadataKeys.fromJSON("""
+                [{
+                  "key": "username",
+                  "metadata": {
+                    "secure": true,
+                    "required": false
+                  }
+                }, {
+                  "key": "password",
+                  "metadata": {
+                    "secure": true,
+                    "required": true
+                  }
+                }]""");
 
         List<PluginConfiguration> pluginConfigurations = metadata.toPluginConfigurations();
 
@@ -73,15 +75,16 @@ public class PluginProfileMetadataKeysTest {
 
     @Test
     public void shouldGetPluginConfigurationsWithMetadataDefaultedToFalseInAbsenceOfPluginMetadata() throws Exception {
-        PluginProfileMetadataKeys metadata = PluginProfileMetadataKeys.fromJSON("[{\n" +
-                "  \"key\": \"username\"\n" +
-                "}, {\n" +
-                "  \"key\": \"password\",\n" +
-                "  \"metadata\": {\n" +
-                "    \"secure\": true,\n" +
-                "    \"required\": true\n" +
-                "  }\n" +
-                "}]");
+        PluginProfileMetadataKeys metadata = PluginProfileMetadataKeys.fromJSON("""
+                [{
+                  "key": "username"
+                }, {
+                  "key": "password",
+                  "metadata": {
+                    "secure": true,
+                    "required": true
+                  }
+                }]""");
 
         List<PluginConfiguration> pluginConfigurations = metadata.toPluginConfigurations();
 

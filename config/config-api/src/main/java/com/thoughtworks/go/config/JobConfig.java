@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -348,8 +348,7 @@ public class JobConfig implements Validatable, ParamsAttributeAware, Environment
         artifactConfigs.forEach(artifactConfig -> artifactConfig.encryptSecureProperties(preprocessedConfig, artifactConfig));
 
         tasks.forEach(task -> {
-            if (task instanceof FetchPluggableArtifactTask) {
-                FetchPluggableArtifactTask fetchPluggableArtifactTask = (FetchPluggableArtifactTask) task;
+            if (task instanceof FetchPluggableArtifactTask fetchPluggableArtifactTask) {
                 fetchPluggableArtifactTask.encryptSecureProperties(preprocessedConfig, pipelineTemplateConfig);
             }
         });

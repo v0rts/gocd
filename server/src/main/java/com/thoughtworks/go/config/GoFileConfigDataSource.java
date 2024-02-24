@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -599,8 +599,7 @@ public class GoFileConfigDataSource {
 
     private boolean shouldMergeConfig(UpdateConfigCommand updatingCommand, GoConfigHolder configHolder) {
         LOGGER.debug("[Config Save] Checking whether config should be merged");
-        if (updatingCommand instanceof NoOverwriteUpdateConfigCommand) {
-            NoOverwriteUpdateConfigCommand noOverwriteCommand = (NoOverwriteUpdateConfigCommand) updatingCommand;
+        if (updatingCommand instanceof NoOverwriteUpdateConfigCommand noOverwriteCommand) {
             return !configHolder.configForEdit.getMd5().equals(noOverwriteCommand.unmodifiedMd5());
         }
         return false;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class ExceptionTemplateTest extends AbstractFreemarkerTemplateTest {
         data.put("errorMessage", "ERROR MESSAGE");
 
         String output = view.render(data);
-        assertThat(output).contains("$('trans_content').update(\"Sorry, an unexpected error occurred [ERROR MESSAGE]. :( Please check the server logs for more information.\");");
+        assertThat(output).contains("$('#trans_content').html(\"Sorry, an unexpected error occurred [ERROR MESSAGE]. :( Please check the server logs for more information.\");");
     }
 
     @Test
@@ -46,12 +46,12 @@ public class ExceptionTemplateTest extends AbstractFreemarkerTemplateTest {
         data.put("errorMessage", "<Error> you shouldn't \"expect\"");
 
         String output = view.render(data);
-        assertThat(output).contains("$('trans_content').update(\"Sorry, an unexpected error occurred [<Error> you shouldn\\'t \\\"expect\\\"]. :( Please check the server logs for more information.\");");
+        assertThat(output).contains("$('#trans_content').html(\"Sorry, an unexpected error occurred [<Error> you shouldn\\'t \\\"expect\\\"]. :( Please check the server logs for more information.\");");
     }
 
     @Test
     public void shouldHaveTheGenericMessageInOutputOfTemplateWhenCustomErrorMessageIsNotProvided() {
         String output = view.render(new HashMap<>());
-        assertThat(output).contains("$('trans_content').update(\"Sorry, an unexpected error occurred. :( Please check the server logs for more information.\");");
+        assertThat(output).contains("$('#trans_content').html(\"Sorry, an unexpected error occurred. :( Please check the server logs for more information.\");");
     }
 }

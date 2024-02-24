@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,9 +49,7 @@ public class PluginProfileMetadata {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PluginProfileMetadata)) return false;
-
-        PluginProfileMetadata that = (PluginProfileMetadata) o;
+        if (!(o instanceof PluginProfileMetadata that)) return false;
 
         if (required != that.required) return false;
         return secure == that.secure;

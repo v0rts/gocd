@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,11 @@
 // Many things depend on jquery (incl direct code, jquery-ui and bootstrap)
 //= require "lib/jquery-3.7.1.js"
 //= require "lib/jquery-pinOnScroll.js"
-//= require "lib/jquery_no_conflict.js"
-
-// A number of things depend on this including Class.create + Event.observe + $() + $A() + Element.removeClassName calls.
-// Also causes some issues with hacks it applies to the browser toJSON that need to be worked around
-// with Json.parse(Json.stringify(jsonObject)) in various places
-//= require "lib/prototype-1.6.0.3.js"
 
 // Used by Rails build/job detail page job history dropdown (data-toggle='dropdown' and .dropdown-menu)
 //= require "lib/bootstrap-dropdown-2.3.2.js"
 
-// used by Rails value_stream_map_renderer (look for $j(.*).draggable etc)
+// used by Rails value_stream_map_renderer (look for $(.*).draggable etc)
 //= require "lib/jquery-ui-1.13.2.js"
 
 // Used by Rails job details page via timer_observer
@@ -46,7 +40,7 @@
 //= require "lib/lodash-4.17.21.js"
 
 // Used by Rails job details and console log for formatting timestamps, along with Rails value stream map
-//= require "lib/moment-2.29.4.js"
+//= require "lib/moment-2.30.1.js"
 //= require "lib/moment-duration-format-2.3.2.js"
 //= require "lib/humanize-for-gocd.js"
 

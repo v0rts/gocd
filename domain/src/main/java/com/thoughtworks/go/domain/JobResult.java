@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,13 +57,10 @@ public enum JobResult implements ViewableStatus {
     }
 
     public String toCctrayStatus() {
-        switch (this) {
-            case Failed:
-            case Cancelled:
-                return "Failure";
-            default:
-                return "Success";
-        }
+        return switch (this) {
+            case Failed, Cancelled -> "Failure";
+            default -> "Success";
+        };
     }
 
     public static final Comparator<JobResult> JOB_RESULT_COMPARATOR = (o1, o2) -> {

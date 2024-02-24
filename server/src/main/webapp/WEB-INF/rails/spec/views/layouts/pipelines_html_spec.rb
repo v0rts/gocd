@@ -1,5 +1,5 @@
 #
-# Copyright 2023 Thoughtworks, Inc.
+# Copyright 2024 Thoughtworks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -106,7 +106,7 @@ describe "layouts/pipelines.html.erb" do
         assign(:stage, stage_with_three_runs)
         allow(view).to receive(:stage_detail_tab_path_for).and_return("some_tab_path")
         render :inline => '<div>content</div>', :layout => @layout_name
-        expect(response.body).to have_selector("script[type='text/javascript']", :text => /new\sMicroContentPopup\(\$\('other_stage_runs'\),\snew\sMicroContentPopup\.NoOpHandler\(\)\)/, :visible => false)
+        expect(response.body).to have_selector("script[type='text/javascript']", :text => /new\sMicroContentPopup\(\$\('#other_stage_runs'\)\)/, :visible => false)
       end
     end
 

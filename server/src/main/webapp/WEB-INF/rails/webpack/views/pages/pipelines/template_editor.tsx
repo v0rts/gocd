@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ export class TemplateEditor extends MithrilComponent<Attrs, State> {
     }
 
     this.cache.prime(() => {
-      this.templates(this.cache.contents());
+      this.templates(_.sortBy(this.cache.contents(), (template: Template) => template.name.toLocaleLowerCase()));
     }, () => {
       this.templates([]);
     });

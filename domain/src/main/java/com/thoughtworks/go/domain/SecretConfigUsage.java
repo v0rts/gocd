@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,8 +67,7 @@ public class SecretConfigUsage {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SecretConfigUsage)) return false;
-        SecretConfigUsage that = (SecretConfigUsage) o;
+        if (!(o instanceof SecretConfigUsage that)) return false;
         return Objects.equals(pipelineName, that.pipelineName) &&
                 Objects.equals(stageName, that.stageName) &&
                 Objects.equals(jobName, that.jobName) &&

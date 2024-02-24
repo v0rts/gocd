@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,9 +38,7 @@ class CapabilitiesDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CapabilitiesDTO)) return false;
-
-        CapabilitiesDTO that = (CapabilitiesDTO) o;
+        if (!(o instanceof CapabilitiesDTO that)) return false;
 
         if (supportsStatusReport != that.supportsStatusReport) return false;
         return supportsAgentStatusReport == that.supportsAgentStatusReport;

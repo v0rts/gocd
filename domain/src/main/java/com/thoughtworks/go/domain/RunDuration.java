@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,10 +62,9 @@ public abstract class RunDuration  {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RunDuration)) {
+        if (!(o instanceof RunDuration that)) {
             return false;
         }
-        RunDuration that = (RunDuration) o;
         return !(duration != null ? !duration.equals(that.duration) : that.duration != null);
     }
 

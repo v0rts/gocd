@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,12 +45,9 @@ public class AuthorizationRequestProcessor implements GoPluginApiRequestProcesso
     public GoApiResponse process(GoPluginDescriptor pluginDescriptor, GoApiRequest request) {
 
         validatePluginRequest(request);
-        switch (Request.fromString(request.api())) {
-            case INVALIDATE_CACHE_REQUEST:
-                return processInvalidateCacheRequest(pluginDescriptor);
-            default:
-                return DefaultGoApiResponse.error("Illegal api request");
-        }
+        return switch (Request.fromString(request.api())) {
+            case INVALIDATE_CACHE_REQUEST -> processInvalidateCacheRequest(pluginDescriptor);
+        };
     }
 
     private GoApiResponse processInvalidateCacheRequest(GoPluginDescriptor pluginDescriptor) {

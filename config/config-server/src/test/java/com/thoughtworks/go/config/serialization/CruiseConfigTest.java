@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,20 +29,22 @@ public class CruiseConfigTest {
 
     @Test
     public void shouldFindAllResourcesOnAllJobs() throws Exception {
-        String jobXml = "<job name=\"dev1\">\n"
-            + "<tasks><ant /></tasks>\n"
-            + "<resources>\n"
-            + "<resource>one</resource>\n"
-            + "<resource>two</resource>\n"
-            + "</resources>\n"
-            + "</job>";
-        String jobXml2 = "<job name=\"dev2\">\n"
-            + "<tasks><ant /></tasks>\n"
-            + "<resources>\n"
-            + "<resource>two</resource>\n"
-            + "<resource>three</resource>\n"
-            + "</resources>\n"
-            + "</job>";
+        String jobXml = """
+                <job name="dev1">
+                <tasks><ant /></tasks>
+                <resources>
+                <resource>one</resource>
+                <resource>two</resource>
+                </resources>
+                </job>""";
+        String jobXml2 = """
+                <job name="dev2">
+                <tasks><ant /></tasks>
+                <resources>
+                <resource>two</resource>
+                <resource>three</resource>
+                </resources>
+                </job>""";
 
         ConfigElementImplementationRegistry registry = ConfigElementImplementationRegistryMother.withNoPlugins();
         CruiseConfig config = new MagicalGoConfigXmlLoader(new ConfigCache(), registry).loadConfigHolder(ConfigFileFixture.withJob(jobXml + jobXml2)).config;

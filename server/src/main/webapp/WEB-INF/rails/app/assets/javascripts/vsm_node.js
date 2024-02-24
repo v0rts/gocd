@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@
     return new PipelineDependencyNode.Instance.Stage({
       name:     json.name,
       status:   json.status,
-      counter:  parseInt(json.locator.split("/").last()),
+      counter:  parseInt(_.last(json.locator.split("/"))),
       duration: json.duration
     });
   };

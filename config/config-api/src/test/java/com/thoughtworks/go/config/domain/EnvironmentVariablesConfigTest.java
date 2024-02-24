@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -246,7 +246,6 @@ class EnvironmentVariablesConfigTest {
 
     private EnvironmentVariableConfig secureVariable(final GoCipher goCipher, String key, String plainText, String cipherText) throws CryptoException {
         when(goCipher.encrypt(plainText)).thenReturn(cipherText);
-        EnvironmentVariableConfig environmentVariableConfig = new EnvironmentVariableConfig(goCipher, key, plainText, true);
-        return environmentVariableConfig;
+        return new EnvironmentVariableConfig(goCipher, key, plainText, true);
     }
 }

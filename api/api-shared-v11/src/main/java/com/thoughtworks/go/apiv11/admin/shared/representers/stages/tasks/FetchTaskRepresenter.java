@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,15 +65,12 @@ public class FetchTaskRepresenter {
             return null;
         }
         String origin = jsonReader.getString("artifact_origin");
-        switch (origin) {
-            case "gocd":
-                return fetchTaskFromJson(jsonReader);
-            case "external":
-                return fetchExternalTaskFromJson(jsonReader);
-            default:
-                throw new UnprocessableEntityException(String.format("Invalid task type %s. It has to be one of '%s'.", origin, String.join(",", "gocd", "external")));
-
-        }
+        return switch (origin) {
+            case "gocd" -> fetchTaskFromJson(jsonReader);
+            case "external" -> fetchExternalTaskFromJson(jsonReader);
+            default ->
+                    throw new UnprocessableEntityException(String.format("Invalid task type %s. It has to be one of '%s'.", origin, String.join(",", "gocd", "external")));
+        };
     }
 
     private static AbstractFetchTask fetchTaskFromJson(JsonReader jsonReader) {

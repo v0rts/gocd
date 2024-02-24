@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,7 @@ public class AccessToken implements Credentials {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AccessToken)) return false;
-
-        AccessToken that = (AccessToken) o;
+        if (!(o instanceof AccessToken that)) return false;
 
         return credentials != null ? credentials.equals(that.credentials) : that.credentials == null;
     }

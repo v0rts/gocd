@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +37,10 @@ public enum DirectiveType {
             return Optional.empty();
         }
 
-        switch (directive) {
-            case "allow":
-                return Optional.of(ALLOW);
-            case "deny":
-                return Optional.of(DENY);
-            default:
-                return Optional.empty();
-        }
+        return switch (directive) {
+            case "allow" -> Optional.of(ALLOW);
+            case "deny" -> Optional.of(DENY);
+            default -> Optional.empty();
+        };
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,10 +49,11 @@ public class CRTabTest extends AbstractCRTest<CRTab> {
 
     @Test
     public void shouldDeserializeFromAPILikeObject() {
-        String json = "{\n" +
-                "      \"name\": \"cobertura\",\n" +
-                "      \"path\": \"target/site/cobertura/index.html\"\n" +
-                "    }";
+        String json = """
+                {
+                      "name": "cobertura",
+                      "path": "target/site/cobertura/index.html"
+                    }""";
         CRTab deserializedValue = gson.fromJson(json,CRTab.class);
 
         assertThat(deserializedValue.getName(),is("cobertura"));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,17 @@ import org.gradle.api.Project
 
 enum Distro implements DistroBehavior {
 
-  alpine{
+  alpine {
     @Override
     List<DistroVersion> getSupportedVersions() {
       return [ // See https://endoflife.date/alpine
-        new DistroVersion(version: '3.16', releaseName: '3.16', eolDate: parseDate('2024-05-23')),
-        new DistroVersion(version: '3.17', releaseName: '3.17', eolDate: parseDate('2024-11-22')),
-        new DistroVersion(version: '3.18', releaseName: '3.18', eolDate: parseDate('2025-05-09')),
         new DistroVersion(version: '3.19', releaseName: '3.19', eolDate: parseDate('2025-11-01')),
       ]
+    }
+
+    @Override
+    boolean isContinuousRelease() {
+      return true
     }
 
     @Override
@@ -67,8 +69,8 @@ enum Distro implements DistroBehavior {
         '  apk add --no-cache tzdata --virtual .build-deps curl binutils zstd',
         '  GLIBC_VER="2.34-r0"',
         '  ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download"',
-        '  ZLIB_URL="https://archive.archlinux.org/packages/z/zlib/zlib-1%3A1.3-2-x86_64.pkg.tar.zst"',
-        '  ZLIB_SHA256=805ad81ea00486717df264b05567a4a0b812a484a7482110b6159fbea6dc7e63',
+        '  ZLIB_URL="https://archive.archlinux.org/packages/z/zlib/zlib-1%3A1.3.1-1-x86_64.pkg.tar.zst"',
+        '  ZLIB_SHA256=a46c58aa1d1cb4a1def7aa27acf03db61e6a7f85ad0a3d8103f9463a453e2b02',
         '  curl -LfsS https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub',
         '  SGERRAND_RSA_SHA256="823b54589c93b02497f1ba4dc622eaef9c813e6b0f0ebbb2f771e32adf9f4ef2"',
         '  echo "${SGERRAND_RSA_SHA256} */etc/apk/keys/sgerrand.rsa.pub" | sha256sum -c -',
@@ -93,7 +95,51 @@ enum Distro implements DistroBehavior {
     }
   },
 
-  centos{
+  wolfi {
+    @Override
+    Set<Architecture> getSupportedArchitectures() {
+      [Architecture.x64, Architecture.aarch64]
+    }
+
+    @Override
+    List<DistroVersion> getSupportedVersions() {
+      return [
+         new DistroVersion(version: 'latest', releaseName: 'latest', eolDate: parseDate('2099-01-01'))
+      ]
+    }
+
+    @Override
+    boolean isContinuousRelease() {
+      return true
+    }
+
+    @Override
+    String getBaseImageLocation(DistroVersion distroVersion) {
+      "cgr.dev/chainguard/wolfi-base"
+    }
+
+    @Override
+    List<String> getBaseImageUpdateCommands(DistroVersion v) {
+      return []
+    }
+
+    @Override
+    List<String> getCreateUserAndGroupCommands() {
+      return [
+        'adduser -D -u ${UID} -s /bin/bash -G root go'
+      ]
+    }
+
+    @Override
+    List<String> getInstallPrerequisitesCommands(DistroVersion v) {
+      return [
+        // procps is needed for tanuki wrapper shell script
+        'apk add --no-cache git openssh-client bash curl procps'
+      ]
+    }
+  },
+
+  centos {
     @Override
     Set<Architecture> getSupportedArchitectures() {
       [Architecture.x64, Architecture.aarch64]
@@ -136,7 +182,7 @@ enum Distro implements DistroBehavior {
     }
   },
 
-  debian{
+  debian {
     @Override
     Set<Architecture> getSupportedArchitectures() {
       [Architecture.x64, Architecture.aarch64]
@@ -170,7 +216,7 @@ enum Distro implements DistroBehavior {
     }
   },
 
-  ubuntu{
+  ubuntu {
     @Override
     Set<Architecture> getSupportedArchitectures() {
       debian.supportedArchitectures
@@ -195,7 +241,7 @@ enum Distro implements DistroBehavior {
     }
   },
 
-  docker{
+  docker {
     @Override
     OperatingSystem getOperatingSystem() {
       return alpine.getOperatingSystem()
@@ -204,6 +250,13 @@ enum Distro implements DistroBehavior {
     @Override
     boolean isPrivilegedModeSupport() {
       return true
+    }
+
+    @Override
+    List<DistroVersion> getSupportedVersions() {
+      return [
+        new DistroVersion(version: 'dind', releaseName: 'dind', eolDate: parseDate('2099-01-01'))
+      ]
     }
 
     @Override
@@ -221,7 +274,6 @@ enum Distro implements DistroBehavior {
       return alpine.getInstallPrerequisitesCommands(v) +
         [
           'apk add --no-cache sudo',
-          'rm -rf /lib/libudev.so*', // btrfs is installed by Docker, but requires eudev-libs, which causes issues with OSHI JNA libary on Alpine with glibc and JVM crashes. Dont think we need udev as it's only needed by btrfs for multipath support.
         ]
     }
 
@@ -233,13 +285,6 @@ enum Distro implements DistroBehavior {
     @Override
     Map<String, String> getEnvironmentVariables(DistroVersion v) {
       return alpine.getEnvironmentVariables(v)
-    }
-
-    @Override
-    List<DistroVersion> getSupportedVersions() {
-      return [
-        new DistroVersion(version: 'dind', releaseName: 'dind', eolDate: parseDate('2099-01-01'))
-      ]
     }
   }
 

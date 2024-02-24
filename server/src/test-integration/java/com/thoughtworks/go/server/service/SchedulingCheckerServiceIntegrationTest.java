@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -298,10 +298,9 @@ public class SchedulingCheckerServiceIntegrationTest {
     @Test
     public void shouldNotPassCheckingWhenAnyStageIsActiveInPipelineForManualTrigger() throws Exception {
         Pipeline pipeline = pipelineFixture.createPipelineWithFirstStageScheduled();
-        String username = APPROVED_USER;
         PipelineConfig pipelineConfig = pipelineFixture.pipelineConfig();
         ServerHealthStateOperationResult result = new ServerHealthStateOperationResult();
-        assertThat(schedulingChecker.canManuallyTrigger(pipelineConfig, username, result), is(false));
+        assertThat(schedulingChecker.canManuallyTrigger(pipelineConfig, APPROVED_USER, result), is(false));
         assertThat(result.getServerHealthState().getDescription(), containsString("still in progress"));
         assertThat(result.getServerHealthState().getDescription(), containsString(pipeline.getName()));
     }

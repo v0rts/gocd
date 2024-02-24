@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,9 @@ public class VariableValueConfig implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof VariableValueConfig)) {
+        if (!(o instanceof VariableValueConfig that)) {
             return false;
         }
-
-        VariableValueConfig that = (VariableValueConfig) o;
 
         return value != null ? value.equals(that.value) : that.value == null;
 

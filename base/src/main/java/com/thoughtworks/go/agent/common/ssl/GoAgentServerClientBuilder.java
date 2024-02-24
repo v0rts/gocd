@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,8 +115,7 @@ public abstract class GoAgentServerClientBuilder<T> {
             } else if (pemObject instanceof PEMKeyPair) {
                 KeyPair keyPair = converter.getKeyPair((PEMKeyPair) pemObject);
                 privateKey = keyPair.getPrivate();
-            } else if (pemObject instanceof PrivateKeyInfo) {
-                PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) pemObject;
+            } else if (pemObject instanceof PrivateKeyInfo privateKeyInfo) {
                 privateKey = converter.getPrivateKey(privateKeyInfo);
             } else {
                 throw new RuntimeException("Unable to parse key of type " + pemObject.getClass());

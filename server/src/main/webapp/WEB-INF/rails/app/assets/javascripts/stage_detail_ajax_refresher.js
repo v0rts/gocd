@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,49 +13,62 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-function StageDetailAjaxRefresher(url, redirectUrl, after_callback_map) {
-  var oldCheckboxes = null;
-  var replicator = new FieldStateReplicator();
+function StageDetailAjaxRefresher(url, after_callback_map) {
+  const replicator = new FieldStateReplicator();
+  let oldCheckboxes = null;
 
-  function registerAgentSelectorsUnder(table) {
-    $(table).select('.job_selector').each(function (elem) {
-      replicator.register(elem, elem.value);
-    });
+  function registerCheckboxStatesToRememberUnder(elementOrSelector) {
+    const element = $(elementOrSelector);
+    if (element.length > 0) {
+      element.find('.job_selector').each(function (i, elem) {
+        replicator.register(elem, elem.value);
+      });
+    }
   }
 
-  var jobs_grid = $('jobs_grid');
-  if (jobs_grid){
-    registerAgentSelectorsUnder(jobs_grid);
-  }
+  // Remember checkbox selections between refreshes. Currently the re-run checkboxes are only displayed 
+  // when the stage is completed. Arguably we could stop updating/refreshing the jobs grid once the 
+  // stage is completed and avoid all of this, however not sure of the implications of doing so.
+  // Historically (prior to April 2011 commit fa93257e07c3a7d) the checkboxes were available even when the 
+  // stage was still running, so remembering the state UI side was definitely needed earlier, but that is 
+  // not possible now so it's not clear if this (and FieldStateReplicator) is really needed at all.
+  registerCheckboxStatesToRememberUnder('#jobs_grid');
 
-  return new AjaxRefresher(url, redirectUrl, {
+  return new AjaxRefresher(url, {
     afterRefresh: function (receiver_id) {
-      var callback = after_callback_map[receiver_id];  
+      const callback = after_callback_map[receiver_id];
       callback && callback();
       if (receiver_id === 'jobs_grid') {
-        oldCheckboxes.each(function (elem) {
+        // We've refreshed the grid. Stop watching the old elements we have now removed
+        oldCheckboxes.each(function (i, elem) {
           replicator.unregister(elem, elem.value);
         });
         oldCheckboxes = null;
       }
     },
     dataFetcher: function () {
-      return $("stage-history-page")? {"stage-history-page": $("stage-history-page").value} : {};
+      const pageElement = $("#stage-history-page");
+      return pageElement ? {
+        "stage-history-page": pageElement.val()
+      } : {};
     },
     manipulateReplacement: function (receiver_id, replaceElement) {
       if (receiver_id === 'jobs_grid') {
-        registerAgentSelectorsUnder(replaceElement);
-        oldCheckboxes = $$('.job_selector');
+        // We are about to replace HTML in the jobs grid. We now need to watch these so we can remember checkbox
+        // selections between refreshes.
+        registerCheckboxStatesToRememberUnder(replaceElement);
+        oldCheckboxes = $('.job_selector');
       }
     }
   });
 }
 
 function compare_link_handlers() {
-  jQuery(".stage_history .stage").mouseover(function() {
-    jQuery(this).find(".compare_pipeline").removeClass("hidden");
+  const individualStage = $(".stage_history .stage");
+  individualStage.mouseover(function() {
+    $(this).find(".compare_pipeline").removeClass("hidden");
   });
-  jQuery(".stage_history .stage").mouseout(function() {
-    jQuery(this).find(".compare_pipeline").addClass("hidden");
+  individualStage.mouseout(function() {
+    $(this).find(".compare_pipeline").addClass("hidden");
   });
 }

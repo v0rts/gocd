@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,20 +53,12 @@ public class ArtifactRepresenter {
 
     public static ArtifactTypeConfig fromJSON(JsonReader jsonReader) {
         String type = jsonReader.getString("type");
-        ArtifactTypeConfig artifactTypeConfig;
-        switch (type) {
-            case "build":
-                artifactTypeConfig = BuiltinArtifactConfigRepresenter.fromJSON(jsonReader, new BuildArtifactConfig());
-                break;
-            case "test":
-                artifactTypeConfig = BuiltinArtifactConfigRepresenter.fromJSON(jsonReader, new TestArtifactConfig());
-                break;
-            case "external":
-                artifactTypeConfig = ExternalArtifactConfigRepresenter.fromJSON(jsonReader, new PluggableArtifactConfig());
-                break;
-            default:
-                throw new UnprocessableEntityException(String.format("Invalid Artifact type: '%s'. It has to be one of %s.", type, String.join(",", "build", "test", "external")));
-        }
-        return artifactTypeConfig;
+        return switch (type) {
+            case "build" -> BuiltinArtifactConfigRepresenter.fromJSON(jsonReader, new BuildArtifactConfig());
+            case "test" -> BuiltinArtifactConfigRepresenter.fromJSON(jsonReader, new TestArtifactConfig());
+            case "external" -> ExternalArtifactConfigRepresenter.fromJSON(jsonReader, new PluggableArtifactConfig());
+            default ->
+                    throw new UnprocessableEntityException(String.format("Invalid Artifact type: '%s'. It has to be one of %s.", type, String.join(",", "build", "test", "external")));
+        };
     }
 }

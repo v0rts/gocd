@@ -1,5 +1,5 @@
 <#--
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
         var json = ${presenter.getMaterialRevisionsJson()?no_esc};
     </script>
     <script type="text/javascript">
-        Event.observe(window, 'load', function(){
-            $('tab-content-of-materials').innerHTML = $('tab-content-of-materials-template').value.process({revisions:json});
+        window.addEventListener('load', function() {
+            $('#tab-content-of-materials').html($('#tab-content-of-materials-template').val().process({revisions:json}));
         });
     </script>
     <#include '_material_revisions_jstemplate.ftlh'>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,7 +179,7 @@ describe("Websocket Wrapper", function () {
     myWebsocket.on("error", onError);
 
     myWebsocket.on("beforeInitialize", function () {
-      fail("Expected callback not to be called");
+      throw "Expected callback not to be called";
     });
 
     expect(onError).not.toHaveBeenCalled();

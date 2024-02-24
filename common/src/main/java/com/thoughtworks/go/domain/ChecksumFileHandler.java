@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,11 +75,9 @@ public class ChecksumFileHandler implements FetchHandler {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ChecksumFileHandler)) {
+        if (!(o instanceof ChecksumFileHandler that)) {
             return false;
         }
-
-        ChecksumFileHandler that = (ChecksumFileHandler) o;
 
         return checksumFile != null ? checksumFile.equals(that.checksumFile) : that.checksumFile == null;
     }

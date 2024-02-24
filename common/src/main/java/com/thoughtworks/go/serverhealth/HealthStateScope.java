@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class HealthStateScope implements Comparable<HealthStateScope> {
     }
 
     public static HealthStateScope forJob(String pipelineName, String stageName, String jobName) {
-        return new HealthStateScope(ScopeType.JOB, pipelineName + "/" + stageName + "/" + jobName);
+        return new HealthStateScope(ScopeType.JOB, String.join("/", pipelineName, stageName, jobName));
     }
 
     public static HealthStateScope forMaterial(Material material) {

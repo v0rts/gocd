@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,8 +61,7 @@ public class ConfigMaterialUpdateListener implements GoMessageListener<MaterialU
         // but MUS is still waiting for material updated message on MaterialUpdateCompletedTopic
         LOGGER.debug("[Config Material Update] Config material update completed for material {}. Starting parse process", material);
         try {
-            if (message instanceof MaterialUpdateFailedMessage) {
-                MaterialUpdateFailedMessage failure = (MaterialUpdateFailedMessage) message;
+            if (message instanceof MaterialUpdateFailedMessage failure) {
                 LOGGER.warn("[Config Material Update] Cannot update configuration part because material update has failed. Reason: {}", failure.getReason());
             } else {
                 File folder = materialRepository.folderFor(material);

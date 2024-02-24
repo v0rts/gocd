@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -146,8 +146,7 @@ public class PluggableArtifactConfig implements ArtifactTypeConfig {
     @Override
     public void validateUniqueness(List<ArtifactTypeConfig> existingArtifactTypeConfigList) {
         for (ArtifactTypeConfig existingArtifactTypeConfig : existingArtifactTypeConfigList) {
-            if (existingArtifactTypeConfig instanceof PluggableArtifactConfig) {
-                final PluggableArtifactConfig pluggableArtifactConfig = (PluggableArtifactConfig) existingArtifactTypeConfig;
+            if (existingArtifactTypeConfig instanceof PluggableArtifactConfig pluggableArtifactConfig) {
 
                 if (this.getId().equalsIgnoreCase(pluggableArtifactConfig.getId())) {
                     this.addError("id", String.format("Duplicate pluggable artifacts  with id `%s` defined.", getId()));

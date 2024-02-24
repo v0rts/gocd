@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,8 +73,10 @@ export class PipelineTemplateWidget extends MithrilComponent<Attrs> {
   templateOptions({attrs}: { attrs: Attrs }) {
     const config = attrs.pipelineConfig;
 
-    const templatesAsOptions = _.map(attrs.templates(), (template: Template) => {
-      return {id: template.name, text: template.name} as Option;
+    const sortedTemplates = _.sortBy(attrs.templates(), (template: Template) => template.name.toLocaleLowerCase());
+
+    const templatesAsOptions = _.map(sortedTemplates, (template: Template) => {
+      return { id: template.name, text: template.name } as Option;
     });
 
     return <SelectField label="Template"

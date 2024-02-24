@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class HgTestRepo extends TestRepo {
     private File remoteRepo;
-    private static final String HG_BUNDLE_FILE = "../common/src/test/resources/data/hgrepo.hgbundle";
+    private static final String HG_BUNDLE_FILE = "../common/src/test/resources/data/repos/hgrepo.hgbundle";
 
     private final HgCommand hgCommand;
 

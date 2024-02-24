@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,15 +32,16 @@ class SecretsMessageConverterV1Test {
             final String requestBody = new SecretsMessageConverterV1().lookupSecretsRequestBody(Sets.newLinkedHashSet(List.of("username", "password")), Map.of("FilePath", "/var/lib/secret.config"));
 
             JsonFluentAssert.assertThatJson(requestBody)
-                    .isEqualTo("{\n" +
-                            "  \"configuration\": {\n" +
-                            "    \"FilePath\": \"/var/lib/secret.config\"\n" +
-                            "  },\n" +
-                            "  \"keys\": [\n" +
-                            "    \"username\",\n" +
-                            "    \"password\"\n" +
-                            "  ]\n" +
-                            "}");
+                    .isEqualTo("""
+                            {
+                              "configuration": {
+                                "FilePath": "/var/lib/secret.config"
+                              },
+                              "keys": [
+                                "username",
+                                "password"
+                              ]
+                            }""");
         }
     }
 }

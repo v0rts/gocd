@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @EnabledOnOs({OS.LINUX, OS.MAC})
 class DatabaseMigratorMySQLTest extends AbstractMigratorIntegrationTest {
     @Container
-    private final JdbcDatabaseContainer mySQLContainer = (JdbcDatabaseContainer) new MySQLContainer("mysql:8")
+    private final JdbcDatabaseContainer mySQLContainer = (JdbcDatabaseContainer) new MySQLContainer("mysql:8.0")
             .withUsername("root")
             .withPassword("")
             .withCommand("--lower-case-table-names=1");

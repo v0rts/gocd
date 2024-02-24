@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,10 +56,9 @@ public class JSONResultMessageHandler {
             }
 
             for (Object errorObj : errors) {
-                if (!(errorObj instanceof Map)) {
+                if (!(errorObj instanceof Map errorMap)) {
                     throw new RuntimeException("Each validation error should be represented as a map");
                 }
-                Map errorMap = (Map) errorObj;
 
                 String key;
                 try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,27 +98,21 @@ public class MaterialDatabaseUpdaterIntegrationTest {
         final List<Exception> threadOneExceptions = new ArrayList();
         final List<Exception> threadTwoExceptions = new ArrayList();
 
-        Thread updateThread1 = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    updater.updateMaterial(material);
-                } catch (Exception e) {
-                    threadOneExceptions.add(e);
-                }
+        Thread updateThread1 = new Thread(() -> {
+            try {
+                updater.updateMaterial(material);
+            } catch (Exception e) {
+                threadOneExceptions.add(e);
             }
-        };
+        });
 
-        Thread updateThread2 = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    updater.updateMaterial(material);
-                } catch (Exception e) {
-                    threadTwoExceptions.add(e);
-                }
+        Thread updateThread2 = new Thread(() -> {
+            try {
+                updater.updateMaterial(material);
+            } catch (Exception e) {
+                threadTwoExceptions.add(e);
             }
-        };
+        });
 
         updateThread1.start();
         updateThread2.start();

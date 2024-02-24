@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,8 +116,7 @@ public class StageConfigMother {
         ArtifactTypeConfigs artifactConfigsWithTests = new ArtifactTypeConfigs();
         artifactConfigsWithTests.add(createArtifactConfig(artifactType));
         JobConfig job1 = new JobConfig(new CaseInsensitiveString(jobName), new ResourceConfigs("abc"), artifactConfigsWithTests);
-        StageConfig stage = new StageConfig(new CaseInsensitiveString(stageName), new JobConfigs(job1));
-        return stage;
+        return new StageConfig(new CaseInsensitiveString(stageName), new JobConfigs(job1));
     }
 
     private static ArtifactTypeConfig createArtifactConfig(ArtifactType artifactType) {

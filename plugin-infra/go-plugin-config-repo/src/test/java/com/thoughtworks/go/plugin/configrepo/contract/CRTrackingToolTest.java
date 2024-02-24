@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,10 +48,11 @@ public class CRTrackingToolTest extends AbstractCRTest<CRTrackingTool> {
 
     @Test
     public void shouldDeserializeFromAPILikeObject() {
-        String json = "{\n" +
-                "    \"link\": \"https://github.com/gocd/api.go.cd/issues/${ID}\",\n" +
-                "    \"regex\": \"##(d+)\"\n" +
-                "  }";
+        String json = """
+                {
+                    "link": "https://github.com/gocd/api.go.cd/issues/${ID}",
+                    "regex": "##(d+)"
+                  }""";
         CRTrackingTool deserializedValue = gson.fromJson(json,CRTrackingTool.class);
 
         assertThat(deserializedValue.getLink(),is("https://github.com/gocd/api.go.cd/issues/${ID}"));

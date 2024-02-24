@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,8 +142,7 @@ public class FetchArtifactViewHelper {
 
     private static void addMaterialsToQueue(Queue<JobHierarchyQueueEntry> bfsQueue, PipelineConfig pipelineConfig, String pathFromThisPipeline) {
         for (MaterialConfig mat : pipelineConfig.materialConfigs()) {
-            if (mat instanceof DependencyMaterialConfig) {
-                DependencyMaterialConfig depMat = (DependencyMaterialConfig) mat;
+            if (mat instanceof DependencyMaterialConfig depMat) {
                 bfsQueue.add(new JobHierarchyQueueEntry(pathFromThisPipeline, depMat.getPipelineName(), depMat.getStageName()));
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,18 +28,19 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @EnabledOnOs({OS.LINUX, OS.MAC})
 class DatabaseMigratorPostgreSQLTest extends AbstractMigratorIntegrationTest {
     @Container
-    private final JdbcDatabaseContainer postgresqlContainer = new PostgreSQLContainer("postgres:12");
+    private final JdbcDatabaseContainer postgresqlContainer = new PostgreSQLContainer("postgres:16");
 
     @Test
     void shouldMigrate() throws Exception {
         migrate(postgresqlContainer,
-                "SELECT\n" +
-                        "    table_schema || '.' || table_name\n" +
-                        "FROM\n" +
-                        "    information_schema.tables\n" +
-                        "WHERE\n" +
-                        "    table_type = 'BASE TABLE'\n" +
-                        "AND\n" +
-                        "    table_schema NOT IN ('pg_catalog', 'information_schema');", postgresqlContainer.getUsername(), postgresqlContainer.getPassword());
+                """
+                        SELECT
+                            table_schema || '.' || table_name
+                        FROM
+                            information_schema.tables
+                        WHERE
+                            table_type = 'BASE TABLE'
+                        AND
+                            table_schema NOT IN ('pg_catalog', 'information_schema');""", postgresqlContainer.getUsername(), postgresqlContainer.getPassword());
     }
 }

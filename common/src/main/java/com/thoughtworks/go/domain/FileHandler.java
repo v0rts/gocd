@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,11 +101,9 @@ public class FileHandler implements FetchHandler {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof FileHandler)) {
+        if (!(o instanceof FileHandler that)) {
             return false;
         }
-
-        FileHandler that = (FileHandler) o;
 
         return Objects.equals(artifact, that.artifact);
     }

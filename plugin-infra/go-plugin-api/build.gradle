@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,12 @@ plugins {
 }
 
 description = 'Interfaces necessary for GoCD to access plugins'
+
+compileJava {
+  // Use older source compatibility for Plugin API consumed by plugins. No need to break this compatibility
+  // for a while yet, so plugins work on older versions.
+  options.release.set(11)
+}
 
 dependencies {
   api project(path: ':plugin-infra:go-plugin-api-internal', configuration: 'runtimeElements')

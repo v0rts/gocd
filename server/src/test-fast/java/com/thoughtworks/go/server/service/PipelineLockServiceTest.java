@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,8 +179,7 @@ public class PipelineLockServiceTest {
         pipelineLockService.initialize();
         List<ConfigChangedListener> listeners = captor.getAllValues();
         assertThat(listeners.get(1) instanceof EntityConfigChangedListener, is(true));
-        EntityConfigChangedListener<PipelineConfig> pipelineConfigChangeListener = (EntityConfigChangedListener<PipelineConfig>) listeners.get(1);
-        return pipelineConfigChangeListener;
+        return (EntityConfigChangedListener<PipelineConfig>) listeners.get(1);
     }
 
     @Test

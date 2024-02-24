@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,27 +57,27 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PipelineHistoryServiceTest {
-    private static final CruiseConfig CRUISE_CONFIG = ConfigMigrator.loadWithMigration("<cruise xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-        + "     xsi:noNamespaceSchemaLocation=\"cruise-config.xsd\" schemaVersion=\"17\" >"
-        + "<server artifactsdir=\"target/testfiles/tmpCCRoot/data/logs\"></server>"
-        + "  <pipelines>"
-        + "    <pipeline name='pipeline'>"
-        + "        <materials>"
-        + "            <svn url='ape'/>"
-        + "        </materials>"
-        + "        <stage name='auto'>"
-        + "            <jobs>"
-        + "                <job name='unit'/>"
-        + "            </jobs>"
-        + "        </stage>"
-        + "        <stage name='manual'>"
-        + "            <jobs>"
-        + "                <job name='unit'/>"
-        + "            </jobs>"
-        + "        </stage>"
-        + "    </pipeline>"
-        + "  </pipelines>"
-        + "</cruise>").config;
+    private static final CruiseConfig CRUISE_CONFIG = ConfigMigrator.loadWithMigration("""
+            <cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"      xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="17" >
+            <server artifactsdir="target/testfiles/tmpCCRoot/data/logs"></server>
+              <pipelines>
+                <pipeline name='pipeline'>
+                    <materials>
+                        <svn url='ape'/>
+                    </materials>
+                    <stage name='auto'>
+                        <jobs>
+                            <job name='unit'/>
+                        </jobs>
+                    </stage>
+                    <stage name='manual'>
+                        <jobs>
+                            <job name='unit'/>
+                        </jobs>
+                    </stage>
+                </pipeline>
+              </pipelines>
+            </cruise>""").config;
 
     @Mock
     private PipelineDao pipelineDao;

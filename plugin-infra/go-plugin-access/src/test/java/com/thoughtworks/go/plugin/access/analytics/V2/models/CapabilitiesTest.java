@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Thoughtworks, Inc.
+ * Copyright 2024 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,13 @@ public class CapabilitiesTest {
 
     @Test
     public void shouldDeserializeFromJSON() throws Exception {
-        String json = "{\n" +
-                "\"supported_analytics\": [\n" +
-                "  {\"type\": \"dashboard\", \"id\": \"abc\",  \"title\": \"Title 1\"},\n" +
-                "  {\"type\": \"pipeline\", \"id\": \"abc\",  \"title\": \"Title 2\"},\n" +
-                "  {\"type\": \"vsm\", \"id\": \"abc\",  \"title\": \"Title 3\", \"required_params\": [\"param1\", \"param2\"]}\n" +
-                "]}";
+        String json = """
+                {
+                "supported_analytics": [
+                  {"type": "dashboard", "id": "abc",  "title": "Title 1"},
+                  {"type": "pipeline", "id": "abc",  "title": "Title 2"},
+                  {"type": "vsm", "id": "abc",  "title": "Title 3", "required_params": ["param1", "param2"]}
+                ]}""";
 
         Capabilities capabilities = Capabilities.fromJSON(json);
 
@@ -42,12 +43,13 @@ public class CapabilitiesTest {
 
     @Test
     public void shouldConvertToDomainCapabilities() throws Exception {
-        String json = "{\n" +
-                "\"supported_analytics\": [\n" +
-                "  {\"type\": \"dashboard\", \"id\": \"abc\",  \"title\": \"Title 1\"},\n" +
-                "  {\"type\": \"pipeline\", \"id\": \"abc\",  \"title\": \"Title 2\"},\n" +
-                "  {\"type\": \"vsm\", \"id\": \"abc\",  \"title\": \"Title 3\", \"required_params\": [\"param1\", \"param2\"]}\n" +
-                "]}";
+        String json = """
+                {
+                "supported_analytics": [
+                  {"type": "dashboard", "id": "abc",  "title": "Title 1"},
+                  {"type": "pipeline", "id": "abc",  "title": "Title 2"},
+                  {"type": "vsm", "id": "abc",  "title": "Title 3", "required_params": ["param1", "param2"]}
+                ]}""";
 
         Capabilities capabilities = Capabilities.fromJSON(json);
         com.thoughtworks.go.plugin.domain.analytics.Capabilities domain = capabilities.toCapabilities();
